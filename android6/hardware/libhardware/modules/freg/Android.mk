@@ -8,3 +8,4 @@ LOCAL_SHARED_LIBRARIES := liblog
 LOCAL_SRC_FILES := freg.cpp
 LOCAL_MODULE := freg.default
 include $(BUILD_SHARED_LIBRARY)
+
