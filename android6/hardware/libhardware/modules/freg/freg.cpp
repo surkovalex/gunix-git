@@ -1,8 +1,10 @@
 #define LOG_TAG	"FregHALStub"
 
+#include <stdlib.h>
 #include <hardware/hardware.h>
 #include <hardware/freg.h>
 #include <fcntl.h>
+#include <cstring>
 #include <errno.h>
 #include <cutils/log.h>
 #include <cutils/atomic.h>
@@ -43,7 +45,7 @@ static int freg_device_open(const struct hw_module_t *module, const char *id, st
 
 		dev = (struct freg_device_t *)malloc(sizeof(struct freg_device_t));
 		if (!dev) {
-			LOGE("Failed to alloc space for freg_device_t.");
+			ALOGE("Failed to alloc space for freg_device_t.");
 			return -EFAULT;
 		}
 
@@ -56,13 +58,13 @@ static int freg_device_open(const struct hw_module_t *module, const char *id, st
 		dev->get_val = freg_get_val;
 
 		if ((dev->fd = open(DEVICE_NAME, O_RDWR)) == -1) {
-			LOGE("Failed to open device file /dev/freg -- %s.", strerror(errno));
+			ALOGE("Failed to open device file /dev/freg -- %s.", strerror(errno));
 			free(dev);
 			return -EFAULT;
 		}
 
 		*device = &(dev->common);
-		LOGI("Open device file /dev/freg successfully.");
+		ALOGI("Open device file /dev/freg successfully.");
 
 		return 0;
 	}
@@ -82,28 +84,28 @@ static int freg_device_close(struct hw_device_t *device) {
 
 static int freg_get_val(struct freg_device_t *dev, int *val) {
 	if (!dev) {
-		LOGE("Null dev pointer.");
+		ALOGE("Null dev pointer.");
 		return -EFAULT;
 	}
 
 	if (!val) {
-		LOGE("Null val pointer.");
+		ALOGE("Null val pointer.");
 		return -EFAULT;
 	}
 
 	read(dev->fd, val, sizeof(*val));
-	LOGI("Get value %d from device file /dev/freg.", *val);
+	ALOGI("Get value %d from device file /dev/freg.", *val);
 
 	return 0;
 }
 
 static int freg_set_val(struct freg_device_t *dev, int val) {
 	if (!dev) {
-		LOGE("Null dev pointer.");
+		ALOGE("Null dev pointer.");
 		return -EFAULT;
 	}
 
-	LOGI("Set value %d to device file /dev/freg.", val);
+	ALOGI("Set value %d to device file /dev/freg.", val);
 	write(dev->fd, &val, sizeof(val));
 
 	return 0;
