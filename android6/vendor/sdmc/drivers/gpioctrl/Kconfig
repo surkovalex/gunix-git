@@ -1,0 +1,5 @@
+config SDMC_GPIOCTRL
+	tristate "sdmc gpio control driver"
+	default m
+	---help---
+	  This is the sdmc gpio control driver
