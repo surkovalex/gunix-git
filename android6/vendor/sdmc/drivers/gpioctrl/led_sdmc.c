@@ -10,9 +10,6 @@
 #include <linux/string.h>
 #include <linux/slab.h>
 #include <linux/delay.h>
-//#include <linux/reboot.h>
-//#include <linux/inetdevice.h>
-//#include <net/if_inet6.h>
 
 #define SDMCLED_NAME		"sdmcled"
 
