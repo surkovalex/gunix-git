@@ -52,13 +52,13 @@ static void led_work_func(struct work_struct *);
 static DECLARE_DELAYED_WORK(led_task, led_work_func);
 
 static unsigned int led_lanrxtx __read_mostly = 1;
-//static unsigned int led_heartbeat __read_mostly = 1;
 static unsigned char lastleds;	/* LED state from most recent update */
 
 /* ptr to LED-specific function */
 static void (*led_func_ptr) (unsigned char) __read_mostly;
 
 int sdmc_set_gpio(int num, int level);
+
 
 /*
  ** led_halt()
@@ -72,6 +72,7 @@ static struct notifier_block led_notifier = {
 	.notifier_call = led_halt,
 };
 static int notifier_disabled = 0;
+
 
 static int led_halt(struct notifier_block *nb, unsigned long event, void *buf) 
 {
@@ -94,6 +95,7 @@ static int led_halt(struct notifier_block *nb, unsigned long event, void *buf)
 	return NOTIFY_OK;
 }
 
+
 int sdmc_req_gpio(int num, int dir, int level, char *own)
 {
 	int nRet = NOUSED_GPIO;
@@ -105,7 +107,7 @@ int sdmc_req_gpio(int num, int dir, int level, char *own)
 			nRet = gpio_direction_output(num, level);
 		else
 			nRet = gpio_direction_input(num);
-		
+
 		if (0 != nRet)
 		   printk("*****%s %d gpionum: %d errno: 0x%x\n", __FUNCTION__, __LINE__, num, nRet);
 	}
@@ -113,6 +115,7 @@ int sdmc_req_gpio(int num, int dir, int level, char *own)
 	return nRet;
 }
 EXPORT_SYMBOL(sdmc_req_gpio);
+
 
 int sdmc_set_dir_gpio(int num, int dir, int level)
 {
@@ -130,6 +133,7 @@ int sdmc_set_dir_gpio(int num, int dir, int level)
 }
 EXPORT_SYMBOL(sdmc_set_dir_gpio);
 
+
 int sdmc_set_gpio(int num, int level)
 {
 	int nRet = NOUSED_GPIO;
@@ -142,6 +146,7 @@ int sdmc_set_gpio(int num, int level)
 }
 EXPORT_SYMBOL(sdmc_set_gpio);
 
+
 int sdmc_get_gpio(int num)
 {
 	int nRet = NOUSED_GPIO;
@@ -151,6 +156,7 @@ int sdmc_get_gpio(int num)
 	return nRet;
 }
 EXPORT_SYMBOL(sdmc_get_gpio);
+
 
 int sdmc_free_gpio(int num)
 {
@@ -163,6 +169,7 @@ int sdmc_free_gpio(int num)
 	return nRet;
 }
 EXPORT_SYMBOL(sdmc_free_gpio);
+
 
 static void sdmc_gpio_init(void)
 {
@@ -217,6 +224,7 @@ static void sdmc_gpio_init(void)
 	}
 }
 
+
 /* led_net_driver() */
 static void led_net_driver(unsigned char leds)
 {
@@ -248,6 +256,7 @@ static void led_net_driver(unsigned char leds)
 		msleep(3000);
 	}
 }
+
 
 /*
  ** register_led_driver()
@@ -290,6 +299,7 @@ int register_led_driver(int model, unsigned long cmd_reg, unsigned long data_reg
 
 	return 0;
 }
+
 
 /*
  **
@@ -363,6 +373,7 @@ static __inline__ int led_get_net_activity(void)
 #endif
 }
 
+
 /*
  ** led_work_func()
  **
@@ -390,9 +401,11 @@ static void led_work_func(struct work_struct *unused)
 	queue_delayed_work(led_wq, &led_task, LED_UPDATE_INTERVAL);
 }
 
+
 static void sdmc_leds_dev_release(struct device *dev)
 {
 }
+
 
 #ifdef CONFIG_HAS_EARLYSUSPEND
 static void sdmc_system_early_suspend(struct early_suspend *h)
@@ -404,6 +417,7 @@ static void sdmc_system_early_suspend(struct early_suspend *h)
 	}
 }
 
+
 static void sdmc_system_late_resume(struct early_suspend *h)
 {
 	if (early_suspend_flag) {
@@ -413,6 +427,7 @@ static void sdmc_system_late_resume(struct early_suspend *h)
 	}
 }
 #endif
+
 
 static int sdmc_leds_suspend(struct platform_device *dev, pm_message_t state)
 {
@@ -430,14 +445,9 @@ static int sdmc_leds_suspend(struct platform_device *dev, pm_message_t state)
 		sdmc_set_gpio(gdev->sys_led.pin, 1);
 	sdmc_set_gpio(DTV_PWR_GPIO, 1);
 
-#if 0
-	nRet = cancel_delayed_work_sync(&led_task);
-	if (0 != nRet)
-		printk("%s Failed, line = %d!\n", __FUNCTION__, __LINE__);
-#endif
-
 	return nRet;
 }
+
 
 static int sdmc_leds_resume(struct platform_device *dev)
 {
@@ -452,10 +462,12 @@ static int sdmc_leds_resume(struct platform_device *dev)
 	return nRet;
 }
 
+
 static ssize_t show_sys_led(struct class *class, struct class_attribute *attr, char *buf)
 {
     return sprintf(buf, "%d\n", sdmc_get_gpio(gdev->sys_led.pin));
 }
+
 
 static ssize_t store_sys_led(struct class *class, struct class_attribute *attr, const char *buf, size_t count)
 {
@@ -473,10 +485,12 @@ static ssize_t store_sys_led(struct class *class, struct class_attribute *attr, 
 	return count;
 }
 
+
 static ssize_t show_standby_sync(struct class *class, struct class_attribute *attr, char *buf)
 {
     return sprintf(buf, "%d\n", sdmc_get_gpio(gdev->standby_sync.pin));
 }
+
 
 static ssize_t store_standby_sync(struct class *class, struct class_attribute *attr, const char *buf, size_t count)
 {
@@ -494,10 +508,12 @@ static ssize_t store_standby_sync(struct class *class, struct class_attribute *a
 	return count;
 }
 
+
 static ssize_t show_net_led(struct class *class, struct class_attribute *attr, char *buf)
 {
     return sprintf(buf, "%d\n", sdmc_get_gpio(gdev->net_led.pin));
 }
+
 
 static ssize_t store_net_led(struct class *class, struct class_attribute *attr, const char *buf, size_t count)
 {
@@ -516,6 +532,7 @@ static ssize_t store_net_led(struct class *class, struct class_attribute *attr, 
 	return count;
 }
 
+
 static ssize_t show_dtv_pwr(struct class *class, struct class_attribute *attr, char *buf)
 {
 	if (NOUSED_GPIO != DTV_PWR_GPIO)
@@ -523,6 +540,7 @@ static ssize_t show_dtv_pwr(struct class *class, struct class_attribute *attr, c
 	else
 		return sprintf(buf, "this gpio isn't used\n");
 }
+
 
 static ssize_t store_dtv_pwr(struct class *class, struct class_attribute *attr, const char *buf, size_t count)
 {
@@ -542,10 +560,12 @@ static ssize_t store_dtv_pwr(struct class *class, struct class_attribute *attr, 
 	return count;
 }
 
+
 static ssize_t show_ant_pwr(struct class *class, struct class_attribute *attr, char *buf)
 {
     return sprintf(buf, "%d\n", sdmc_get_gpio(gdev->ant_pwr.pin));
 }
+
 
 static ssize_t store_ant_pwr(struct class *class, struct class_attribute *attr, const char *buf, size_t count)
 {
@@ -563,10 +583,12 @@ static ssize_t store_ant_pwr(struct class *class, struct class_attribute *attr, 
 	return count;
 }
 
+
 static ssize_t show_demo_res(struct class *class, struct class_attribute *attr, char *buf)
 {
     return sprintf(buf, "%d\n", sdmc_get_gpio(gdev->demo_res.pin));
 }
+
 
 static ssize_t store_demo_res(struct class *class, struct class_attribute *attr, const char *buf, size_t count)
 {
@@ -584,6 +606,7 @@ static ssize_t store_demo_res(struct class *class, struct class_attribute *attr,
 	return count;
 }
 
+
 static ssize_t show_s2_antpwr(struct class *class, struct class_attribute *attr, char *buf)
 {
 	if (NOUSED_GPIO != gdev->s2_ant_pwr.pin)
@@ -591,6 +614,7 @@ static ssize_t show_s2_antpwr(struct class *class, struct class_attribute *attr,
 	else
 		return sprintf(buf, "this gpio isn't used\n");
 }
+
 
 static ssize_t store_s2_antpwr(struct class *class, struct class_attribute *attr, const char *buf, size_t count)
 {
@@ -610,10 +634,12 @@ static ssize_t store_s2_antpwr(struct class *class, struct class_attribute *attr
 	return count;
 }
 
+
 static ssize_t show_wifi_type(struct class *class, struct class_attribute *attr, char *buf)
 {
 	return sprintf(buf, "%d\n", t_wifi);
 }
+
 
 static struct class_attribute sdmc_class_attrs[] = {
 	__ATTR(sys_led, S_IRUGO | S_IWUGO, show_sys_led, store_sys_led),
@@ -626,11 +652,14 @@ static struct class_attribute sdmc_class_attrs[] = {
 	__ATTR(standby_sync, S_IRUGO | S_IWUGO, show_standby_sync, store_standby_sync),
     __ATTR_NULL
 };
+
+
 static struct class sdmc_class = {
 	.name = "sdmc",
 	.class_attrs = sdmc_class_attrs,
  };
 
+ 
 /* The workqueue must be created at init-time */
 static const struct of_device_id sdmc_leds_dt_match[] = {
 	{
@@ -638,6 +667,7 @@ static const struct of_device_id sdmc_leds_dt_match[] = {
 	},
 	{},
 };
+
 
 static int sdmc_gpio_dt_parse(struct platform_device *pdev)
 {
@@ -696,6 +726,7 @@ static int sdmc_gpio_dt_parse(struct platform_device *pdev)
 	return 0;
 }
 
+
 static int sdmc_leds_probe(struct platform_device *pdev)
 {
 	int ret;
@@ -713,7 +744,7 @@ static int sdmc_leds_probe(struct platform_device *pdev)
 	early_suspend.resume = sdmc_system_late_resume;
 	register_early_suspend(&early_suspend);
 #endif
-	
+
 	nRet = class_register(&sdmc_class);
 	if (nRet)
         printk(" sdmc class register fail nRet = %d!\n", nRet);
@@ -725,6 +756,7 @@ static int sdmc_leds_probe(struct platform_device *pdev)
 
 	return register_led_driver(0, 0, 0);
 }
+
 
 static int sdmc_leds_remove(struct platform_device *pdev)
 {
@@ -755,7 +787,7 @@ static int sdmc_leds_remove(struct platform_device *pdev)
     return 0;
 }
 
-/* 平台驱动定义 */
+
 static struct platform_driver sdmc_leds_driver = {
 	.probe		= sdmc_leds_probe,
 	.remove		= sdmc_leds_remove,
@@ -767,29 +799,20 @@ static struct platform_driver sdmc_leds_driver = {
 		.of_match_table = sdmc_leds_dt_match,
 	},
 };
-static struct platform_device sdmc_leds_device ={
-    .name = "gpioctrl",
-	.dev.release = sdmc_leds_dev_release,
-};
+
 
 static int __init sdmc_leds_init(void)
 {
-#if 0
-	int nRet = 0;
-	nRet = platform_device_register(&sdmc_leds_device);
-	if(0 != nRet)
-	    printk("%s Failed,line = %d!\n", __FUNCTION__, __LINE__);
-#endif
-
-	/* 平台驱动注册 */
 	return platform_driver_register(&sdmc_leds_driver);
 }
+
 
 static void __exit sdmc_leds_exit(void)
 {
 	platform_driver_unregister(&sdmc_leds_driver);
-	/*platform_device_unregister(&sdmc_leds_device);*/
 }
+
+
 module_init(sdmc_leds_init);
 module_exit(sdmc_leds_exit);
 
