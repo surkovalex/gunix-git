@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#
+#  Copyright Shenzhen SDMC Electronics Co. Ltd China
+#
+#  Summary: produce odex for *.jar *.apk for android system
+#
+#  Author: Ronny <ronny@nuedc.net.cn>
+#
+#  Apr 09, 2013
+#
+
+base_version=$1
+fireware_ver=$2
+
+[ `echo $base_version | awk -F. '{print NF}'` -ne 4 ] && echo "base version number invalid" && exit 126;
+[ `echo $fireware_ver | awk -F. '{print NF}'` -ne 4 ] && echo "fw   version number invalid" && exit 126;
+echo -e "base_version : $base_version\n"
+echo -e "fireware_ver : $fireware_ver\n"
+
+for high_bit_num in 1 2 3 4
+do
+	bver_bit_val=`echo $base_version | awk -F. '{print $counter}' counter=${high_bit_num}`
+	fver_bit_val=`echo $fireware_ver | awk -F. '{print $counter}' counter=${high_bit_num}`
+	
+	if [ "$bver_bit_val" = "" ] || [ "$fver_bit_val" = "" ];then
+		echo -e "err: base version or fireware version is invalid.\n"
+		exit 1
+	elif [ $bver_bit_val -eq $fver_bit_val ];then
+		continue
+	elif [ $bver_bit_val -gt $fver_bit_val ];then
+		echo -e "err : [${high_bit_num}bit] base versin newer than fireware version\n"
+		exit 2
+	else
+		echo -e "[${high_bit_num}bit] base versin older than fireware version\n"
+		exit 0
+	fi
+done	

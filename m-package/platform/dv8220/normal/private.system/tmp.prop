@@ -1,0 +1,8 @@
+ro.build.id=Normal-4.4.0.6-20150722
+ro.ethernet.default_on=true
+ubootenv.var.has.accelerometer=false
+common.privilege.lockLuncher=0,com.vmedia.stb,com.vianettv.viamedia.activity.LoginActivity
+ro.statusbar.height=1
+common.privilege.localbackup=true
+ro.dev.id=sdmc
+libplayer.hls.cmf=true

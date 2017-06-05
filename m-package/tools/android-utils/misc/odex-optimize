@@ -1,0 +1,135 @@
+#!/bin/bash
+
+#
+#  Copyright Shenzhen SDMC Electronics Co. Ltd China
+#
+#  Summary: produce odex for *.jar *.apk for android system
+#
+#  Author: Ronny <ronny@nuedc.net.cn>
+#
+#  Apr 11, 2013
+#
+
+relative_dir=$1
+
+echo "$1"
+
+out_dir=$relative_dir
+dexopt_bin=$2/dexopt
+product_dir=.
+boot_dir=system/framework
+boot_jars=core:conscrypt:okhttp:core-junit:bouncycastle:ext:framework:framework2:telephony-common:voip-common:mms-common:android.policy:services:apache-xml:webviewchromium
+dex_preopt_script=$2/../../misc/dex-preopt
+aapt_bin=$2/aapt
+
+bootclase_dir=${out_dir}/${product_dir}/dex_bootjars/${boot_dir}
+bootclase_rel_dir=${product_dir}/dex_bootjars/${boot_dir}
+framwork_dir=${out_dir}/${product_dir}/${boot_dir}
+framwork_rel_dir=${product_dir}/${boot_dir}
+app_dir=${out_dir}/${product_dir}/system/app
+app_rel_dir=${product_dir}/system/app
+
+if [ -f "${dex_preopt_script}" ];then
+	echo "${dex_preopt_script} is exist."
+	chmod +x ${dex_preopt_script}
+fi
+produce_odex_file()
+{
+	# *.jar *.apk
+	input_file=$1
+	# *.odex
+	output_file=$2
+	${dex_preopt_script} \
+		--dexopt=${dexopt_bin} \
+		--build-dir=${out_dir} \
+		--product-dir=${product_dir}/dex_bootjars \
+		--boot-dir=${boot_dir} \
+		--boot-jars=${boot_jars} \
+		--uniprocessor \
+		${input_file} \
+		${output_file}
+}
+
+remove_classes_dex()
+{
+	dex_file=$1
+	
+	${aapt_bin} remove ${dex_file} classes.dex
+}
+
+init_boot_jars_odex()
+{
+	[ ! -d ${framwork_dir} ] && echo "${framwork_dir} isn't exist." && exit 1
+	[ -d ${bootclase_dir} ] && rm -rf ${bootclase_dir}/* || mkdir -p ${bootclase_dir}
+
+	for bjars_prefix in `echo ${boot_jars} | sed 's/:/ /g'`
+	do
+		[ ! -f ${framwork_dir}/${bjars_prefix}.jar ] && echo "${framwork_dir}/${bjars_prefix}.jar isn't exist." && exit 2
+		cp -f ${framwork_dir}/${bjars_prefix}.jar ${bootclase_dir}/${bjars_prefix}.jar 
+		produce_odex_file ${bootclase_rel_dir}/${bjars_prefix}.jar ${bootclase_rel_dir}/${bjars_prefix}.odex
+		[ $? -ne 0 ] && echo "produce ${bootclase_dir}/${bjars_prefix}.jar x.odex err." && exit 3
+		cp -f ${bootclase_dir}/${bjars_prefix}.jar ${bootclase_dir}/${bjars_prefix}_nodex.jar
+		remove_classes_dex ${bootclase_dir}/${bjars_prefix}_nodex.jar
+		[ $? -ne 0 ] && echo "remove classes.dex in ${bootclase_dir}/${bjars_prefix}_nodex.jar err." && exit 3
+	done
+}
+
+preopt_not_boot_jars()
+{
+	rm -rf ${framwork_dir}/*.odex
+	sync;
+	for jarfile in `ls ${framwork_dir}`
+	do
+		jar_is_bjar=0
+		jar_prefix=${jarfile%.*}
+		jar_posfix=${jarfile##*.}
+		[ "$jar_posfix" != "jar" ] && echo "skip $jarfile ..." && continue
+		for bjars_prefix in `echo ${boot_jars} | sed 's/:/ /g'`
+		do
+			if [ "${jarfile}" = "${bjars_prefix}.jar" ];then
+				cp -f ${bootclase_dir}/${bjars_prefix}.odex ${framwork_dir}/
+				echo "$jarfile is boot class path use default."
+				jar_is_bjar=1
+				break;
+			fi
+		done
+		if [ $jar_is_bjar -ne 1 ];then
+			produce_odex_file ${framwork_rel_dir}/${jarfile} ${framwork_rel_dir}/${jar_prefix}.odex
+			[ $? -ne 0 ] && echo "produce ${framwork_dir}/${jar_prefix} x.odex err." && exit 2
+		fi
+		remove_classes_dex ${framwork_dir}/${jarfile}
+		[ $? -ne 0 ] && echo "remove classes.dex in ${framwork_dir}/${jarfile} err." && exit 3
+	done
+}
+
+preopt_app()
+{
+	rm -rf ${app_dir}/*.odex
+	sync;
+	for apkfile in `ls ${app_dir}`
+	do
+		jar_prefix=${apkfile%.*}
+		jar_posfix=${apkfile##*.}
+		[ "$jar_posfix" != "apk" ] && echo "skip $apkfile ..." && continue
+		produce_odex_file ${app_rel_dir}/${apkfile} ${app_rel_dir}/${jar_prefix}.odex
+		[ $? -ne 0 ] && echo "produce ${app_dir}/${apkfile} x.odex err." && exit 2
+		remove_classes_dex ${app_dir}/${apkfile}
+		[ $? -ne 0 ] && echo "remove classes.dex in ${app_dir}/${apkfile} err." && exit 3
+	done
+}
+
+dexopt()
+{
+	[ ! -d ${out_dir} ] && mkdir -p ${out_dir}
+	init_boot_jars_odex
+	preopt_not_boot_jars
+	preopt_app
+	app_dir=${out_dir}/${product_dir}/system/priv-app
+	app_rel_dir=${product_dir}/system/priv-app
+	preopt_app
+}
+
+# main function
+dexopt
+echo "dexopt status : $?"
+
