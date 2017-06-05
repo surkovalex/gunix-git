@@ -24,9 +24,9 @@ struct blinkbled_gpio {
 
 struct blinkbled_gpio_dev {
     struct blinkbled_gpio bled_gpio;
-	struct timer_list bled_timer;
-	unsigned int led_level;
-	unsigned int stop_flag;
+    struct timer_list bled_timer;
+    unsigned int led_level;
+    unsigned int stop_flag;
 };
 
 struct blinkbled_gpio_dev *gdev;
@@ -47,7 +47,7 @@ static ssize_t store_blinkled(struct class *class, struct class_attribute *attr,
 	if (dbg)
         gpio_set_value(gdev->bled_gpio.pin, 1);
     else
-		gpio_set_value(gdev->bled_gpio.pin, 0);
+        gpio_set_value(gdev->bled_gpio.pin, 0);
 
     return count;
 }
@@ -68,7 +68,7 @@ static ssize_t store_stopflag(struct class *class, struct class_attribute *attr,
 	if (dbg)
         gdev->stop_flag = 1;
     else
-		gdev->stop_flag = 0;
+        gdev->stop_flag = 0;
 
     return count;
 }
@@ -122,11 +122,11 @@ static void bled_timer_handler(unsigned long data)
 
 	stop_flag = gdev->stop_flag;
 	if (!stop_flag) {
-		gpio_set_value(gdev->bled_gpio.pin, !(gdev->led_level));
-		gdev->led_level = !(gdev->led_level);
-		mod_timer(&gdev->bled_timer, jiffies + HZ/4);
+            gpio_set_value(gdev->bled_gpio.pin, !(gdev->led_level));
+            gdev->led_level = !(gdev->led_level);
+            mod_timer(&gdev->bled_timer, jiffies + HZ/4);
 	} else
-		gpio_set_value(gdev->bled_gpio.pin, 0);
+            gpio_set_value(gdev->bled_gpio.pin, 0);
 }
 
 
@@ -134,27 +134,27 @@ static int blinkbled_gpio_dev_init(void)
 {
     int nRet = 0;
 
-	nRet = gpio_request(gdev->bled_gpio.pin, NULL);
-	if (0 != nRet) {
-		pr_err("%s %d gpio_request() failed, errno = %d\n", __func__, __LINE__, nRet);
-		return nRet;
-	}
-	nRet = gpio_direction_output(gdev->bled_gpio.pin, 1);
-	if (0 != nRet) {
-		pr_err("%s %d gpio_direction_output() failed, errno = %d\n", __func__, __LINE__, nRet);
-		return nRet;
-	}
-	gpio_set_value(gdev->bled_gpio.pin, 0);
-	gdev->led_level = 0;
-	gdev->stop_flag = 0;
+    nRet = gpio_request(gdev->bled_gpio.pin, NULL);
+    if (0 != nRet) {
+        pr_err("%s %d gpio_request() failed, errno = %d\n", __func__, __LINE__, nRet);
+        return nRet;
+    }
+    nRet = gpio_direction_output(gdev->bled_gpio.pin, 1);
+    if (0 != nRet) {
+        pr_err("%s %d gpio_direction_output() failed, errno = %d\n", __func__, __LINE__, nRet);
+        return nRet;
+    }
+    gpio_set_value(gdev->bled_gpio.pin, 0);
+    gdev->led_level = 0;
+    gdev->stop_flag = 0;
 
-	/* init the timer */
-	init_timer(&gdev->bled_timer);
-	gdev->bled_timer.function = &bled_timer_handler;
-	gdev->bled_timer.expires = jiffies + HZ/4;
-	add_timer(&gdev->bled_timer);
+    /* init the timer */
+    init_timer(&gdev->bled_timer);
+    gdev->bled_timer.function = &bled_timer_handler;
+    gdev->bled_timer.expires = jiffies + HZ/4;
+    add_timer(&gdev->bled_timer);
 
-	return 0;
+    return 0;
 }
 
 
@@ -172,9 +172,9 @@ static int sdmc_blinkled_probe(struct platform_device *pdev)
     if (nRet)
         return nRet;
 
-	nRet = blinkbled_gpio_dev_init();
-	if (nRet)
-		return nRet;
+    nRet = blinkbled_gpio_dev_init();
+    if (nRet)
+        return nRet;
 
     nRet = class_register(&sdmca_class);
     if (nRet)
@@ -186,9 +186,9 @@ static int sdmc_blinkled_probe(struct platform_device *pdev)
 
 static int sdmc_blinkled_remove(struct platform_device *pdev)
 {
-	class_unregister(&sdmca_class);
+    class_unregister(&sdmca_class);
     gpio_free(gdev->bled_gpio.pin);
-	del_timer(&gdev->bled_timer);
+    del_timer(&gdev->bled_timer);
     kfree(gdev);
     pr_info("sdmc blinkled module removed ok\n");
 
