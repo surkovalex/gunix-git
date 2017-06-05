@@ -1,0 +1,105 @@
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+index 3b1d76c..8602f44 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+@@ -134,6 +134,12 @@
+ 		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	blinkled {
++		compatible = "sdmca, blinkled";
++		dev_name = "blinkled";
++		status = "okay";
++		blinkled_gpio = <&gpio_ao GPIOAO_5 GPIO_ACTIVE_HIGH>;
++	};
+ 	fd650s {
+ 		   compatible = "sdmc, fd650s";
+ 		   dev_name = "fd650s";
+@@ -145,12 +151,11 @@
+ 		   compatible = "sdmc, gpioctrl";
+ 		   dev_name = "gpioctrl";
+ 		   status = "okay";
+-		   sys_led = <&gpio  GPIODV_24  GPIO_ACTIVE_HIGH>;
+-		   net_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_LOW>;
++		   sys_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_LOW>;
++		   net_led = <&gpio  GPIODV_24  GPIO_ACTIVE_HIGH>;
+ 		   shut_volume= <&gpio GPIOH_5  GPIO_ACTIVE_HIGH>;
+ 		   demo_res = <&gpio  GPIODV_12  GPIO_ACTIVE_LOW>;
+ 		   tuner_lnb = <&gpio  GPIODV_15  GPIO_ACTIVE_LOW>;
+-		   s2_tuner_lnb = <&gpio_ao  GPIOAO_5  GPIO_ACTIVE_LOW>;
+ 		   standby_sync= <&gpio_ao GPIOAO_6  GPIO_ACTIVE_LOW>;
+ 	};
+ 
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+index 2721f26..b70dad6 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+@@ -138,6 +138,12 @@
+ 		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	blinkled {
++		compatible = "sdmca, blinkled";
++		dev_name = "blinkled";
++		status = "okay";
++		blinkled_gpio = <&gpio_ao GPIOAO_5 GPIO_ACTIVE_HIGH>;
++	};
+ 	fd650s {
+ 		   compatible = "sdmc, fd650s";
+ 		   dev_name = "fd650s";
+@@ -149,12 +155,11 @@
+ 		   compatible = "sdmc, gpioctrl";
+ 		   dev_name = "gpioctrl";
+ 		   status = "okay";
+-		   sys_led = <&gpio  GPIODV_24  GPIO_ACTIVE_HIGH>;
+-		   net_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_LOW>;
++		   sys_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_LOW>;
++		   net_led = <&gpio  GPIODV_24  GPIO_ACTIVE_HIGH>;
+ 		   shut_volume= <&gpio GPIOH_5  GPIO_ACTIVE_HIGH>;
+ 		   demo_res = <&gpio  GPIODV_12  GPIO_ACTIVE_LOW>;
+ 		   tuner_lnb = <&gpio  GPIODV_15  GPIO_ACTIVE_LOW>;
+-		   s2_tuner_lnb = <&gpio_ao  GPIOAO_5  GPIO_ACTIVE_LOW>;
+ 		   standby_sync= <&gpio_ao GPIOAO_6  GPIO_ACTIVE_LOW>;
+ 	};
+ 
+diff --git a/arch/arm64/configs/meson64_defconfig b/arch/arm64/configs/meson64_defconfig
+index 7fba832..a522880 100644
+--- a/arch/arm64/configs/meson64_defconfig
++++ b/arch/arm64/configs/meson64_defconfig
+@@ -220,6 +220,7 @@ CONFIG_AML_BACKLIGHT=y
+ CONFIG_AML_LOCAL_DIMMING=y
+ CONFIG_AMLOGIC_LED=y
+ CONFIG_AML_LED_SYS=y
++CONFIG_SDMC_BLINKLED=y
+ CONFIG_AML_LED_PWM=y
+ CONFIG_AML_LED_TRIGGER_BREATHE=y
+ CONFIG_AML_LED_TRIGGER_SCPI=y
+diff --git a/drivers/amlogic/led/Kconfig b/drivers/amlogic/led/Kconfig
+index 345d0c6..ad38d4b 100644
+--- a/drivers/amlogic/led/Kconfig
++++ b/drivers/amlogic/led/Kconfig
+@@ -25,6 +25,12 @@ config AML_LED_SYS
+ 	  Enable this option to allow the userspace to control
+ 	  the system led.
+ 
++config SDMC_BLINKLED
++	tristate "sdmc blinkled module support"
++	default n
++	help
++	  This option enables support for sdmc blinkled drivers.
++
+ config AML_LED_PWM
+ 	tristate "pwm led module support"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/amlogic/led/Makefile b/drivers/amlogic/led/Makefile
+index 9447bc8..82e6f91 100644
+--- a/drivers/amlogic/led/Makefile
++++ b/drivers/amlogic/led/Makefile
+@@ -3,6 +3,7 @@
+ #
+ 
+ obj-$(CONFIG_AML_LED_SYS) += led_sys.o
++obj-$(CONFIG_SDMC_BLINKLED) += sdmc_blinkled.o
+ obj-$(CONFIG_AML_LED_PWM) += led_pwm.o
+ 
+ obj-$(CONFIG_AML_LED_TRIGGER_BREATHE) += led_trigger_breathe.o
