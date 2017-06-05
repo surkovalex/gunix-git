@@ -44,7 +44,7 @@ static ssize_t store_blinkled(struct class *class, struct class_attribute *attr,
     ssize_t r;
 
     r = sscanf(buf, "%d", &dbg);
-	if (dbg)
+    if (dbg)
         gpio_set_value(gdev->bled_gpio.pin, 1);
     else
         gpio_set_value(gdev->bled_gpio.pin, 0);
@@ -65,7 +65,7 @@ static ssize_t store_stopflag(struct class *class, struct class_attribute *attr,
     ssize_t r;
 
     r = sscanf(buf, "%d", &dbg);
-	if (dbg)
+    if (dbg)
         gdev->stop_flag = 1;
     else
         gdev->stop_flag = 0;
@@ -75,9 +75,9 @@ static ssize_t store_stopflag(struct class *class, struct class_attribute *attr,
 
 
 static struct class_attribute sdmca_class_attrs[] = {
-	__ATTR(blink_led, S_IRUGO | S_IWUGO, show_blinkled, store_blinkled),
-	__ATTR(stop_flag, S_IRUGO | S_IWUGO, show_stopflag, store_stopflag),
-	__ATTR_NULL
+    __ATTR(blink_led, S_IRUGO | S_IWUGO, show_blinkled, store_blinkled),
+    __ATTR(stop_flag, S_IRUGO | S_IWUGO, show_stopflag, store_stopflag),
+    __ATTR_NULL
 };
 
 
@@ -118,15 +118,15 @@ static int blinkbled_gpio_dt_parse(struct platform_device *pdev)
 
 static void bled_timer_handler(unsigned long data)
 {
-	unsigned int stop_flag;
+    unsigned int stop_flag;
 
-	stop_flag = gdev->stop_flag;
-	if (!stop_flag) {
-            gpio_set_value(gdev->bled_gpio.pin, !(gdev->led_level));
-            gdev->led_level = !(gdev->led_level);
-            mod_timer(&gdev->bled_timer, jiffies + HZ/4);
-	} else
-            gpio_set_value(gdev->bled_gpio.pin, 0);
+    stop_flag = gdev->stop_flag;
+    if (!stop_flag) {
+        gpio_set_value(gdev->bled_gpio.pin, !(gdev->led_level));
+        gdev->led_level = !(gdev->led_level);
+        mod_timer(&gdev->bled_timer, jiffies + HZ/4);
+    } else
+        gpio_set_value(gdev->bled_gpio.pin, 0);
 }
 
 
