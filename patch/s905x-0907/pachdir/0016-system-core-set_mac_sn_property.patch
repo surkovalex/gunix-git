@@ -1,0 +1,204 @@
+diff --git a/init/Android.mk b/init/Android.mk
+index dd62138..6d2c73a 100644
+--- a/init/Android.mk
++++ b/init/Android.mk
+@@ -44,6 +44,7 @@ LOCAL_SRC_FILES:= \
+     devices.cpp \
+     init.cpp \
+     keychords.cpp \
++    sdmc_options.cpp \
+     property_service.cpp \
+     signal_handler.cpp \
+     ueventd.cpp \
+@@ -76,11 +77,14 @@ LOCAL_STATIC_LIBRARIES := \
+     libc++_static \
+     libdl \
+     libsparse_static \
+-    libz
++    libz \
++    libIDburn_s \
++    libi2c_s
+ 
+ LOCAL_C_INCLUDES += system/extras/ext4_utils \
+ 		    external/zlib \
+-		    vendor/amlogic/frameworks/services/systemcontrol
++		    vendor/amlogic/frameworks/services/systemcontrol \
++		    vendor/sdmc/sdmc-libs/libIDburn
+ 
+ # Create symlinks
+ LOCAL_POST_INSTALL_CMD := $(hide) mkdir -p $(TARGET_ROOT_OUT)/sbin; \
+diff --git a/init/init.cpp b/init/init.cpp
+index 05c0c05..f7d4fa8 100644
+--- a/init/init.cpp
++++ b/init/init.cpp
+@@ -63,6 +63,7 @@
+ #include "util.h"
+ #include "ueventd.h"
+ #include "watchdogd.h"
++#include "sdmc_options.h"
+ #include "ubootenv.h"
+ 
+ struct selabel_handle *sehandle;
+@@ -807,7 +808,7 @@ static void export_kernel_boot_props() {
+         const char *dst_prop;
+         const char *default_value;
+     } prop_map[] = {
+-        { "ro.boot.serialno",   "ro.serialno",   "0123456789abcdef", },
++        /* { "ro.boot.serialno",   "ro.serialno",   "0123456789abcdef", }, */
+         { "ro.boot.mode",       "ro.bootmode",   "unknown", },
+         { "ro.boot.baseband",   "ro.baseband",   "unknown", },
+         { "ro.boot.bootloader", "ro.bootloader", "unknown", },
+@@ -1159,11 +1160,13 @@ int main(int argc, char** argv) {
+ 
+     // Run all property triggers based on current state of the properties.
+     queue_builtin_action(queue_property_triggers_action, "queue_property_triggers");
++    queue_builtin_action(sdmc_set_MAC_property_action, "mac_init");
+ 
+     while (true) {
+         if (!waiting_for_exec) {
+             execute_one_command();
+             restart_processes();
++            sdmc_set_SN_property();
+         }
+ 
+         int timeout = -1;
+diff --git a/init/sdmc_options.cpp b/init/sdmc_options.cpp
+new file mode 100644
+index 0000000..507ed65
+--- /dev/null
++++ b/init/sdmc_options.cpp
+@@ -0,0 +1,114 @@
++#include <string.h>
++#include <stdio.h>
++#include <unistd.h>
++#include <stdlib.h>
++#include <sys/ioctl.h>
++#include <netinet/in.h>
++#include <linux/if.h>
++#include <sys/socket.h>
++#include "sdmc_options.h"
++#include "property_service.h"
++#include "log.h"
++
++#include "IDburner.h"
++
++#define DEFAULT_ETH_DEV_NAME "eth0"
++#define USER_DEVICE_ID_ADDR_LENGTH 0x18
++
++int get_eth_dev_mac(char *mac, const char *eth_dev_name)
++{
++    struct ifreq tmp;
++    int sock_mac;
++    char mac_addr[30];
++    sock_mac = socket(AF_INET, SOCK_STREAM, 0);
++    if( sock_mac == -1){
++        ERROR("create socket fail\n");
++        return -1;
++    }
++    memset(&tmp,0,sizeof(tmp));
++    strncpy(tmp.ifr_name, eth_dev_name, sizeof(tmp.ifr_name)-1 );
++    if( (ioctl(sock_mac, SIOCGIFHWADDR, &tmp)) < 0 ){
++        ERROR("mac ioctl error\n");
++        return -1;
++    }
++    sprintf(mac_addr, "%02x:%02x:%02x:%02x:%02x:%02x",
++            (unsigned char)tmp.ifr_hwaddr.sa_data[0],
++            (unsigned char)tmp.ifr_hwaddr.sa_data[1],
++            (unsigned char)tmp.ifr_hwaddr.sa_data[2],
++            (unsigned char)tmp.ifr_hwaddr.sa_data[3],
++            (unsigned char)tmp.ifr_hwaddr.sa_data[4],
++            (unsigned char)tmp.ifr_hwaddr.sa_data[5]
++            );
++    ERROR("local mac:%s\n", mac_addr);
++    close(sock_mac);
++    memcpy(mac,mac_addr,strlen(mac_addr));
++    return 0;
++}
++
++int sdmc_set_MAC_property_action(int nargs, char **args)
++{
++#if SDMC_SET_MAC_TO_UBOOTENV
++	INFO("SDMC:: init MAC IN.\n");
++	char mac[32];
++	int nRet =0;
++    memset(mac, 0, 32);
++    if(get_eth_dev_mac(mac, DEFAULT_ETH_DEV_NAME) == 0) {
++        ERROR("SDMC:: Set MAC Addr: %s\n",mac);
++        nRet = init_property_set("ubootenv.var.ethaddr", mac);
++		ERROR("SDMC: Set MAC Addr: %d\n",nRet);
++        return 0;
++    } else {
++        ERROR("SDMC:: Get MAC failure\n");
++        return -1;
++    }
++    return -1;
++#else
++    INFO("SDMC:: Set MAC to ubootenv options has been turn off");
++    return 0;
++#endif
++}
++
++int sdmc_set_SN_property(void)
++{
++	char r_sn[USER_DEVICE_ID_ADDR_LENGTH+1] = {0};
++	char snarr[USER_DEVICE_ID_ADDR_LENGTH+1] = {0};
++	static int isSN_Set = 0;
++	int nRet = 0;
++	char len_string[3] = {0};
++	char new_version_tag[4] = "NEW";
++
++	if(!isSN_Set)
++	{
++		nRet = readUserDeviceID( r_sn );
++		if(!nRet && strlen(r_sn))
++		{
++			INFO("@@@@@%s#%d# ret:%d s/n:%s\n", __FUNCTION__, __LINE__, nRet,r_sn);
++			if (strncmp(r_sn, new_version_tag, 3) == 0)
++			{
++				strncpy(len_string, r_sn + strlen(new_version_tag), 2);
++				unsigned int len = atoi(len_string);
++				if (len > 24)
++				{
++					len = 24;
++				}
++				strncpy(snarr, r_sn + 5, len);
++			}
++			else
++			{
++				strcpy(snarr, r_sn);
++			}
++			if(0 == init_property_set("ro.serialno", snarr) )
++			{
++				INFO("@@@@@%s#%d# s/n:%s\n", __FUNCTION__, __LINE__, snarr);
++				isSN_Set = 1;
++			}
++		}
++		else if(0 != nRet)
++		{
++			ERROR("@@@@@%s#%d# read s/n error\n", __FUNCTION__, __LINE__);
++			return -1;
++		}
++	}
++
++	return 0;
++}
+diff --git a/init/sdmc_options.h b/init/sdmc_options.h
+new file mode 100644
+index 0000000..8aa14b1
+--- /dev/null
++++ b/init/sdmc_options.h
+@@ -0,0 +1,14 @@
++/*    by SDMC.Daniel  2013-01-22
++        This include the options of sdmc
++        Copyright (C) Daniel@SDMC 2013
++*/
++#ifndef __SDMC_OPTIONS_H__
++#define __SDMC_OPTIONS_H__
++
++#define SDMC_SET_MAC_TO_UBOOTENV    1
++#define SDMC_SET_INIT_PROPERTIES    1
++
++extern int sdmc_set_MAC_property_action(int nargs, char **args);
++extern int sdmc_set_SN_property(void);
++
++#endif /*__SDMC_OPTIONS_H__*/

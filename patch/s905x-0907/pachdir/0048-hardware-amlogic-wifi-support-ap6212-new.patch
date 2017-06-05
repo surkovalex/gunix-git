@@ -1,0 +1,17 @@
+commit 3caaf212ba0563c1acf341353cbf2e7a8b5fb2db
+Author: luodongdong <luodongdong@mail.sdmc.com>
+Date:   Tue Jan 17 11:29:36 2017 +0800
+
+    support ap6212 new
+
+diff --git a/bcm_ampak/config/6212/BT/bcm43438a0.hcd b/bcm_ampak/config/6212/BT/bcm43438a0.hcd
+index ff9211b..9205ae6 100644
+Binary files a/bcm_ampak/config/6212/BT/bcm43438a0.hcd and b/bcm_ampak/config/6212/BT/bcm43438a0.hcd differ
+diff --git a/bcm_ampak/config/6212/BT/bcm43438a1.hcd b/bcm_ampak/config/6212/BT/bcm43438a1.hcd
+new file mode 100644
+index 0000000..c4a4b55
+Binary files /dev/null and b/bcm_ampak/config/6212/BT/bcm43438a1.hcd differ
+diff --git a/bcm_ampak/config/6212/fw_bcm43438a1.bin b/bcm_ampak/config/6212/fw_bcm43438a1.bin
+new file mode 100644
+index 0000000..e815f44
+Binary files /dev/null and b/bcm_ampak/config/6212/fw_bcm43438a1.bin differ

@@ -1,0 +1,39 @@
+From 7354f66c866229335fbb2ffa806ada620e0f0731 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 27 Dec 2016 14:15:04 +0800
+Subject: [PATCH] fix bluetooth wake up
+
+---
+ p230/p230.mk | 3 ++-
+ q201/q201.mk | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/p230/p230.mk b/p230/p230.mk
+index 745cfac..81f0470 100644
+--- a/p230/p230.mk
++++ b/p230/p230.mk
+@@ -124,7 +124,8 @@ PRODUCT_DEFAULT_WIFI_CHANNELS := 11
+ #########################################################################
+ 
+ BOARD_HAVE_BLUETOOTH := true
+-BLUETOOTH_MODULE := bcm4356
++MULTI_BLUETOOTH_SUPPORT := true
++BCM_BLUETOOTH_LPM_ENABLE := true
+ include device/amlogic/common/bluetooth.mk
+ 
+ 
+diff --git a/q201/q201.mk b/q201/q201.mk
+index a19d76c..eb19176 100644
+--- a/q201/q201.mk
++++ b/q201/q201.mk
+@@ -125,6 +125,7 @@ PRODUCT_DEFAULT_WIFI_CHANNELS := 11
+ 
+ BOARD_HAVE_BLUETOOTH := true
+ MULTI_BLUETOOTH_SUPPORT := true
++BCM_BLUETOOTH_LPM_ENABLE := true
+ include device/amlogic/common/bluetooth.mk
+ 
+ 
+-- 
+1.9.1
+

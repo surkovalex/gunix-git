@@ -1,0 +1,87 @@
+From a3c3e251398b37e88d0e3ab3e8ccd647a1ac2d79 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Mon, 26 Dec 2016 17:39:36 +0800
+Subject: [PATCH] add preinstall service
+
+---
+ p212/init.amlogic.board.rc |  9 +++++++++
+ p230/init.amlogic.board.rc |  9 +++++++++
+ q201/init.amlogic.board.rc | 10 ++++++++++
+ 3 files changed, 28 insertions(+)
+
+diff --git a/p212/init.amlogic.board.rc b/p212/init.amlogic.board.rc
+index 072ce3f..8846a9a 100644
+--- a/p212/init.amlogic.board.rc
++++ b/p212/init.amlogic.board.rc
+@@ -42,6 +42,9 @@ on fs
+ on post-fs-data
+    mkdir  /data/tee
+ 
++on property:init.svc.bootanim=stopped
++    start preinstall
++
+ service wpa_supplicant /system/bin/wpa_supplicant \
+     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+     -I/system/etc/wifi/wpa_supplicant_overlay.conf \
+@@ -82,3 +85,9 @@ service devinit_svc /system/bin/device_init.sh
+     class core
+     oneshot
+ 
++service preinstall /system/bin/preinstall.sh
++    user root
++    group root
++    disabled
++    oneshot
++
+diff --git a/p230/init.amlogic.board.rc b/p230/init.amlogic.board.rc
+index 397a6a4..ecdc25c 100644
+--- a/p230/init.amlogic.board.rc
++++ b/p230/init.amlogic.board.rc
+@@ -45,6 +45,9 @@ on fs
+ on post-fs-data
+    mkdir  /data/tee
+ 
++on property:init.svc.bootanim=stopped
++    start preinstall
++
+ service wpa_supplicant /system/bin/wpa_supplicant \
+     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+     -e/data/misc/wifi/entropy.bin \
+@@ -84,3 +87,9 @@ service devinit_svc /system/bin/device_init.sh
+     class core
+     oneshot
+ 
++service preinstall /system/bin/preinstall.sh
++    user root
++    group root
++    disabled
++    oneshot
++
+diff --git a/q201/init.amlogic.board.rc b/q201/init.amlogic.board.rc
+index fec6168..0a8ba55 100644
+--- a/q201/init.amlogic.board.rc
++++ b/q201/init.amlogic.board.rc
+@@ -45,6 +45,10 @@ on boot
+ on fs
+ on post-fs-data
+    mkdir  /data/tee
++
++on property:init.svc.bootanim=stopped
++    start preinstall
++
+ service wpa_supplicant /system/bin/wpa_supplicant \
+     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+     -e/data/misc/wifi/entropy.bin \
+@@ -84,3 +88,9 @@ service devinit_svc /system/bin/device_init.sh
+     class core
+     oneshot
+ 
++service preinstall /system/bin/preinstall.sh
++    user root
++    group root
++    disabled
++    oneshot
++
+-- 
+1.9.1
+

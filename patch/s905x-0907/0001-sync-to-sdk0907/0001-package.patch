@@ -1,0 +1,2711 @@
+diff --git a/apps/Bluetooth/AndroidManifest.xml b/apps/Bluetooth/AndroidManifest.xml
+index be7f1a8..ad090ba 100644
+--- a/apps/Bluetooth/AndroidManifest.xml
++++ b/apps/Bluetooth/AndroidManifest.xml
+@@ -340,16 +340,16 @@
+         </service>
+         <receiver
+             android:exported="true"
+-            android:name=".btservice.BluetoothAutoPairReceiver"
++            android:name=".hid.BluetoothAutoPairReceiver"
+             android:enabled="true">
+                 <intent-filter android:priority="1000">
+                     <action android:name="android.intent.action.BOOT_COMPLETED" />
+                 </intent-filter>
+-         </receiver>
+-         <service
+-             android:name = ".btservice.BluetoothAutoPairService">
+-         </service>
+-    <service
++        </receiver>
++        <service
++             android:name = ".hid.BluetoothAutoPairService">
++        </service>
++        <service
+             android:process="@string/process"
+             android:name = ".rtkbt.RtkbtService"
+             android:enabled="@bool/profile_supported_rtkbt">
+diff --git a/apps/Bluetooth/jni/com_android_bluetooth_btservice_AdapterService.cpp b/apps/Bluetooth/jni/com_android_bluetooth_btservice_AdapterService.cpp
+index cce13b1..64148cf 100755
+--- a/apps/Bluetooth/jni/com_android_bluetooth_btservice_AdapterService.cpp
++++ b/apps/Bluetooth/jni/com_android_bluetooth_btservice_AdapterService.cpp
+@@ -702,13 +702,12 @@ static bool cleanupNative(JNIEnv *env, jobject obj) {
+     return JNI_TRUE;
+ }
+ 
+-static jboolean enableNative(JNIEnv* env, jobject obj) {
++static jboolean enableNative(JNIEnv* env, jobject obj, jboolean isGuest) {
+     ALOGV("%s:",__FUNCTION__);
+ 
+     jboolean result = JNI_FALSE;
+     if (!sBluetoothInterface) return result;
+-
+-    int ret = sBluetoothInterface->enable();
++    int ret = sBluetoothInterface->enable(isGuest == JNI_TRUE ? 1 : 0);
+     result = (ret == BT_STATUS_SUCCESS || ret == BT_STATUS_DONE) ? JNI_TRUE : JNI_FALSE;
+     return result;
+ }
+@@ -1135,7 +1134,7 @@ static JNINativeMethod sMethods[] = {
+     {"classInitNative", "()V", (void *) classInitNative},
+     {"initNative", "()Z", (void *) initNative},
+     {"cleanupNative", "()V", (void*) cleanupNative},
+-    {"enableNative", "()Z",  (void*) enableNative},
++    {"enableNative", "(Z)Z",  (void*) enableNative},
+     {"disableNative", "()Z",  (void*) disableNative},
+     {"setAdapterPropertyNative", "(I[B)Z", (void*) setAdapterPropertyNative},
+     {"getAdapterPropertiesNative", "()Z", (void*) getAdapterPropertiesNative},
+diff --git a/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterService.java b/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterService.java
+index 5e60ee4..78dd579 100644
+--- a/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterService.java
++++ b/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterService.java
+@@ -2107,7 +2107,7 @@ public class AdapterService extends Service {
+     private native static void classInitNative();
+     private native boolean initNative();
+     private native void cleanupNative();
+-    /*package*/ native boolean enableNative();
++    /*package*/ native boolean enableNative(boolean startRestricted);
+     /*package*/ native boolean disableNative();
+     /*package*/ native boolean setAdapterPropertyNative(int type, byte[] val);
+     /*package*/ native boolean getAdapterPropertiesNative();
+diff --git a/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterState.java b/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterState.java
+index 0febb0e..abb1e6a 100644
+--- a/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterState.java
++++ b/apps/Bluetooth/src/com/android/bluetooth/btservice/AdapterState.java
+@@ -20,6 +20,7 @@ import android.bluetooth.BluetoothAdapter;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.os.Message;
++import android.os.UserManager;
+ import android.util.Log;
+ 
+ import com.android.internal.util.State;
+@@ -360,7 +361,8 @@ final class AdapterState extends StateMachine {
+                     removeMessages(BLE_START_TIMEOUT);
+ 
+                     //Enable
+-                    if (!adapterService.enableNative()) {
++                    boolean isGuest = UserManager.get(mAdapterService).isGuestUser();
++                    if (!adapterService.enableNative(isGuest)) {
+                         errorLog("Error while turning Bluetooth on");
+                         notifyAdapterStateChange(BluetoothAdapter.STATE_OFF);
+                         transitionTo(mOffState);
+diff --git a/apps/Bluetooth/src/com/android/bluetooth/hid/BluetoothAutoPairReceiver.java b/apps/Bluetooth/src/com/android/bluetooth/hid/BluetoothAutoPairReceiver.java
+new file mode 100644
+index 0000000..b37a2c6
+--- /dev/null
++++ b/apps/Bluetooth/src/com/android/bluetooth/hid/BluetoothAutoPairReceiver.java
+@@ -0,0 +1,33 @@
++package com.android.bluetooth.hid;
++
++import android.content.Context;
++import android.content.Intent;
++import android.util.Log;
++import android.os.SystemProperties;
++import android.content.BroadcastReceiver;
++
++public class BluetoothAutoPairReceiver extends BroadcastReceiver {
++    private static final String TAG = "BluetoothAutoPairReceiver";
++    private static final boolean DEBUG = true;
++
++    private void Log(String msg) {
++        if (DEBUG) {
++            Log.i(TAG, msg);
++        }
++    }
++
++    @Override
++    public void onReceive(Context context, Intent intent) {
++        String action = intent.getAction();
++        if (Intent.ACTION_BOOT_COMPLETED.equals(action)) {
++            Log("Received ACTION_BOOT_COMPLETED");
++            if (SystemProperties.get("ro.autoconnectbt.isneed").equals("true")) {
++                Log("Need autoconnectBT!");
++                Intent serviceintent = new Intent(context, BluetoothAutoPairService.class);
++                context.startService(serviceintent);
++            } else {
++                Log("No need autoconnectBT!");
++            }
++        }
++    }
++}
+\ No newline at end of file
+diff --git a/apps/Bluetooth/src/com/android/bluetooth/hid/BluetoothAutoPairService.java b/apps/Bluetooth/src/com/android/bluetooth/hid/BluetoothAutoPairService.java
+new file mode 100644
+index 0000000..166807c
+--- /dev/null
++++ b/apps/Bluetooth/src/com/android/bluetooth/hid/BluetoothAutoPairService.java
+@@ -0,0 +1,221 @@
++package com.android.bluetooth.hid;
++
++import android.annotation.SuppressLint;
++import android.app.IntentService;
++import android.content.BroadcastReceiver;
++import android.content.Context;
++import android.content.Intent;
++import android.util.Log;
++import android.bluetooth.BluetoothAdapter;
++import android.bluetooth.BluetoothClass.Device;
++import android.bluetooth.BluetoothDevice;
++import android.bluetooth.BluetoothSocket;
++import android.bluetooth.BluetoothInputDevice;
++import android.bluetooth.BluetoothProfile;
++import android.content.IntentFilter;
++import android.os.SystemProperties;
++import java.util.Timer;
++import java.util.TimerTask;
++import java.lang.reflect.Method;
++import java.util.Iterator;
++import java.util.Set;
++
++@SuppressLint("NewApi")
++public class BluetoothAutoPairService extends IntentService {
++    private static final String TAG = "BluetoothAutoPairService";
++    private static BluetoothDevice RemoteDevice;
++    private String mBtMacPrefix;
++    private String mBtClass;
++    private String mBtCallback;
++    private BluetoothInputDevice mService = null;
++    private Context mContext = null;
++    private static final boolean DEBUG = false;
++    private BluetoothAdapter mBluetoothAdapter = null;
++    private boolean scanState = false;
++    private boolean scanFlag = false;
++    private static Timer timer = null;
++    static final long SNAPSHOT_INTERVAL = 30 * 1000;
++    private void Log(String msg) {
++        if (DEBUG) {
++            Log.i(TAG, msg);
++        }
++    }
++
++    @Override
++    protected void onHandleIntent(Intent intent) {
++        Log("onHandleIntent begin");
++        if (!getSpecialDeviceInfo()) {
++            Log("getSpecialDeviceInfo fail!");
++            return;
++        }
++        if (initBt(this)) {
++            try {
++                Thread.sleep(5000);
++            } catch(Exception e) {
++              e.printStackTrace();
++            }
++            timer = new Timer();
++            timer.schedule(new TimerTask() {
++            public void run() {
++                try{
++                   scanState=true;
++                }catch(Exception e) {
++                   e.printStackTrace();
++                }
++            }
++            }, SNAPSHOT_INTERVAL, SNAPSHOT_INTERVAL );
++            if (isSpecialDevicePaired())  {
++                Log("Hasfound SpecialDevicePaired!");
++            }
++            while (!scanState) {
++                if (!mBluetoothAdapter.isDiscovering()) {
++                    mBluetoothAdapter.startLeScan(mLeScanCallback);
++                }
++            }
++            mBluetoothAdapter.stopLeScan(mLeScanCallback);
++            Log("Cancel Scan!");
++            if ( scanFlag == true ) {
++                try {
++                    Thread.sleep(5000);
++                    connected(RemoteDevice);
++                } catch(Exception e) {}
++            }
++            Log("Exit Services...!");
++        }
++    }
++    private boolean getSpecialDeviceInfo() {
++        mBtMacPrefix = SystemProperties.get("ro.autoconnectbt.macprefix");
++        Log("getSpecialDeviceInfo mBtMacPrefix:"+mBtMacPrefix);
++        mBtClass = SystemProperties.get("ro.autoconnectbt.btclass");
++        Log("getSpecialDeviceInfo mBtClass:"+mBtClass);
++        return (!mBtMacPrefix.isEmpty() && !mBtClass.isEmpty());
++    }
++    private boolean isSpecialDevice(BluetoothDevice bd) {
++        //return bd.getAddress().startsWith(mBtMacPrefix) &&
++        //    bd.getBluetoothClass().toString().equals(mBtClass);
++        return bd.getAddress().startsWith(mBtMacPrefix);
++    }
++    private BluetoothAdapter.LeScanCallback mLeScanCallback =
++    new BluetoothAdapter.LeScanCallback(){
++        @Override
++        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord){
++        if ( device.getName() != mBtCallback ) {
++                mBtCallback = device.getName();
++                Log("BluetoothDevice = " + device.getName() +
++                " Address=" + device.getAddress() +
++                " class=" + device.getBluetoothClass().toString());
++                BluetoothDevice btDevice=device;
++                if (btDevice != null) {
++                    if (isSpecialDevice(btDevice)) {
++                        Log("Scan result isSpecialDevice!");
++                        if (btDevice.getBondState() == BluetoothDevice.BOND_NONE) {
++                            Log("Device no bond!");
++                            Log("Find remoteDevice and parm: name= " + btDevice.getName() +
++                            " Address=" + btDevice.getAddress() +
++                            " class=" + btDevice.getBluetoothClass().toString());
++                            RemoteDevice = mBluetoothAdapter.getRemoteDevice(btDevice.getAddress());
++                            try {
++                                Log("Device start bond...");
++                                if ( createBond( RemoteDevice.getClass(), RemoteDevice ) ) {
++                                    timer.cancel();
++                                    scanFlag=true;
++                                    scanState=true;
++                                    Log("RemoteDevice bond ok!");
++                                }
++                                else
++                                {
++                                    Log("RemoteDevice bond failed!");
++                                }
++                            } catch (Exception e) {
++                                e.printStackTrace();
++                            }
++                        }
++                        else
++                        {
++                            Log("Device has bond");
++                            scanState=true;
++                        }
++                    }
++                }
++            }
++        }
++    };
++    private void connected(BluetoothDevice device) throws Exception {
++        if ( mService != null && device != null ) {
++            Log("Connecting to target: " + device.getAddress());
++            if (mService.connect(device)) {
++                mService.setPriority( device, BluetoothProfile.PRIORITY_AUTO_CONNECT );
++                timer.cancel();
++            }
++            else{
++                Log("connect no!");
++            }
++        }
++        else{
++            Log("mService or device no work!");
++        }
++    }
++    static public boolean createBond(Class btClass,BluetoothDevice device) throws Exception {
++        Method createBondMethod = btClass.getMethod("createBond");
++        Boolean returnValue = (Boolean) createBondMethod.invoke(device);
++        return returnValue.booleanValue();
++    }
++    private boolean initBt(Context context) {
++        mContext = context;
++        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
++        if (mBluetoothAdapter == null) {
++            Log("No bluetooth device!");
++            return false;
++        } else {
++            Log("Bluetooth device exits!");
++            if (!mBluetoothAdapter.isEnabled()) {
++                mBluetoothAdapter.enable();
++            }
++        }
++        if (!mBluetoothAdapter.getProfileProxy(mContext, mServiceConnection,
++                BluetoothProfile.INPUT_DEVICE)) {
++            Log("Bluetooth getProfileProxy failed!");
++        }
++        return true;
++    }
++    private BluetoothProfile.ServiceListener mServiceConnection =
++            new BluetoothProfile.ServiceListener() {
++
++        @Override
++        public void onServiceDisconnected(int profile) {
++            Log("Bluetooth service proxy disconnected");
++        }
++
++        @Override
++        public void onServiceConnected(int profile, BluetoothProfile proxy) {
++            if (DEBUG) {
++                Log("Bluetooth service proxy connected");
++            }
++            mService = (BluetoothInputDevice)proxy;
++        }
++    };
++
++    public BluetoothAutoPairService() {
++        super("HelloIntentService");
++    }
++    private boolean isSpecialDevicePaired() {
++        Set<BluetoothDevice> bts = mBluetoothAdapter.getBondedDevices();
++        Iterator<BluetoothDevice> iterator = bts.iterator();
++        while (iterator.hasNext()) {
++            BluetoothDevice bd = iterator.next();
++            if (isSpecialDevice(bd)) {
++            Log("RemoteDevice has bond: name=" + bd.getName() +
++                " Address=" + bd.getAddress() +
++                " class=" + bd.getBluetoothClass().toString());
++                try {
++                    timer.cancel();
++                    scanState=true;
++                } catch (Exception e) {
++                    e.printStackTrace();
++                }
++                return true;
++            }
++        }
++        return false;
++    }
++}
+diff --git a/apps/Browser/AndroidManifest.xml b/apps/Browser/AndroidManifest.xml
+index 8726a48..4b98cf9 100644
+--- a/apps/Browser/AndroidManifest.xml
++++ b/apps/Browser/AndroidManifest.xml
+@@ -49,7 +49,7 @@
+     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+     <uses-permission android:name="android.permission.CAMERA"/>
+     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="22"/>
++    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="23"/>
+ 
+     <application   android:name="Browser"
+                    android:label="@string/application_name"
+diff --git a/apps/Browser/src/com/android/browser/ActivityController.java b/apps/Browser/src/com/android/browser/ActivityController.java
+index ac248b8..18ac0fb 100644
+--- a/apps/Browser/src/com/android/browser/ActivityController.java
++++ b/apps/Browser/src/com/android/browser/ActivityController.java
+@@ -71,4 +71,6 @@ public interface ActivityController {
+ 
+     boolean dispatchGenericMotionEvent(MotionEvent ev);
+ 
++    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);
++
+ }
+diff --git a/apps/Browser/src/com/android/browser/BrowserActivity.java b/apps/Browser/src/com/android/browser/BrowserActivity.java
+index 4166b11..96de2b0 100644
+--- a/apps/Browser/src/com/android/browser/BrowserActivity.java
++++ b/apps/Browser/src/com/android/browser/BrowserActivity.java
+@@ -304,4 +304,9 @@ public class BrowserActivity extends Activity {
+                 super.dispatchGenericMotionEvent(ev);
+     }
+ 
++    @Override
++    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
++        mController.onRequestPermissionsResult(requestCode, permissions,  grantResults) ;
++    }
++
+ }
+diff --git a/apps/Browser/src/com/android/browser/Controller.java b/apps/Browser/src/com/android/browser/Controller.java
+index dc55f6a..4153323 100644
+--- a/apps/Browser/src/com/android/browser/Controller.java
++++ b/apps/Browser/src/com/android/browser/Controller.java
+@@ -17,6 +17,7 @@
+ package com.android.browser;
+ 
+ import android.app.Activity;
++import android.app.AlertDialog;
+ import android.app.Dialog;
+ import android.app.DownloadManager;
+ import android.app.ProgressDialog;
+@@ -38,6 +39,7 @@ import android.database.sqlite.SQLiteDatabase;
+ import android.database.sqlite.SQLiteException;
+ import android.graphics.Bitmap;
+ import android.graphics.Canvas;
++import android.Manifest;
+ import android.net.Uri;
+ import android.net.http.SslError;
+ import android.os.AsyncTask;
+@@ -54,6 +56,8 @@ import android.provider.BrowserContract.Images;
+ import android.provider.ContactsContract;
+ import android.provider.ContactsContract.Intents.Insert;
+ import android.speech.RecognizerIntent;
++import android.support.v4.content.ContextCompat;
++import android.support.v4.app.ActivityCompat;
+ import android.text.TextUtils;
+ import android.util.Log;
+ import android.util.Patterns;
+@@ -82,6 +86,7 @@ import android.webkit.WebSettings;
+ import android.webkit.WebView;
+ import android.widget.Toast;
+ 
++import com.android.browser.DownloadStartInf;
+ import com.android.browser.IntentHandler.UrlData;
+ import com.android.browser.UI.ComboViews;
+ import com.android.browser.provider.BrowserProvider2.Thumbnails;
+@@ -113,7 +118,7 @@ public class Controller
+         "android.speech.extras.SEND_APPLICATION_ID_EXTRA";
+     private static final String INCOGNITO_URI = "browser:incognito";
+ 
+-
++    private final int REQUEST_WRITE_EXTERNAL_STORAGE = 1233;
+     // public message ids
+     public final static int LOAD_URL = 1001;
+     public final static int STOP_LOAD = 1002;
+@@ -162,6 +167,8 @@ public class Controller
+     // A bitmap that is re-used in createScreenshot as scratch space
+     private static Bitmap sThumbnailBitmap;
+ 
++    private DownloadStartInf mDownloadStartInf = null;
++
+     private Activity mActivity;
+     private UI mUi;
+     private TabControl mTabControl;
+@@ -1039,6 +1046,35 @@ public class Controller
+     }
+ 
+     @Override
++    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
++
++        Log.d(LOGTAG, "onRequestPermissionsResult");
++        switch (requestCode) {
++            case REQUEST_WRITE_EXTERNAL_STORAGE:
++            {
++                if (mDownloadStartInf == null) {
++                    Log.e(LOGTAG, "onRequestPermissionsResult should not equal to null");
++                    return;
++                }
++
++                onDownloadStart(mDownloadStartInf.tab,
++                    mDownloadStartInf.url,
++                    mDownloadStartInf.userAgent,
++                    mDownloadStartInf.contentDisposition,
++                    mDownloadStartInf.mimetype,
++                    mDownloadStartInf.referer,
++                    mDownloadStartInf.contentLength);
++
++                mDownloadStartInf = null;
++
++            }
++                break;
++            default:
++                break;
++        }
++    }
++
++    @Override
+     public void onDownloadStart(Tab tab, String url, String userAgent,
+             String contentDisposition, String mimetype, String referer,
+             long contentLength) {
+@@ -1059,6 +1095,68 @@ public class Controller
+     }
+ 
+     @Override
++    public void onRequestPermissionsDownloadStart(Tab tab, String url, String userAgent,
++            String contentDisposition, String mimetype, String referer,
++            long contentLength) {
++
++            Log.d(LOGTAG, "onRequestPermissionsDownloadStart");
++            if (ContextCompat.checkSelfPermission(mActivity,
++                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
++                    != PackageManager.PERMISSION_GRANTED) {
++
++                mDownloadStartInf = new DownloadStartInf(tab, url, userAgent,
++                                                contentDisposition, mimetype, referer,
++                                                contentLength);
++
++                // Should we show an explanation?
++                if (ActivityCompat.shouldShowRequestPermissionRationale(
++                        mActivity,Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
++
++                // Show an expanation to the user *asynchronously* -- don't block
++                // this thread waiting for the user's response! After the user
++                // sees the explanation, try again to request the permission.
++                    DialogInterface.OnClickListener okListener =
++                            new DialogInterface.OnClickListener() {
++                    @Override
++                        public void onClick(DialogInterface dialog, int which) {
++                            ActivityCompat.requestPermissions(mActivity,
++                                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
++                                    REQUEST_WRITE_EXTERNAL_STORAGE);
++                        }
++                    };
++
++                    new AlertDialog.Builder(mActivity)
++                        .setMessage("You need to allow access to WRITE_EXTERNAL_STORAGE")
++                        .setPositiveButton("OK", okListener)
++                        .setNegativeButton("Cancel", null)
++                        .create()
++                        .show();
++
++                    return;
++
++                } else {
++
++                    // No explanation needed, we can request the permission.
++                    // REQUEST_WRITE_EXTERNAL_STORAGE is an
++                    // app-defined int constant. The callback method gets the
++                    // result of the request.
++
++                    ActivityCompat.requestPermissions(mActivity,
++                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
++                        REQUEST_WRITE_EXTERNAL_STORAGE);
++
++                    return;
++                }
++            }
++
++        onDownloadStart(tab,url, userAgent,
++            contentDisposition, mimetype, referer,
++            contentLength);
++        mDownloadStartInf = null;
++
++    }
++
++    @Override
+     public Bitmap getDefaultVideoPoster() {
+         return mUi.getDefaultVideoPoster();
+     }
+diff --git a/apps/Browser/src/com/android/browser/DownloadStartInf.java b/apps/Browser/src/com/android/browser/DownloadStartInf.java
+new file mode 100644
+index 0000000..078ca93
+--- /dev/null
++++ b/apps/Browser/src/com/android/browser/DownloadStartInf.java
+@@ -0,0 +1,38 @@
++/*
++ * Copyright (C) 2010 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
++ * use this file except in compliance with the License. You may obtain a copy of
++ * the License at
++ *
++ * http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
++ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
++ * License for the specific language governing permissions and limitations under
++ * the License.
++ */
++
++package com.android.browser;
++
++import  com.android.browser.Tab;
++
++public class DownloadStartInf{
++    public Tab tab;
++    public String url;
++    public String userAgent;
++    public String contentDisposition;
++    public String mimetype;
++    public String referer;
++    public long contentLength;
++    public DownloadStartInf(Tab tab,String url,String userAgent,String contentDisposition,String mimetype,String referer,long contentLength){
++            this.tab = tab ;
++            this.url = url;
++            this.userAgent = userAgent;
++            this.contentDisposition = contentDisposition;
++            this.mimetype = mimetype;
++            this.referer = referer;
++            this.contentLength = contentLength;
++            }
++}
+diff --git a/apps/Browser/src/com/android/browser/PreloadController.java b/apps/Browser/src/com/android/browser/PreloadController.java
+index 1929951..58d3bd9 100644
+--- a/apps/Browser/src/com/android/browser/PreloadController.java
++++ b/apps/Browser/src/com/android/browser/PreloadController.java
+@@ -151,6 +151,13 @@ public class PreloadController implements WebViewController {
+         if (LOGD_ENABLED) Log.d(LOGTAG, "onReceivedHttpAuthRequest()");
+     }
+ 
++
++    public void onRequestPermissionsResult(int requestCode,
++                                    String[] permissions,
++                                    int[] grantResults){
++        if (LOGD_ENABLED) Log.d(LOGTAG, "onRequestPermissionsResult()");
++    }
++
+     @Override
+     public void onDownloadStart(Tab tab, String url, String useragent,
+                                     String contentDisposition, String mimeType,
+@@ -159,6 +166,13 @@ public class PreloadController implements WebViewController {
+     }
+ 
+     @Override
++    public void onRequestPermissionsDownloadStart(Tab tab, String url, String userAgent,
++            String contentDisposition, String mimetype, String referer,
++            long contentLength){
++            if (LOGD_ENABLED) Log.d(LOGTAG, "onRequestPermissionsDownloadStart()");
++    }
++
++    @Override
+     public void showCustomView(Tab tab, View view, int requestedOrientation,
+                                     CustomViewCallback callback) {
+         if (LOGD_ENABLED) Log.d(LOGTAG, "showCustomView()");
+diff --git a/apps/Browser/src/com/android/browser/Tab.java b/apps/Browser/src/com/android/browser/Tab.java
+index a1bba1d..b4b3349 100644
+--- a/apps/Browser/src/com/android/browser/Tab.java
++++ b/apps/Browser/src/com/android/browser/Tab.java
+@@ -1143,7 +1143,8 @@ class Tab implements PictureListener {
+             public void onDownloadStart(String url, String userAgent,
+                     String contentDisposition, String mimetype, String referer,
+                     long contentLength) {
+-                mWebViewController.onDownloadStart(Tab.this, url, userAgent, contentDisposition,
++
++                mWebViewController.onRequestPermissionsDownloadStart(Tab.this, url, userAgent, contentDisposition,
+                         mimetype, referer, contentLength);
+             }
+         };
+diff --git a/apps/Browser/src/com/android/browser/WebViewController.java b/apps/Browser/src/com/android/browser/WebViewController.java
+index dfede35..915f1e2 100644
+--- a/apps/Browser/src/com/android/browser/WebViewController.java
++++ b/apps/Browser/src/com/android/browser/WebViewController.java
+@@ -73,9 +73,15 @@ public interface WebViewController {
+     void onReceivedHttpAuthRequest(Tab tab, WebView view, final HttpAuthHandler handler,
+             final String host, final String realm);
+ 
++    void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults);
++
+     void onDownloadStart(Tab tab, String url, String useragent, String contentDisposition,
+             String mimeType, String referer, long contentLength);
+ 
++    void onRequestPermissionsDownloadStart(Tab tab, String url, String userAgent,
++            String contentDisposition, String mimetype, String referer,
++            long contentLength);
++
+     void showCustomView(Tab tab, View view, int requestedOrientation,
+             WebChromeClient.CustomViewCallback callback);
+ 
+diff --git a/apps/Browser/src/com/android/browser/stub/NullController.java b/apps/Browser/src/com/android/browser/stub/NullController.java
+index 149fe4e..262ed0c 100644
+--- a/apps/Browser/src/com/android/browser/stub/NullController.java
++++ b/apps/Browser/src/com/android/browser/stub/NullController.java
+@@ -149,4 +149,9 @@ public class NullController implements ActivityController {
+         return false;
+     }
+ 
++    @Override
++    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults){
++        return;
++    }
++
+ }
+diff --git a/apps/Music/src/com/android/music/MediaPlaybackActivity.java b/apps/Music/src/com/android/music/MediaPlaybackActivity.java
+index 6aaaf5a..0c66644 100644
+--- a/apps/Music/src/com/android/music/MediaPlaybackActivity.java
++++ b/apps/Music/src/com/android/music/MediaPlaybackActivity.java
+@@ -77,6 +77,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
+     private static final int USE_AS_RINGTONE = CHILD_MENU_BASE;
+     private static final String TAG = "MediaPlaybackActivity";
+ 
++    private boolean mPrevToSeek0 = false;
+     private boolean mSeeking = false;
+     private boolean mDeviceHasDpad;
+     private long mStartSeekPos = 0;
+@@ -578,7 +579,7 @@ public class MediaPlaybackActivity extends Activity implements MusicUtils.Defs,
+         public void onClick(View v) {
+             if (mService == null) return;
+             try {
+-                if (mService.position() < 2000) {
++                if (mService.position() < 2000 || !mPrevToSeek0) {
+                     mService.prev();
+                     initLrcThread mLrcThread = new initLrcThread();
+                     mLrcThread.start();
+diff --git a/apps/Settings/AndroidManifest.xml b/apps/Settings/AndroidManifest.xml
+index a2b232a..3d538a1 100644
+--- a/apps/Settings/AndroidManifest.xml
++++ b/apps/Settings/AndroidManifest.xml
+@@ -82,7 +82,6 @@
+     <uses-permission android:name="android.permission.USER_ACTIVITY" />
+     <uses-permission android:name="android.permission.CHANGE_APP_IDLE_STATE" />
+     <uses-permission android:name="android.permission.PEERS_MAC_ADDRESS"/>
+-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+ 
+     <application android:label="@string/settings_label"
+             android:icon="@mipmap/ic_launcher_settings"
+@@ -847,10 +846,6 @@
+                 <category android:name="android.intent.category.VOICE_LAUNCH" />
+                 <category android:name="com.android.settings.SHORTCUT" />
+             </intent-filter>
+-            <intent-filter >
+-                <action android:name="com.sumavision.settings.standby"/>
+-                <category android:name="android.intent.category.DEFAULT"/>
+-            </intent-filter>
+             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                 android:value="com.android.settings.DisplaySettings" />
+             <meta-data android:name="com.android.settings.TOP_LEVEL_HEADER_ID"
+@@ -2580,10 +2575,5 @@
+                 android:value="com.android.settings.applications.WriteSettingsDetails" />
+         </activity>
+ 
+-        <receiver android:name="com.android.settings.BootReceiver">
+-            <intent-filter >
+-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+-            </intent-filter>
+-        </receiver>
+     </application>
+ </manifest>
+diff --git a/apps/Settings/res/values-ru/arrays.xml b/apps/Settings/res/values-ru/arrays.xml
+index 4dbb835..5b114d4 100644
+--- a/apps/Settings/res/values-ru/arrays.xml
++++ b/apps/Settings/res/values-ru/arrays.xml
+@@ -38,13 +38,6 @@
+     <item msgid="2314124409517439288">"10 мин."</item>
+     <item msgid="6864027152847611413">"30 мин."</item>
+   </string-array>
+-  <string-array name="auto_standby_entries">
+-    <item>1 час</item>
+-    <item>2 часа</item>
+-    <item>3 часа</item>
+-    <item>4 часа</item>
+-    <item>Выключить</item>
+-  </string-array>
+   <string-array name="dream_timeout_entries">
+     <item msgid="3149294732238283185">"Никогда"</item>
+     <item msgid="2194151041885903260">"15 сек."</item>
+diff --git a/apps/Settings/res/values-ru/strings.xml b/apps/Settings/res/values-ru/strings.xml
+index aac2675..e612f8e 100755
+--- a/apps/Settings/res/values-ru/strings.xml
++++ b/apps/Settings/res/values-ru/strings.xml
+@@ -853,11 +853,6 @@
+     <string name="screen_timeout" msgid="4351334843529712571">"Спящий режим"</string>
+     <string name="screen_timeout_title" msgid="5130038655092628247">"Отключение экрана"</string>
+     <string name="screen_timeout_summary" msgid="327761329263064327">"После <xliff:g id="TIMEOUT_DESCRIPTION">%1$s</xliff:g> бездействия"</string>
+-	<string name="auto_standby">"Приставка автоматически переходит в режим ожидания после долгого времени без никакого управления"</string>
+-	<string name="auto_standby_tv_suspend">"Приставка автоматически переходит в режим ожидания после выключения телевизора"</string>
+-	<string name="auto_standby_tv_suspend_summary">"Приставка автоматически переходит в режим ожидания через 5 минут"</string> 
+-    <string name="auto_standby_summary">"Привтавка входит в ждуший режим в течение %1$s секунд!"</string>
+-    <string name="auto_standby_summary_closed">"Выключить"</string>
+     <string name="wallpaper_settings_title" msgid="5449180116365824625">"Обои"</string>
+     <string name="wallpaper_settings_fragment_title" msgid="519078346877860129">"Установка обоев"</string>
+     <string name="screensaver_settings_title" msgid="3349790120327233241">"Заставка"</string>
+@@ -2948,6 +2943,4 @@
+     <skip />
+     <!-- no translation found for color_temperature_toast (4974218172133854827) -->
+     <skip />
+-	<string name="hdmi_cec_control">"HDMI CEC громкости"</string>
+-    <string name="stb_name_settings_title">"Stb имя"</string>
+ </resources>
+diff --git a/apps/Settings/res/values-zh-rCN/arrays.xml b/apps/Settings/res/values-zh-rCN/arrays.xml
+index cf312b9..e5f0f54 100644
+--- a/apps/Settings/res/values-zh-rCN/arrays.xml
++++ b/apps/Settings/res/values-zh-rCN/arrays.xml
+@@ -38,13 +38,6 @@
+     <item msgid="2314124409517439288">"10分钟"</item>
+     <item msgid="6864027152847611413">"30分钟"</item>
+   </string-array>
+-  	<string-array name="auto_standby_entries">
+-        <item>1小时</item>
+-        <item>2小时</item>
+-        <item>3小时</item>
+-        <item>4小时</item>
+-        <item>关闭</item>
+-    </string-array>
+   <string-array name="dream_timeout_entries">
+     <item msgid="3149294732238283185">"永不"</item>
+     <item msgid="2194151041885903260">"15秒"</item>
+diff --git a/apps/Settings/res/values-zh-rCN/strings.xml b/apps/Settings/res/values-zh-rCN/strings.xml
+index cf1258b..98462dd 100755
+--- a/apps/Settings/res/values-zh-rCN/strings.xml
++++ b/apps/Settings/res/values-zh-rCN/strings.xml
+@@ -888,11 +888,6 @@
+     <string name="night_mode_auto" msgid="7508348175804304327">"自动"</string>
+     <string name="screen_timeout" msgid="4351334843529712571">"休眠"</string>
+     <string name="screen_timeout_title" msgid="5130038655092628247">"屏幕关闭"</string>
+-    <string name="auto_standby">长时间无操作后机顶盒自动待机</string>
+-    <string name="auto_standby_tv_suspend">电视关闭后机顶盒自动待机</string>
+-    <string name="auto_standby_tv_suspend_summary">5分钟后自动待机</string>
+-    <string name="auto_standby_summary">%1$s后自动待机</string>
+-    <string name="auto_standby_summary_closed">关闭</string>
+     <string name="screen_timeout_summary" msgid="327761329263064327">"无操作<xliff:g id="TIMEOUT_DESCRIPTION">%1$s</xliff:g>后"</string>
+     <string name="wallpaper_settings_title" msgid="5449180116365824625">"壁纸"</string>
+     <string name="wallpaper_settings_fragment_title" msgid="519078346877860129">"选择壁纸来源"</string>
+@@ -3030,9 +3025,4 @@
+     <skip />
+     <!-- no translation found for color_temperature_toast (4974218172133854827) -->
+     <skip />
+-    
+-    
+-	<string name="hdmi_cec">HDMI CEC</string>
+-	<string name="hdmi_cec_control">HDMI CEC音量控制</string>
+-    <string name="stb_name_settings_title">机顶盒名称</string>
+ </resources>
+diff --git a/apps/Settings/res/values/arrays.xml b/apps/Settings/res/values/arrays.xml
+index 63f64fd..e5f1988 100644
+--- a/apps/Settings/res/values/arrays.xml
++++ b/apps/Settings/res/values/arrays.xml
+@@ -49,23 +49,6 @@
+         <item>10 minutes</item>
+         <item>30 minutes</item>
+     </string-array>
+-    
+-	<string-array name="auto_standby_entries">
+-        <item>1 hour</item>
+-        <item>2 hours</item>
+-        <item>3 hours</item>
+-        <item>4 hours</item>
+-        <item>Closed</item>
+-    </string-array>
+-    
+-	<!-- Do not translate. -->
+-    <string-array name="auto_standby_values" translatable="false">
+-        <item>3600</item>
+-        <item>7200</item>
+-        <item>10800</item>
+-        <item>14400</item>
+-        <item>-1</item>
+-    </string-array>
+ 
+     <!-- Do not translate. -->
+     <string-array name="screen_timeout_values" translatable="false">
+diff --git a/apps/Settings/res/values/strings.xml b/apps/Settings/res/values/strings.xml
+index 90fb958..9e1c814 100755
+--- a/apps/Settings/res/values/strings.xml
++++ b/apps/Settings/res/values/strings.xml
+@@ -2168,14 +2168,8 @@
+     <string name="screen_timeout_title">Screen turns off</string>
+     <!-- Sound & display settings screen, setting option summary to change screen timeout -->
+     <string name="screen_timeout_summary">After <xliff:g id="timeout_description">%1$s</xliff:g> of inactivity</string>
+-    <string name="auto_standby">Auto Standby after long time no operation</string>
+-    <string name="auto_standby_tv_suspend">Auto Standby when TV is off</string>
+-    <string name="auto_standby_tv_suspend_summary">After 5 mins of auto standby</string>
+-    <string name="auto_standby_summary">After %1$s of auto standby</string>
+-    <string name="auto_standby_summary_closed">Closed</string>
+     <!-- Wallpaper settings title [CHAR LIMIT=30] -->
+     <string name="wallpaper_settings_title">Wallpaper</string>
+-    <string name="stb_name_settings_title">Stb name</string>
+     <!-- Wallpaper settings fragment title [CHAR LIMIT=30] -->
+     <string name="wallpaper_settings_fragment_title">Choose wallpaper from</string>
+     <!-- Display settings screen, trigger for screen saver options -->
+@@ -7361,7 +7355,4 @@
+ 
+     <!-- Toast message letting the user know the color temperature setting is not immediate -->
+     <string name="color_temperature_toast">To apply color change, turn off screen</string>
+-    
+-	<string name="hdmi_cec">HDMI CEC</string>
+-	<string name="hdmi_cec_control">HDMI CEC Control</string>
+ </resources>
+diff --git a/apps/Settings/res/xml/dashboard_categories.xml b/apps/Settings/res/xml/dashboard_categories.xml
+index a0d26de..d437dcf 100644
+--- a/apps/Settings/res/xml/dashboard_categories.xml
++++ b/apps/Settings/res/xml/dashboard_categories.xml
+@@ -157,14 +157,6 @@
+             <intent android:action="com.android.settings.MANUFACTURER_APPLICATION_SETTING" />
+         </dashboard-tile>
+ 
+-        <!-- Manage HDMI CEC function -->
+-        <dashboard-tile
+-                android:id="@+id/hdmi_cec_settings"
+-                android:title="@string/hdmi_cec"
+-                android:fragment="com.android.settings.HdmiCECSettings"
+-                android:icon="@drawable/ic_settings_sound"
+-                />
+-        
+     </dashboard-category>
+ 
+     <!-- PERSONAL -->
+diff --git a/apps/Settings/res/xml/display_settings.xml b/apps/Settings/res/xml/display_settings.xml
+index 2a9b4a8..371d67b 100644
+--- a/apps/Settings/res/xml/display_settings.xml
++++ b/apps/Settings/res/xml/display_settings.xml
+@@ -49,33 +49,13 @@
+                 settings:keywords="@string/keywords_display_wallpaper"
+                 android:fragment="com.android.settings.WallpaperTypeSettings" />
+ 
+-        <PreferenceScreen
+-                android:key="stb_name"
+-                android:title="@string/stb_name_settings_title"
+-                settings:keywords="@string/stb_name_settings_title"
+-                android:fragment="com.android.settings.StbNameSettings" />
+-        <!--Modify by 22230, do not show
+         <ListPreference
+                 android:key="screen_timeout"
+                 android:title="@string/screen_timeout"
+                 android:summary="@string/screen_timeout_summary"
+                 android:persistent="false"
+                 android:entries="@array/screen_timeout_entries"
+-                android:entryValues="@array/screen_timeout_values" />-->
+-                
+-		<SwitchPreference
+-                android:key="auto_standby_tv_suspend"
+-                android:title="@string/auto_standby_tv_suspend"
+-                android:summary="@string/auto_standby_tv_suspend_summary"
+-                android:persistent="false" />
+-                
+-        <ListPreference
+-                android:key="auto_standby"
+-                android:title="@string/auto_standby"
+-                android:summary="@string/auto_standby_summary"
+-                android:persistent="false"
+-                android:entries="@array/auto_standby_entries"
+-                android:entryValues="@array/auto_standby_values" />
++                android:entryValues="@array/screen_timeout_values" />
+ 
+         <SwitchPreference
+                 android:key="camera_gesture"
+diff --git a/apps/Settings/res/xml/hdmi_cec_settings.xml b/apps/Settings/res/xml/hdmi_cec_settings.xml
+deleted file mode 100755
+index 9d5ab9c..0000000
+--- a/apps/Settings/res/xml/hdmi_cec_settings.xml
++++ /dev/null
+@@ -1,27 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<!-- Copyright (C) 2010 The Android Open Source Project
+-
+-     Licensed under the Apache License, Version 2.0 (the "License");
+-     you may not use this file except in compliance with the License.
+-     You may obtain a copy of the License at
+-
+-          http://www.apache.org/licenses/LICENSE-2.0
+-
+-     Unless required by applicable law or agreed to in writing, software
+-     distributed under the License is distributed on an "AS IS" BASIS,
+-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-     See the License for the specific language governing permissions and
+-     limitations under the License.
+--->
+-
+-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+-                  xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
+-        android:title="@string/hdmi_cec"
+-        settings:keywords="@string/keywords_display">
+-        
+-        <SwitchPreference
+-                android:key="hdmi_control_enabled"
+-                android:title="@string/hdmi_cec_control"
+-                android:persistent="false" />
+-
+-</PreferenceScreen>
+diff --git a/apps/Settings/src/com/android/settings/DisplaySettings.java b/apps/Settings/src/com/android/settings/DisplaySettings.java
+index 389d92d..de15d4c 100644
+--- a/apps/Settings/src/com/android/settings/DisplaySettings.java
++++ b/apps/Settings/src/com/android/settings/DisplaySettings.java
+@@ -64,16 +64,10 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+         Preference.OnPreferenceChangeListener, OnPreferenceClickListener, Indexable {
+     private static final String TAG = "DisplaySettings";
+ 
+-    private static final String PROPERTY_STANDBY = "vender.standby.open";
+-    private static final String PROPERTY_DLNA = "vender.dlna.open";
+-
+     /** If there is no setting in the provider, use this. */
+     private static final int FALLBACK_SCREEN_TIMEOUT_VALUE = 30000;
+ 
+-    private static final String KEY_STB_NAME = "stb_name";
+     private static final String KEY_SCREEN_TIMEOUT = "screen_timeout";
+-    private static final String KEY_AUTO_STANDBY = "auto_standby";
+-    private static final String KEY_AUTO_STANDBY_TV_SUSPEND = "auto_standby_tv_suspend";
+     private static final String KEY_FONT_SIZE = "font_size";
+     private static final String KEY_SCREEN_SAVER = "screensaver";
+     private static final String KEY_LIFT_TO_WAKE = "lift_to_wake";
+@@ -85,10 +79,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+     private static final String KEY_CAMERA_GESTURE = "camera_gesture";
+     private static final String KEY_CAMERA_DOUBLE_TAP_POWER_GESTURE
+             = "camera_double_tap_power_gesture";
+-    
+-    private static final String AUTO_STANDBY_ENABLE = "auto_standby_enable";
+-    private static final String AUTO_STANDBY_TIME = "auto_standby_time";
+-    private static final String AUTO_STANDBY_TV_SUSPEND_ENABLE = "auto_standby_tv_suspend_enable";
+ 
+     private static final int DLG_GLOBAL_CHANGE_WARNING = 1;
+ 
+@@ -97,11 +87,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+     private final Configuration mCurConfig = new Configuration();
+ 
+     private ListPreference mScreenTimeoutPreference;
+-    private ListPreference mAutoStandbyPreference;
+-    private SwitchPreference mAutoStandbyTvSuspendPreference;
+     private ListPreference mNightModePreference;
+     private Preference mScreenSaverPreference;
+-    private Preference mStbNamePreference;
+     private SwitchPreference mLiftToWakePreference;
+     private SwitchPreference mDozePreference;
+     private SwitchPreference mTapToWakePreference;
+@@ -129,42 +116,14 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+             getPreferenceScreen().removePreference(mScreenSaverPreference);
+         }
+ 
+-        /* Modify by 22230 ,do not show
+-		mScreenTimeoutPreference = (ListPreference) findPreference(KEY_SCREEN_TIMEOUT);
++        mScreenTimeoutPreference = (ListPreference) findPreference(KEY_SCREEN_TIMEOUT);
+         final long currentTimeout = Settings.System.getLong(resolver, SCREEN_OFF_TIMEOUT,
+                 FALLBACK_SCREEN_TIMEOUT_VALUE);
+         mScreenTimeoutPreference.setValue(String.valueOf(currentTimeout));
+         mScreenTimeoutPreference.setOnPreferenceChangeListener(this);
+         disableUnusableTimeouts(mScreenTimeoutPreference);
+-        updateTimeoutPreferenceDescription(currentTimeout);*/
++        updateTimeoutPreferenceDescription(currentTimeout);
+ 
+-        if (SystemProperties.getBoolean(PROPERTY_STANDBY, false)) {
+-        	mStbNamePreference = findPreference(KEY_STB_NAME);
+-        	mStbNamePreference.setOnPreferenceChangeListener(this);
+-        	mStbNamePreference.setOnPreferenceClickListener(this);
+-        	updateStbName();
+-        } else {
+-        	removePreference(KEY_STB_NAME);
+-        }
+-        
+-        if (SystemProperties.getBoolean(PROPERTY_STANDBY, false)) {
+-        	mAutoStandbyPreference = (ListPreference) findPreference(KEY_AUTO_STANDBY);
+-        	final long autoStandbyTime = Settings.Global.getLong(resolver, AUTO_STANDBY_TIME, 3600*4);
+-        	final boolean autoStandbyEnable = Settings.Global.getInt(resolver, AUTO_STANDBY_ENABLE, 0) == 1;
+-        	long value = autoStandbyEnable ? autoStandbyTime : -1;
+-        	mAutoStandbyPreference.setValue(String.valueOf(value));
+-        	mAutoStandbyPreference.setOnPreferenceChangeListener(this);
+-        	updateAutoStandbyPreferenceDescription(value);
+-        	
+-        	mAutoStandbyTvSuspendPreference = (SwitchPreference) findPreference(KEY_AUTO_STANDBY_TV_SUSPEND);
+-        	final boolean autoStandbyTvSuspendEnable = Settings.Global.getInt(resolver, AUTO_STANDBY_TV_SUSPEND_ENABLE, 1) == 1;
+-        	mAutoStandbyTvSuspendPreference.setChecked(autoStandbyTvSuspendEnable);
+-        	mAutoStandbyTvSuspendPreference.setOnPreferenceChangeListener(this);
+-        } else {
+-        	removePreference(KEY_AUTO_STANDBY);
+-        	removePreference(KEY_AUTO_STANDBY_TV_SUSPEND);
+-        }
+-        
+         mFontSizePref = (WarnedListPreference) findPreference(KEY_FONT_SIZE);
+         mFontSizePref.setOnPreferenceChangeListener(this);
+         mFontSizePref.setOnPreferenceClickListener(this);
+@@ -298,37 +257,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+         return res.getBoolean(
+                 com.android.internal.R.bool.config_cameraDoubleTapPowerGestureEnabled);
+     }
+-    
+-    private void updateAutoStandbyPreferenceDescription(long autoStandbyTime) {
+-        ListPreference preference = mAutoStandbyPreference;
+-        String summary;
+-        if (autoStandbyTime < -1) {
+-            // Unsupported value
+-            summary = "";
+-        } else {
+-            final CharSequence[] entries = preference.getEntries();
+-            final CharSequence[] values = preference.getEntryValues();
+-            if (entries == null || entries.length == 0) {
+-                summary = "";
+-            } else {
+-                int best = 0;
+-                for (int i = 0; i < values.length; i++) {
+-                    long timeout = Long.parseLong(values[i].toString());
+-                    if (autoStandbyTime == timeout) {
+-                        best = i;
+-                        break;
+-                    }
+-                }
+-                if (best == values.length-1) {
+-                	summary = preference.getContext().getString(R.string.auto_standby_summary_closed);
+-                } else {
+-                	summary = preference.getContext().getString(R.string.auto_standby_summary, entries[best]);
+-                }
+-            }
+-        }
+-        preference.setSummary(summary);
+-    }
+-    
++
+     private void updateTimeoutPreferenceDescription(long currentTimeout) {
+         ListPreference preference = mScreenTimeoutPreference;
+         String summary;
+@@ -523,29 +452,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+                 Log.e(TAG, "could not persist screen timeout setting", e);
+             }
+         }
+-        if (KEY_AUTO_STANDBY.equals(key)) {
+-        	try {
+-                boolean test = android.os.SystemProperties.getBoolean("vender.standby.test", false);
+-        		int value = Integer.parseInt((String) objValue);
+-                Log.i(TAG, "auto standby:: value = " + objValue);
+-                Settings.Global.putInt(getContentResolver(), AUTO_STANDBY_ENABLE, value == -1 ? 0 : 1);
+-                Settings.Global.putLong(getContentResolver(), AUTO_STANDBY_TIME, test ? value/60 : value);
+-                updateAutoStandbyPreferenceDescription(value);
+-			} catch (Exception e) {
+-				Log.e(TAG, "could not persist auto standby setting", e);
+-			}
+-        }
+-        
+-        if (KEY_AUTO_STANDBY_TV_SUSPEND.equals(key)) {
+-        	try {
+-                boolean auto = (Boolean) objValue;
+-                Log.i(TAG, "auto standby tv suspend :: value = " + auto);
+-        		Settings.Global.putInt(getContentResolver(), AUTO_STANDBY_TV_SUSPEND_ENABLE, auto ? 1 : 0);
+-			} catch (Exception e) {
+-				Log.e(TAG, "could not persist auto standby tv suspend setting", e);
+-			}
+-        }
+-        
+         if (KEY_FONT_SIZE.equals(key)) {
+             writeFontSizePreference(objValue);
+         }
+@@ -598,9 +504,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+             } else {
+                 mFontSizePref.click();
+             }
+-        } else if (preference == mStbNamePreference) {
+-        	StbNameSettings.show(this);
+-        	return true;
+         }
+         return false;
+     }
+@@ -610,10 +513,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
+         return R.string.help_uri_display;
+     }
+ 
+-    public void updateStbName() {
+-    	mStbNamePreference.setSummary(Settings.System.getString(getContentResolver(), StbNameSettings.DLNA_STB_NAME));
+-    }
+-    
+     public static final Indexable.SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
+             new BaseSearchIndexProvider() {
+                 @Override
+diff --git a/apps/Settings/src/com/android/settings/HdmiCECSettings.java b/apps/Settings/src/com/android/settings/HdmiCECSettings.java
+deleted file mode 100755
+index b494d4f..0000000
+--- a/apps/Settings/src/com/android/settings/HdmiCECSettings.java
++++ /dev/null
+@@ -1,145 +0,0 @@
+-/*
+- * Copyright (C) 2010 The Android Open Source Project
+- *
+- * Licensed under the Apache License, Version 2.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- *
+- *      http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- */
+-
+-package com.android.settings;
+-
+-import com.android.internal.logging.MetricsLogger;
+-import com.android.internal.view.RotationPolicy;
+-import com.android.settings.DropDownPreference.Callback;
+-import com.android.settings.search.BaseSearchIndexProvider;
+-import com.android.settings.search.Indexable;
+-
+-import static android.provider.Settings.Secure.CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED;
+-import static android.provider.Settings.Secure.CAMERA_GESTURE_DISABLED;
+-import static android.provider.Settings.Secure.DOUBLE_TAP_TO_WAKE;
+-import static android.provider.Settings.Secure.DOZE_ENABLED;
+-import static android.provider.Settings.Secure.WAKE_GESTURE_ENABLED;
+-import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
+-import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+-import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL;
+-import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
+-
+-import android.app.Activity;
+-import android.app.ActivityManagerNative;
+-import android.app.Dialog;
+-import android.app.UiModeManager;
+-import android.app.admin.DevicePolicyManager;
+-import android.content.ContentResolver;
+-import android.content.Context;
+-import android.content.res.Configuration;
+-import android.content.res.Resources;
+-import android.hardware.Sensor;
+-import android.hardware.SensorManager;
+-import android.os.Build;
+-import android.os.Bundle;
+-import android.os.RemoteException;
+-import android.os.SystemProperties;
+-import android.preference.ListPreference;
+-import android.preference.Preference;
+-import android.preference.Preference.OnPreferenceClickListener;
+-import android.preference.PreferenceScreen;
+-import android.preference.SwitchPreference;
+-import android.provider.SearchIndexableResource;
+-import android.provider.Settings;
+-import android.text.TextUtils;
+-import android.util.Log;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-public class HdmiCECSettings extends SettingsPreferenceFragment implements
+-        Preference.OnPreferenceChangeListener, OnPreferenceClickListener, Indexable {
+-    private static final String TAG = "HdmiCECSettings";
+-
+-    private static final String KEY_HDMI_CEC_CONTROL = "hdmi_control_enabled";
+-
+-    private SwitchPreference mCameraGesturePreference;
+-
+-    @Override
+-    protected int getMetricsCategory() {
+-        return MetricsLogger.DISPLAY;
+-    }
+-
+-    @Override
+-    public void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        final Activity activity = getActivity();
+-        final ContentResolver resolver = activity.getContentResolver();
+-        addPreferencesFromResource(R.xml.hdmi_cec_settings);
+-		
+-        mCameraGesturePreference = (SwitchPreference) findPreference(KEY_HDMI_CEC_CONTROL);
+-        mCameraGesturePreference.setOnPreferenceChangeListener(this);
+-    }
+-
+-    @Override
+-    public void onResume() {
+-        super.onResume();
+-        updateState();
+-    }
+-
+-    private void updateState() {
+-        // Update camera gesture #1 if it is available.
+-        if (mCameraGesturePreference != null) {
+-            int value = Settings.Global.getInt(getContentResolver(), KEY_HDMI_CEC_CONTROL, 1);
+-            mCameraGesturePreference.setChecked(value == 1);
+-			Log.i("Settings.Global Get hdmi_control_enabled", "value = " + value);
+-        }
+-    }
+-
+-    @Override
+-    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+-        return super.onPreferenceTreeClick(preferenceScreen, preference);
+-    }
+-
+-    @Override
+-    public boolean onPreferenceChange(Preference preference, Object objValue) {
+-        final String key = preference.getKey();
+-        if (preference == mCameraGesturePreference) {
+-            boolean value = (Boolean) objValue;
+-            Settings.Global.putInt(getContentResolver(), KEY_HDMI_CEC_CONTROL, value ? 1 : 0);
+-			Log.i("Settings.Global Set hdmi_control_enabled", "value = " + value);
+-        }
+-        return true;
+-    }
+-
+-    @Override
+-    protected int getHelpResource() {
+-        return R.string.help_uri_display;
+-    }
+-
+-    public static final Indexable.SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
+-            new BaseSearchIndexProvider() {
+-                @Override
+-                public List<SearchIndexableResource> getXmlResourcesToIndex(Context context,
+-                        boolean enabled) {
+-                    ArrayList<SearchIndexableResource> result =
+-                            new ArrayList<SearchIndexableResource>();
+-                    return result;
+-                }
+-
+-                @Override
+-                public List<String> getNonIndexableKeys(Context context) {
+-                    ArrayList<String> result = new ArrayList<String>();
+-                    return result;
+-                }
+-            };
+-
+-	@Override
+-	public boolean onPreferenceClick(Preference arg0) {
+-		// TODO Auto-generated method stub
+-		return false;
+-	}
+-}
+diff --git a/apps/Settings/src/com/android/settings/SettingsActivity.java b/apps/Settings/src/com/android/settings/SettingsActivity.java
+index 2a38835..8edec09 100644
+--- a/apps/Settings/src/com/android/settings/SettingsActivity.java
++++ b/apps/Settings/src/com/android/settings/SettingsActivity.java
+@@ -278,7 +278,6 @@ public class SettingsActivity extends Activity
+             R.id.print_settings,
+             R.id.nfc_payment_settings,
+             R.id.home_settings,
+-			R.id.hdmi_cec_settings,
+             R.id.dashboard
+     };
+ 
+@@ -355,7 +354,6 @@ public class SettingsActivity extends Activity
+             ProcessStatsSummary.class.getName(),
+             DrawOverlayDetails.class.getName(),
+             WriteSettingsDetails.class.getName(),
+-			HdmiCECSettings.class.getName(),
+     };
+ 
+ 
+@@ -1256,13 +1254,12 @@ public class SettingsActivity extends Activity
+                     }
+                 } else if (id == R.id.data_usage_settings) {
+                     // Remove data usage when kernel module not enabled
+-                	removeTile = true;
+                     if (!Utils.isBandwidthControlEnabled()) {
+                         removeTile = true;
+                     }
+                 } else if (id == R.id.battery_settings) {
+                     // Remove battery settings when battery is not available. (e.g. TV)
+-                    removeTile = true;
++
+                     if (!mBatteryPresent) {
+                         removeTile = true;
+                     }
+@@ -1292,7 +1289,6 @@ public class SettingsActivity extends Activity
+                         }
+                     }
+                 } else if (id == R.id.print_settings) {
+-                	removeTile = true;
+                     boolean hasPrintingSupport = getPackageManager().hasSystemFeature(
+                             PackageManager.FEATURE_PRINTING);
+                     if (!hasPrintingSupport) {
+@@ -1303,11 +1299,7 @@ public class SettingsActivity extends Activity
+                             UserManager.DISALLOW_DEBUGGING_FEATURES)) {
+                         removeTile = true;
+                     }
+-                } else if (id == R.id.location_settings) {
+-                	removeTile = true;
+-                } else if (id == R.id.account_settings ) {
+-					removeTile = true;
+-				}
++                }
+ 
+                 if (UserHandle.MU_ENABLED && UserHandle.myUserId() != 0
+                         && !ArrayUtils.contains(SETTINGS_FOR_RESTRICTED, id)) {
+@@ -1519,7 +1511,6 @@ public class SettingsActivity extends Activity
+         mNeedToRevertToInitialFragment = false;
+         mSearchResultsFragment = null;
+         mSearchMenuItemExpanded = false;
+-        setRebuildUI(true);
+         getFragmentManager().popBackStackImmediate(SettingsActivity.BACK_STACK_PREFS,
+                 FragmentManager.POP_BACK_STACK_INCLUSIVE);
+         if (mSearchMenuItem != null) {
+@@ -1534,13 +1525,4 @@ public class SettingsActivity extends Activity
+     public void setResultIntentData(Intent resultIntentData) {
+         mResultIntentData = resultIntentData;
+     }
+-    
+-    private boolean rebuild = false;
+-    public void setRebuildUI(boolean rebuild) {
+-    	this.rebuild = rebuild;
+-    }
+-    
+-    public boolean isRebuildUI() {
+-    	return rebuild;
+-    }
+ }
+diff --git a/apps/Settings/src/com/android/settings/StbNameSettings.java b/apps/Settings/src/com/android/settings/StbNameSettings.java
+deleted file mode 100755
+index 36dcd98..0000000
+--- a/apps/Settings/src/com/android/settings/StbNameSettings.java
++++ /dev/null
+@@ -1,93 +0,0 @@
+-/*
+- * Copyright (C) 2010 The Android Open Source Project
+- *
+- * Licensed under the Apache License, Version 2.0 (the "License");
+- * you may not use this file except in compliance with the License.
+- * You may obtain a copy of the License at
+- *
+- *      http://www.apache.org/licenses/LICENSE-2.0
+- *
+- * Unless required by applicable law or agreed to in writing, software
+- * distributed under the License is distributed on an "AS IS" BASIS,
+- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+- * See the License for the specific language governing permissions and
+- * limitations under the License.
+- */
+-
+-package com.android.settings;
+-
+-import android.app.AlertDialog;
+-import android.app.Dialog;
+-import android.app.DialogFragment;
+-import android.app.Fragment;
+-import android.content.DialogInterface;
+-import android.content.DialogInterface.OnClickListener;
+-import android.os.Bundle;
+-import android.os.UserHandle;
+-import android.provider.Settings;
+-import android.text.TextUtils;
+-import android.view.LayoutInflater;
+-import android.view.View;
+-import android.widget.EditText;
+-
+-import com.android.internal.widget.LockPatternUtils;
+-
+-public class StbNameSettings extends DialogFragment implements OnClickListener {
+-
+-    private static final String TAG_STB_NAME = "stb_name";
+-    
+-    public static final String DLNA_STB_NAME = "dlna_stb_name";
+-
+-    private View mView;
+-    private EditText mOwnerInfo;
+-
+-    @Override
+-    public void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-    }
+-
+-    @Override
+-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+-        mView = LayoutInflater.from(getActivity()).inflate(R.layout.ownerinfo, null);
+-        initView();
+-        return new AlertDialog.Builder(getActivity())
+-                .setTitle(R.string.stb_name_settings_title)
+-                .setView(mView)
+-                .setPositiveButton(R.string.save, this)
+-                .setNegativeButton(R.string.cancel, this)
+-                .show();
+-    }
+-
+-    private void initView() {
+-        String info = Settings.System.getString(getActivity().getContentResolver(), DLNA_STB_NAME);
+-        if (TextUtils.isEmpty(info)) {
+-        	info = "SMSX_BOX";
+-        }
+-        
+-        mOwnerInfo = (EditText) mView.findViewById(R.id.owner_info_edit_text);
+-        mOwnerInfo.setText(info);
+-    }
+-
+-    @Override
+-    public void onClick(DialogInterface dialog, int which) {
+-        if (which == AlertDialog.BUTTON_POSITIVE) {
+-            String info = mOwnerInfo.getText().toString();
+-            if (TextUtils.isEmpty(info)) {
+-            	info = "SMSX_BOX";
+-            }
+-            Settings.System.putString(getActivity().getContentResolver(), DLNA_STB_NAME, info);
+-
+-            if (getTargetFragment() instanceof DisplaySettings) {
+-                ((DisplaySettings) getTargetFragment()).updateStbName();
+-            }
+-        }
+-    }
+-
+-    public static void show(Fragment parent) {
+-        if (!parent.isAdded()) return;
+-
+-        final StbNameSettings dialog = new StbNameSettings();
+-        dialog.setTargetFragment(parent, 0);
+-        dialog.show(parent.getFragmentManager(), TAG_STB_NAME);
+-    }
+-}
+diff --git a/apps/Settings/src/com/android/settings/TetherSettings.java b/apps/Settings/src/com/android/settings/TetherSettings.java
+index b66d08d..d1db301 100644
+--- a/apps/Settings/src/com/android/settings/TetherSettings.java
++++ b/apps/Settings/src/com/android/settings/TetherSettings.java
+@@ -653,6 +653,7 @@ public class TetherSettings extends SettingsPreferenceFragment
+                     mWifiManager.setWifiApEnabled(mWifiConfig, true);
+                 } else {
+                     mWifiManager.setWifiApConfiguration(mWifiConfig);
++                    mWifiManager.setWifiApEnabled(null, false);
+                 }
+                 int index = WifiApDialog.getSecurityTypeIndex(mWifiConfig);
+                 mCreateNetwork.setSummary(String.format(getActivity().getString(CONFIG_SUBTEXT),
+diff --git a/apps/Settings/src/com/android/settings/WirelessSettings.java b/apps/Settings/src/com/android/settings/WirelessSettings.java
+index 965787b..9253eac 100644
+--- a/apps/Settings/src/com/android/settings/WirelessSettings.java
++++ b/apps/Settings/src/com/android/settings/WirelessSettings.java
+@@ -230,7 +230,6 @@ public class WirelessSettings extends SettingsPreferenceFragment implements Inde
+ 
+         final Activity activity = getActivity();
+         mAirplaneModePreference = (SwitchPreference) findPreference(KEY_TOGGLE_AIRPLANE);
+-        removePreference(KEY_TOGGLE_AIRPLANE);
+         SwitchPreference nfc = (SwitchPreference) findPreference(KEY_TOGGLE_NFC);
+         PreferenceScreen androidBeam = (PreferenceScreen) findPreference(KEY_ANDROID_BEAM_SETTINGS);
+         SwitchPreference nsd = (SwitchPreference) findPreference(KEY_TOGGLE_NSD);
+diff --git a/apps/Settings/src/com/android/settings/dashboard/DashboardSummary.java b/apps/Settings/src/com/android/settings/dashboard/DashboardSummary.java
+index 1fb5a0f..6408636 100644
+--- a/apps/Settings/src/com/android/settings/dashboard/DashboardSummary.java
++++ b/apps/Settings/src/com/android/settings/dashboard/DashboardSummary.java
+@@ -80,7 +80,7 @@ public class DashboardSummary extends InstrumentedFragment {
+     @Override
+     public void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        sendRebuildUI();
++
+         setHasOptionsMenu(true);
+     }
+ 
+@@ -95,10 +95,8 @@ public class DashboardSummary extends InstrumentedFragment {
+     public void onResume() {
+         super.onResume();
+ 
+-        if (((SettingsActivity) getActivity()).isRebuildUI()) {
+-        	rebuildUI(getActivity());
+-        }
+-        
++        sendRebuildUI();
++
+         final IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
+         filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+         filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
+@@ -131,7 +129,6 @@ public class DashboardSummary extends InstrumentedFragment {
+             Log.w(LOG_TAG, "Cannot build the DashboardSummary UI yet as the Fragment is not added");
+             return;
+         }
+-    	((SettingsActivity) getActivity()).setRebuildUI(false);
+ 
+         long start = System.currentTimeMillis();
+         final Resources res = getResources();
+diff --git a/apps/Settings/src/com/android/settings/inputmethod/InputMethodAndLanguageSettings.java b/apps/Settings/src/com/android/settings/inputmethod/InputMethodAndLanguageSettings.java
+index 002fb97..e8ef5ef 100644
+--- a/apps/Settings/src/com/android/settings/inputmethod/InputMethodAndLanguageSettings.java
++++ b/apps/Settings/src/com/android/settings/inputmethod/InputMethodAndLanguageSettings.java
+@@ -209,9 +209,7 @@ public class InputMethodAndLanguageSettings extends SettingsPreferenceFragment
+         if (null == localeSet) {
+             // The locale list is null if and only if the user dictionary service is
+             // not present or disabled. In this case we need to remove the preference.
+-            if (userDictionaryPreference != null) {
+-                getPreferenceScreen().removePreference(userDictionaryPreference);
+-            }
++            getPreferenceScreen().removePreference(userDictionaryPreference);
+         } else {
+             userDictionaryPreference.setOnPreferenceClickListener(
+                     new OnPreferenceClickListener() {
+diff --git a/apps/Settings/src/com/android/settings/wifi/WifiApEnabler.java b/apps/Settings/src/com/android/settings/wifi/WifiApEnabler.java
+index cfedc68..2911aef 100755
+--- a/apps/Settings/src/com/android/settings/wifi/WifiApEnabler.java
++++ b/apps/Settings/src/com/android/settings/wifi/WifiApEnabler.java
+@@ -191,7 +191,6 @@ public class WifiApEnabler {
+                 mSwitch.setSummary(R.string.wifi_tether_starting);
+                 mSwitch.setEnabled(false);
+                 mSwitch.setChecked(false);
+-                Settings.Global.putInt(cr, "wifi_ap_enable", 1);
+                 break;
+             case WifiManager.WIFI_AP_STATE_ENABLED:
+                 /**
+@@ -201,13 +200,11 @@ public class WifiApEnabler {
+                 mSwitch.setChecked(true);
+                 /* Doesnt need the airplane check */
+                 mSwitch.setEnabled(true);
+-                Settings.Global.putInt(cr, "wifi_ap_enable", 1);
+                 break;
+             case WifiManager.WIFI_AP_STATE_DISABLING:
+                 mSwitch.setSummary(R.string.wifi_tether_stopping);
+                 mSwitch.setChecked(false);
+                 mSwitch.setEnabled(false);
+-                Settings.Global.putInt(cr, "wifi_ap_enable", 0);
+                 break;
+             case WifiManager.WIFI_AP_STATE_DISABLED:
+                 if (wifiSavedState == WIFI_STATE_OFF) {
+@@ -216,7 +213,6 @@ public class WifiApEnabler {
+                     enableWifiSwitch();
+                     Settings.Global.putInt(cr, Settings.Global.WIFI_SAVED_STATE, WIFI_STATE_OFF);
+                 }
+-                Settings.Global.putInt(cr, "wifi_ap_enable", 0);
+                 break;
+             case WifiManager.WIFI_STATE_ENABLING:
+             case WifiManager.WIFI_STATE_DISABLED:
+diff --git a/apps/TvSettings/Settings/AndroidManifest.xml b/apps/TvSettings/Settings/AndroidManifest.xml
+index 05626bc..127b3c7 100644
+--- a/apps/TvSettings/Settings/AndroidManifest.xml
++++ b/apps/TvSettings/Settings/AndroidManifest.xml
+@@ -50,7 +50,6 @@
+ 
+         <activity
+             android:name=".MainSettings"
+-            android:launchMode="singleTask"
+             android:configChanges="keyboard|keyboardHidden|navigation"
+             android:label="@string/settings_app_name" >
+             <intent-filter>
+@@ -248,6 +247,10 @@
+             android:configChanges="keyboard|keyboardHidden|navigation"
+             android:exported="true" />
+         <activity
++            android:name=".device.sound.dolbysound.DolbySoundActivity"
++            android:configChanges="keyboard|keyboardHidden|navigation"
++            android:exported="true" />
++        <activity
+             android:name=".device.display.DisplayActivity"
+             android:configChanges="keyboard|keyboardHidden|navigation"
+             android:exported="true" >
+@@ -544,10 +547,15 @@
+                   <action android:name="android.intent.action.BOOT_COMPLETED"/>
+             </intent-filter>
+         </receiver>
+-
++        <receiver android:name=".device.sound.dolbysound.DolbyBootReceiver">
++            <intent-filter>
++                  <action android:name="android.intent.action.BOOT_COMPLETED"/>
++            </intent-filter>
++        </receiver>
+         <receiver android:name=".device.storage.NewStorageActivity$DiskReceiver">
+             <intent-filter>
+                 <action android:name="android.os.storage.action.DISK_SCANNED" />
++                <action android:name="android.os.storage.action.VOLUME_STATE_CHANGED" />
+                 <action android:name="com.google.android.tungsten.setupwraith.TV_SETTINGS_POST_SETUP" />
+             </intent-filter>
+         </receiver>
+diff --git a/apps/TvSettings/Settings/res/values-zh-rCN/strings.xml b/apps/TvSettings/Settings/res/values-zh-rCN/strings.xml
+index eb3a6f9..5bb6e3b 100644
+--- a/apps/TvSettings/Settings/res/values-zh-rCN/strings.xml
++++ b/apps/TvSettings/Settings/res/values-zh-rCN/strings.xml
+@@ -80,6 +80,8 @@
+     <string name="device_sound_dts_trans_51pcm">5.1 PCM 解码器</string>
+     <string name="device_sound_dts_trans_71pcm">7.1 PCM 解码器</string>
+     <string name="device_sound_dts_mulasset">DTS 多资源解码器</string>
++    <string name="device_sound_dolby">杜比音效</string>
++    <string name="device_sound_dolby_drcmode">DRC 模式</string>
+     <string name="device_apps" msgid="9180435229638772838">"应用"</string>
+     <string name="device_storage_reset" msgid="1425978936501134425">"存储空间和恢复出厂设置"</string>
+     <string name="device_storage" msgid="5536683600091277826">"存储空间"</string>
+diff --git a/apps/TvSettings/Settings/res/values-zh-rTW/strings.xml b/apps/TvSettings/Settings/res/values-zh-rTW/strings.xml
+index f927437..c0e60eb 100644
+--- a/apps/TvSettings/Settings/res/values-zh-rTW/strings.xml
++++ b/apps/TvSettings/Settings/res/values-zh-rTW/strings.xml
+@@ -79,6 +79,8 @@
+     <string name="device_sound_dts_trans_51pcm">5.1 PCM 解碼器</string>
+     <string name="device_sound_dts_trans_71pcm">7.1 PCM 解碼器</string>
+     <string name="device_sound_dts_mulasset">DTS 多資源解碼器</string>
++    <string name="device_sound_dolby">杜比音效</string>
++    <string name="device_sound_dolby_drcmode">DRC 模式</string>
+     <string name="device_apps" msgid="9180435229638772838">"應用程式"</string>
+     <string name="device_storage_reset" msgid="1425978936501134425">"儲存空間與重設"</string>
+     <string name="device_storage" msgid="5536683600091277826">"儲存空間"</string>
+diff --git a/apps/TvSettings/Settings/res/values/strings.xml b/apps/TvSettings/Settings/res/values/strings.xml
+index 898096f..e9aae00 100644
+--- a/apps/TvSettings/Settings/res/values/strings.xml
++++ b/apps/TvSettings/Settings/res/values/strings.xml
+@@ -124,6 +124,11 @@
+     <string name="device_sound_dts_trans_51pcm">5.1 PCM Transcoder</string>
+     <string name="device_sound_dts_trans_71pcm">7.1 PCM Transcoder</string>
+     <string name="device_sound_dts_mulasset">DTS Mulasset</string>
++    <string name="device_sound_dolby">Dolby sounds</string>
++    <string name="device_sound_dolby_drcmode">DRC mode</string>
++    <string name="device_sound_dolby_drcoff">OFF</string>
++    <string name="device_sound_dolby_drcline">LINE</string>
++    <string name="device_sound_dolby_drcrf">RF</string>
+     <!-- Preference which manages apps. [CHAR LIMIT=50] -->
+     <string name="device_apps">Apps</string>
+     <!-- Preference which shows storage status. [CHAR LIMIT=50] -->
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/BrowseInfo.java b/apps/TvSettings/Settings/src/com/android/tv/settings/BrowseInfo.java
+index 6525e09..d653ec9 100644
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/BrowseInfo.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/BrowseInfo.java
+@@ -284,7 +284,16 @@ public class BrowseInfo extends BrowseInfoBase {
+                 mAccountHeaderId = mHeaderId;
+                 addAccounts(mRow);
+             } else if (PREF_KEY_CEC.equals(key)) {
+-                return;
++                if (SettingsConstant.needDroidlogicTvFeature(mContext)) return;
++                Intent i = getIntent(parser, attrs);
++                if (systemIntentIsHandled(i) != null) {
++                    mRow.add(new MenuItem.Builder()
++                            .id(mNextItemId++)
++                            .title(title)
++                            .imageResourceId(mContext, iconRes)
++                            .intent(i)
++                            .build());
++                }
+             } else if (PREF_KEY_HOME.equals(key)) {
+                 // Only show home screen setting if there's a system app to handle the intent.
+                 Intent recIntent = getIntent(parser, attrs);
+@@ -480,18 +489,31 @@ public class BrowseInfo extends BrowseInfoBase {
+                     .intent(i).build());
+         }
+ 
+-        // Add new accessory activity icon
+-        ComponentName componentNameRC = new ComponentName("com.android.tv.settings",
+-                "com.android.tv.settings.accessories.RemoteControlSetActivity");
+-        Intent iRC = new Intent().setComponent(componentNameRC );
+-        iRC.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+-
+-        row.add(new MenuItem.Builder().id(mNextItemId++)
+-                .title(mContext.getString(R.string.accessories_remote))
+-                .imageResourceId(mContext, R.drawable.ic_settings_remote)
+-                .intent(iRC).build());
++        if ( hasRemote() ) {
++            // Add new accessory activity icon
++            ComponentName componentNameRC = new ComponentName("com.android.tv.settings",
++                    "com.android.tv.settings.accessories.RemoteControlSetActivity");
++            Intent iRC = new Intent().setComponent(componentNameRC );
++            iRC.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
++
++            row.add(new MenuItem.Builder().id(mNextItemId++)
++                    .title(mContext.getString(R.string.accessories_remote))
++                    .imageResourceId(mContext, R.drawable.ic_settings_remote)
++                    .intent(iRC).build());
++        }
+     }
+ 
++   private boolean hasRemote() {
++        try{
++            ApplicationInfo info = mContext.getPackageManager().getApplicationInfo("com.droidlogic.service.remotecontrol",0);
++            if (info != null) {
++                return true;
++            }
++        } catch(Exception ex) {
++            return false;
++        }
++        return false;
++    }
+     private Intent getIntent(XmlResourceParser parser, AttributeSet attrs)
+             throws org.xmlpull.v1.XmlPullParserException, IOException {
+         Intent intent = null;
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/about/AboutActivity.java b/apps/TvSettings/Settings/src/com/android/tv/settings/about/AboutActivity.java
+index 852574a..6827265 100644
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/about/AboutActivity.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/about/AboutActivity.java
+@@ -188,13 +188,13 @@ public class AboutActivity extends SettingsLayoutActivity {
+                 intent.setComponent(mPlatLogoActivity);
+                 startActivity(intent);
+             }
+-        } else if (key == KEY_REBOOT) {
++        } /*else if (key == KEY_REBOOT) {
+             final Fragment f = new RebootConfirmFragment();
+             getFragmentManager().beginTransaction()
+                     .replace(android.R.id.content, f)
+                     .addToBackStack(null)
+                     .commit();
+-        } else {
++        }*/ else {
+             Intent intent = action.getIntent();
+             if (intent != null) {
+                 try {
+@@ -232,9 +232,9 @@ public class AboutActivity extends SettingsLayoutActivity {
+                 .title(R.string.about_system_update)
+                 .build());
+         header.add(mDeviceNameLayoutGetter);
+-        header.add(new Layout.Action.Builder(res, KEY_REBOOT)
++        /*header.add(new Layout.Action.Builder(res, KEY_REBOOT)
+                 .title(R.string.restart_button_label)
+-                .build());
++                .build());*/
+         header.add(new Layout.Header.Builder(res)
+                 .title(R.string.about_legal_info)
+                 .build()
+@@ -312,6 +312,18 @@ public class AboutActivity extends SettingsLayoutActivity {
+         // Limit the intent to an activity that is in the system image.
+         final PackageManager pm = getPackageManager();
+         final List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
++
++        if (action.equals(SETTINGS_UPDATE_SYSTEM) && activities.size() > 1) {
++            for (ResolveInfo info : activities) {
++                if ((info.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
++                    if (info.activityInfo.isEnabled() && info.activityInfo.packageName.contains("google")) {
++                        intent.setPackage(info.activityInfo.packageName);
++                        return intent;
++                    }
++                }
++            }
++        }
++        //for Update Intent---->google package not contains will set default
+         for (ResolveInfo info : activities) {
+             if ((info.activityInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                 if (info.activityInfo.isEnabled()) {
+@@ -374,7 +386,7 @@ public class AboutActivity extends SettingsLayoutActivity {
+             m.group(4);                            // Thu Jun 28 11:02:39 PDT 2012
+     }
+ 
+-    public static class RebootConfirmFragment extends GuidedStepFragment {
++    /*public static class RebootConfirmFragment extends GuidedStepFragment {
+ 
+         private static final int ACTION_RESTART = 1;
+ 
+@@ -416,5 +428,5 @@ public class AboutActivity extends SettingsLayoutActivity {
+                 getFragmentManager().popBackStack();
+             }
+         }
+-    }
++    }*/
+ }
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectToWifiFragment.java b/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectToWifiFragment.java
+index 877d0f2..c61d05a 100755
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectToWifiFragment.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectToWifiFragment.java
+@@ -57,7 +57,6 @@ public class ConnectToWifiFragment extends MessageWizardFragment
+     private static final String EXTRA_CONFIGURATION = "configuration";
+     private static final int MSG_TIMEOUT = 1;
+     private static final int CONNECTION_TIMEOUT = 15000;
+-
+     public static ConnectToWifiFragment newInstance(String title, boolean showProgressIndicator,
+             WifiConfiguration configuration) {
+         ConnectToWifiFragment fragment = new ConnectToWifiFragment();
+@@ -133,7 +132,6 @@ public class ConnectToWifiFragment extends MessageWizardFragment
+         mWifiConfiguration = getArguments().getParcelable(EXTRA_CONFIGURATION);
+         mWifiManager = ((WifiManager) getActivity().getSystemService(Context.WIFI_SERVICE));
+         mHandler = new MessageHandler(this);
+-
+         IntentFilter filter = new IntentFilter();
+         filter.addAction(WifiManager.SUPPLICANT_STATE_CHANGED_ACTION);
+         mReceiver = new BroadcastReceiver() {
+@@ -248,6 +246,8 @@ public class ConnectToWifiFragment extends MessageWizardFragment
+         ConnectivityManager connMan =
+                 (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+         NetworkInfo netInfo = connMan.getActiveNetworkInfo();
++        if (mConnectivityListener != null)
++            return mConnectivityListener.getConnectivityStatus().isWifiConnected();
+         if (netInfo == null) {
+             if (DEBUG) Log.d(TAG, "NetworkInfo is null; network is not connected");
+             return false;
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectivityListener.java b/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectivityListener.java
+index fecf38f..24003ba 100644
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectivityListener.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/ConnectivityListener.java
+@@ -34,7 +34,7 @@ import android.net.wifi.WifiManager;
+ import android.text.TextUtils;
+ import android.util.Log;
+ import android.util.Pair;
+-
++import com.android.settingslib.wifi.AccessPoint;
+ import java.net.Inet4Address;
+ import java.net.InetAddress;
+ import java.util.ArrayList;
+@@ -61,6 +61,7 @@ public class ConnectivityListener {
+     private final Context mContext;
+     private final Listener mListener;
+     private final IntentFilter mFilter;
++    private IntentFilter mWifiStateFilter;
+     private final BroadcastReceiver mReceiver;
+     private boolean mStarted;
+ 
+@@ -68,6 +69,7 @@ public class ConnectivityListener {
+     private final WifiManager mWifiManager;
+     private final EthernetManager mEthernetManager;
+     private WifiNetworkListener mWifiListener;
++    private NetworkInfo mWifiNetworkInfo;
+     private final BroadcastReceiver mWifiListReceiver = new BroadcastReceiver() {
+         @Override
+         public void onReceive(Context context, Intent intent) {
+@@ -83,26 +85,43 @@ public class ConnectivityListener {
+             mListener.onConnectivityChange(intent);
+         }
+     };
++
+     private final EthernetManager.Listener mEthernetListener = new EthernetManager.Listener() {
+         @Override
+         public void onAvailabilityChanged(boolean isAvailable) {
+             mListener.onConnectivityChange(null);
+         }
+     };
++    private void handleNetworkStateChanged(NetworkInfo networkInfo) {
++        if (mWifiManager.isWifiEnabled()) {
++            WifiInfo info = mWifiManager.getConnectionInfo();
++            String summary = AccessPoint.getSummary(mContext, info.getSSID(),
++                    networkInfo.getDetailedState(),
++                    info.getNetworkId() == WifiConfiguration.INVALID_NETWORK_ID, null);
++            Log.e(TAG,"AccessPoint.getSummary:"+summary);
++        }
++    }
+ 
+     public static class ConnectivityStatus {
+-        public static final int NETWORK_NONE = 1;
+-        public static final int NETWORK_WIFI_OPEN = 3;
+-        public static final int NETWORK_WIFI_SECURE = 5;
+-        public static final int NETWORK_ETHERNET = 7;
++        public static final int NETWORK_NONE = 0x00;
++        public static final int NETWORK_WIFI_OPEN = 0x01;
++        public static final int NETWORK_WIFI_SECURE = 0x02;
++        public static final int NETWORK_ETHERNET = 0x80;
++        public static final int NETWORK_WIFI_OP_ETHERNET = 0x81;
++        public static final int NETWORK_WIFI_SE_ETHERNET = 0x82;
+ 
+         public int mNetworkType;
+         public String mWifiSsid;
+         public int mWifiSignalStrength;
+ 
+-        boolean isEthernetConnected() { return mNetworkType == NETWORK_ETHERNET; }
++        boolean isEthernetConnected() { return mNetworkType == NETWORK_ETHERNET ||
++                                          mNetworkType == NETWORK_WIFI_OP_ETHERNET ||
++                                          mNetworkType == NETWORK_WIFI_SE_ETHERNET; }
+         boolean isWifiConnected() {
+-            return mNetworkType == NETWORK_WIFI_OPEN ||  mNetworkType == NETWORK_WIFI_SECURE;
++            return mNetworkType == NETWORK_WIFI_OPEN ||
++                   mNetworkType == NETWORK_WIFI_SECURE ||
++                   mNetworkType == NETWORK_WIFI_OP_ETHERNET ||
++                   mNetworkType == NETWORK_WIFI_SE_ETHERNET;
+         }
+ 
+         @Override
+@@ -128,14 +147,25 @@ public class ConnectivityListener {
+         mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+         mFilter.addAction(ConnectivityManager.INET_CONDITION_ACTION);
+         mFilter.addAction(WifiManager.RSSI_CHANGED_ACTION);
++        mFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
++
+         mReceiver = new BroadcastReceiver() {
+             @Override
+             public void onReceive(Context context, Intent intent) {
+                 if (DEBUG) {
+                     Log.d(TAG, "Connectivity change!");
+                 }
+-                if (updateConnectivityStatus()) {
+-                    mListener.onConnectivityChange(intent);
++
++                if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
++                    mWifiNetworkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
++                    handleNetworkStateChanged(mWifiNetworkInfo);
++                    if (updateConnectivityStatus(mWifiNetworkInfo)) {
++                        mListener.onConnectivityChange(intent);
++                    }
++                } else {
++                    if (updateConnectivityStatus(mWifiNetworkInfo)) {
++                        mListener.onConnectivityChange(intent);
++                    }
+                 }
+             }
+         };
+@@ -148,7 +178,7 @@ public class ConnectivityListener {
+     public void start() {
+         if (!mStarted) {
+             mStarted = true;
+-            updateConnectivityStatus();
++            updateConnectivityStatus(null);
+             mContext.registerReceiver(mReceiver, mFilter);
+             mContext.registerReceiver(mWifiListReceiver, new IntentFilter(
+                     WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
+@@ -370,27 +400,32 @@ public class ConnectivityListener {
+ 
+     private boolean setNetworkType(int networkType) {
+         boolean hasChanged = mConnectivityStatus.mNetworkType != networkType;
+-        mConnectivityStatus.mNetworkType = networkType;
++        if (hasChanged) {
++            mConnectivityStatus.mNetworkType = networkType;
++        }
+         return hasChanged;
+     }
+ 
+-    private boolean updateConnectivityStatus() {
++    private boolean updateConnectivityStatus(NetworkInfo mWifiInfo) {
++        int netwifiType=0;
++        int netethType=0;
++        boolean hasChanged = false;
+         NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
++        NetworkInfo netInfoETH = mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
+         if (networkInfo == null) {
+             return setNetworkType(ConnectivityStatus.NETWORK_NONE);
+         } else {
+-            switch (networkInfo.getType()) {
+-                case ConnectivityManager.TYPE_WIFI: {
+-                    boolean hasChanged;
+-
++            if (mWifiInfo != null) {
++                if (mWifiInfo.getState() == NetworkInfo.State.CONNECTED) {
+                     // Determine if this is an open or secure wifi connection.
+                     WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
+-                    if (isSecureWifi(wifiInfo)) {
+-                        hasChanged = setNetworkType(ConnectivityStatus.NETWORK_WIFI_SECURE);
+-                    } else {
+-                        hasChanged = setNetworkType(ConnectivityStatus.NETWORK_WIFI_OPEN);
++                    if (wifiInfo != null && isWifiEnabled()) {
++                        if (isSecureWifi(wifiInfo)) {
++                            netwifiType = ConnectivityStatus.NETWORK_WIFI_SECURE;
++                        } else {
++                            netwifiType = ConnectivityStatus.NETWORK_WIFI_OPEN;
++                        }
+                     }
+-
+                     // Find the SSID of network.
+                     String ssid = null;
+                     if (wifiInfo != null) {
+@@ -416,18 +451,16 @@ public class ConnectivityListener {
+                         hasChanged = true;
+                         mConnectivityStatus.mWifiSignalStrength = signalStrength;
+                     }
+-                    return hasChanged;
++                } else {
++                    netwifiType = ConnectivityStatus.NETWORK_NONE;
+                 }
+-
+-                case ConnectivityManager.TYPE_ETHERNET:
+-                    if (getEthernetIpAddress().isEmpty()) {
+-                        return setNetworkType(ConnectivityStatus.NETWORK_NONE);
+-                    }
+-                    return setNetworkType(ConnectivityStatus.NETWORK_ETHERNET);
+-
+-                default:
+-                    return setNetworkType(ConnectivityStatus.NETWORK_NONE);
++            }else {
++                Log.e(TAG,"mWifiInfo == null!");
++            }
++            if (networkInfo.getType() ==  ConnectivityManager.TYPE_ETHERNET) {
++                netethType = ConnectivityStatus.NETWORK_ETHERNET;
+             }
++            return (setNetworkType(netwifiType | netethType) || hasChanged);
+         }
+     }
+ }
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/NetworkActivity.java b/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/NetworkActivity.java
+index 30c7784..d70f4aa 100755
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/NetworkActivity.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/connectivity/NetworkActivity.java
+@@ -26,8 +26,6 @@ import android.content.ComponentName;
+ import android.net.IpConfiguration;
+ import android.net.IpConfiguration.IpAssignment;
+ import android.net.IpConfiguration.ProxySettings;
+-import android.net.ConnectivityManager;
+-import android.net.NetworkInfo;
+ import android.net.wifi.WifiConfiguration;
+ import android.net.wifi.ScanResult;
+ import android.net.wifi.WifiConfiguration;
+@@ -172,7 +170,6 @@ public class NetworkActivity extends SettingsLayoutActivity implements
+         refreshEnableWifiSelection();
+         onWifiListChanged();
+         mWifiLayout.refreshView();
+-        mEthernetAdvancedLayout.refreshView();
+     }
+ 
+     private void refreshEnableWifiSelection() {
+@@ -427,14 +424,7 @@ public class NetworkActivity extends SettingsLayoutActivity implements
+                                 new Intent(NetworkActivity.this,
+                                         AddWifiNetworkActivity.class))
+                                 .title(R.string.wifi_setting_other_options_add_network)
+-                                .build())
+-                        .add(new Header.Builder(mRes)
+-                                .title(R.string.wifi_setting_always_scan)
+-                                .description(mAlwaysScanWifi)
+-                                .detailedDescription(
+-                                        R.string.wifi_setting_always_scan_context)
+-                                .build()
+-                                .add(mAlwaysScanWifi));
++                                .build());
+             }
+             return layout;
+         }
+@@ -526,7 +516,7 @@ public class NetworkActivity extends SettingsLayoutActivity implements
+         private Layout initAvailableWifiNetworks(boolean top3EntriesOnly, String mustHave) {
+             List<ScanResult> networks = mConnectivityListener.getAvailableNetworks();
+             Layout layout = new Layout();
+-            if (networks.size() > 0) {
++            if (networks.size() > 0 && getWifiDevEnable() == true) {
+                 int maxItems = top3EntriesOnly ? 3 : Integer.MAX_VALUE;
+                 // "networks" is already sorted by the signal strength and connection status.
+                 // Generate a new list with size less than "maxItems" that ensures "mustHave" is
+@@ -935,23 +925,10 @@ public class NetworkActivity extends SettingsLayoutActivity implements
+                     sendWifiOffMsg();
+                 }
+                 else {
+-                    ConnectivityManager mConnectivityManager = (ConnectivityManager) mContext.getSystemService(
+-                        Context.CONNECTIVITY_SERVICE);
+-                    NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
+-                    if ( networkInfo != null ) {
+-                        if (networkInfo.getType() != ConnectivityManager.TYPE_ETHERNET) {
+-                            if (getWifiApDevEnable()) {
+-                               sendWifiApOffMsg();
+-                            }
+-                            sendWifiOnMsg();
+-
+-                        }
+-                    } else {
+-                        if (getWifiApDevEnable()) {
+-                            sendWifiApOffMsg();
+-                        }
+-                        sendWifiOnMsg();
++                    if (getWifiApDevEnable()) {
++                        sendWifiApOffMsg();
+                     }
++                    sendWifiOnMsg();
+                 }
+                 goBackToTitle(mRes.getString(R.string.connectivity_wifi));
+                 break;
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/device/display/rotation/ScreenRotationActivity.java b/apps/TvSettings/Settings/src/com/android/tv/settings/device/display/rotation/ScreenRotationActivity.java
+index 0b2d389..2f187df 100644
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/device/display/rotation/ScreenRotationActivity.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/device/display/rotation/ScreenRotationActivity.java
+@@ -6,6 +6,9 @@ import android.content.Context;
+ import android.media.AudioManager;
+ import android.net.Uri;
+ import android.os.Bundle;
++import android.os.UserHandle;
++import android.provider.Settings;
++import android.content.ContentResolver;
+ import com.droidlogic.app.SystemControlManager;
+ import com.android.tv.settings.dialog.DialogFragment;
+ import com.android.tv.settings.dialog.DialogFragment.Action;
+@@ -66,14 +69,31 @@ public class ScreenRotationActivity extends Activity implements Action.Listener
+     public void onActionClicked(Action action) {
+         if (ACTION_ROTATION_MIDDLE.equals(action.getKey())) {
+             setRotationType("middle_port");
++            enableAccelerMeter(false);
+         } else if (ACTION_ROTATION_LAND.equals(action.getKey())) {
+             setRotationType("force_land");
++            enableAccelerMeter(false);
+         } else if (ACTION_ROTATION_ORIGINAL.equals(action.getKey())) {
+             setRotationType("original");
++            enableAccelerMeter(true);
+         }
+         //mDialogFragment.setIcon(getIconResource(getContentResolver()));
+     }
+ 
++    private void enableAccelerMeter(boolean b) {
++        if (b) {
++            Settings.System.putIntForUser(this.getContentResolver(),
++               Settings.System.ACCELEROMETER_ROTATION,
++               1,
++               UserHandle.USER_CURRENT);
++        } else {
++            Settings.System.putIntForUser(this.getContentResolver(),
++               Settings.System.ACCELEROMETER_ROTATION,
++               0,
++               UserHandle.USER_CURRENT);
++        }
++    }
++
+     public int getIconResource(ContentResolver contentResolver) {
+         return R.drawable.ic_settings_rotation;
+         //return getRotationEnabled() ? R.drawable.ic_settings_overscan : R.drawable.ic_settings_rotation;
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/SoundBrowseInfo.java b/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/SoundBrowseInfo.java
+index bb3bef1..fb27006 100755
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/SoundBrowseInfo.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/SoundBrowseInfo.java
+@@ -26,6 +26,7 @@ import com.android.tv.settings.BrowseInfoBase;
+ import com.android.tv.settings.MenuItem;
+ import com.android.tv.settings.R;
+ import com.android.tv.settings.SettingsConstant;
++import android.os.SystemProperties;
+ 
+ /**
+  * Gets the list of browse headers and browse items.
+@@ -57,7 +58,14 @@ public class SoundBrowseInfo extends BrowseInfoBase {
+                 .intent(getIntent(SettingsConstant.PACKAGE,
+                         SettingsConstant.PACKAGE + ".device.sound.systemsound.SystemSoundActivity"))
+                 .build());
+-
++        if (SystemProperties.getBoolean("ro.platform.support.dolby", false)) {
++            mRow.add(new MenuItem.Builder().id(mNextItemId++)
++                    .title(mContext.getString(R.string.device_sound_dolby))
++                    .imageResourceId(mContext, R.drawable.ic_settings_sound_on)
++                    .intent(getIntent(SettingsConstant.PACKAGE,
++                            SettingsConstant.PACKAGE + ".device.sound.dolbysound.DolbySoundActivity"))
++                    .build());
++        }
+         if (SettingsConstant.needDroidlogicDigitalSounds(mContext)) {
+             mRow.add(new MenuItem.Builder().id(mNextItemId++)
+                     .title(mContext.getString(R.string.device_sound_digital))
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/dolbysound/DolbyBootReceiver.java b/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/dolbysound/DolbyBootReceiver.java
+new file mode 100644
+index 0000000..1ef3dd8
+--- /dev/null
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/dolbysound/DolbyBootReceiver.java
+@@ -0,0 +1,35 @@
++package com.android.tv.settings.device.sound.dolbysound;
++
++import android.content.Intent;
++import android.content.Context;
++import android.content.SharedPreferences;
++import android.content.BroadcastReceiver;
++import android.os.SystemProperties;
++
++import com.droidlogic.app.OutputModeManager;
++import com.droidlogic.app.SystemControlManager;
++
++public class DolbyBootReceiver extends BroadcastReceiver {
++    private boolean mSupportDRC = SystemProperties.getBoolean("ro.platform.support.dolby", false);
++
++    @Override
++    public void onReceive(Context context, Intent intent) {
++        if (mSupportDRC) initDRCMode(context);
++    }
++
++    public void initDRCMode(Context context) {
++        String data = "";
++        OutputModeManager omm = new OutputModeManager(context);
++        SharedPreferences spf = context.getSharedPreferences(DolbySoundActivity.PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE);
++        data = spf.getString(DolbySoundActivity.DRC_MODE, DolbySoundActivity.DRC_LINE);
++        if (data.equals(DolbySoundActivity.DRC_OFF)) {
++            omm.enableDobly_DRC(false);
++        } else if (data.equals(DolbySoundActivity.DRC_RF)) {
++            omm.enableDobly_DRC(true);
++            omm.setDoblyMode(DolbySoundActivity.RF);
++        } else {
++            omm.enableDobly_DRC(true);
++            omm.setDoblyMode(DolbySoundActivity.LINE);
++        }
++    }
++}
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/dolbysound/DolbySoundActivity.java b/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/dolbysound/DolbySoundActivity.java
+new file mode 100644
+index 0000000..09a0a34
+--- /dev/null
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/device/sound/dolbysound/DolbySoundActivity.java
+@@ -0,0 +1,179 @@
++/*
++ * Copyright (C) 2014 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.tv.settings.device.sound.dolbysound;
++
++import com.android.tv.settings.ActionKey;
++import com.android.tv.settings.ActionBehavior;
++import com.android.tv.settings.BaseSettingsActivity;
++import com.android.tv.settings.dialog.old.ActionAdapter;
++import com.android.tv.settings.dialog.old.Action;
++import com.android.tv.settings.R;
++
++import android.content.Intent;
++import android.content.Context;
++import android.content.SharedPreferences;
++import android.content.res.Resources;
++import android.content.SharedPreferences.Editor;
++import android.os.SystemProperties;
++import android.os.Bundle;
++import android.util.Log;
++
++import com.droidlogic.app.OutputModeManager;
++import com.droidlogic.app.SystemControlManager;
++
++
++public class DolbySoundActivity extends BaseSettingsActivity implements ActionAdapter.Listener {
++    public static final String TAG = "DRCSound";
++    public static final String LINE = "2";
++    public static final String RF = "3";
++    //For sharedPreferences
++    public static final String PREFERENCE_BOX_SETTING = "preference_box_settings";
++    public static final String DRC_MODE = "dolbydrc";
++    public static final String DRC_OFF = "off";
++    public static final String DRC_LINE = "line";
++    public static final String DRC_RF = "rf";
++
++    private SharedPreferences mSharepreference = null;
++    private OutputModeManager mOMM;
++
++    enum ActionType {
++        DOLBY_SOUND,
++        DOLBY_DRC_MODE,
++        DOLBY_DRC_OFF,
++        DOLBY_DRC_LINE,
++        DOLBY_DRC_RF;
++
++        Action toAction(Resources resources, String title, String description) {
++            return new Action.Builder()
++                    .key(getKey(this, ActionBehavior.INIT))
++                    .title(title)
++                    .description(description)
++                    .enabled(true)
++                    .checked(false)
++                    .build();
++        }
++
++        private String getKey(ActionType t, ActionBehavior b) {
++            return new ActionKey<ActionType, ActionBehavior>(t, b).getKey();
++        }
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        mOMM = new OutputModeManager(this);
++        mSharepreference = getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE);
++        super.onCreate(savedInstanceState);
++    }
++
++    @Override
++    public void onActionClicked(Action action) {
++        /*
++         * For list preferences
++         */
++        String data = "";
++        ActionKey<ActionType, ActionBehavior> actionKey = new ActionKey<ActionType, ActionBehavior>(ActionType.class, ActionBehavior.class, action.getKey());
++        final ActionType type = actionKey.getType();
++        switch ((ActionType) mState) {
++            case DOLBY_DRC_MODE:
++                if (type == ActionType.DOLBY_DRC_OFF) {
++                    mOMM.enableDobly_DRC(false);
++                    mOMM.setDoblyMode(LINE);
++                    savePreference(DRC_MODE, DRC_OFF);
++                } else if (type == ActionType.DOLBY_DRC_LINE) {
++                    mOMM.enableDobly_DRC(true);
++                    mOMM.setDoblyMode(LINE);
++                    savePreference(DRC_MODE, DRC_LINE);
++                } else if (type == ActionType.DOLBY_DRC_RF) {
++                    mOMM.setDoblyMode(RF);
++                    savePreference(DRC_MODE, DRC_RF);
++                }
++                goBack();
++                return;
++            default:
++                break;
++        }
++
++        final ActionBehavior behavior = actionKey.getBehavior();
++        if (behavior == null) {
++            return;
++        }
++        switch (behavior) {
++            case INIT:
++                setState(type, true);
++                break;
++            default:
++        }
++    }
++
++    @Override
++    protected Object getInitialState() {
++        return ActionType.DOLBY_SOUND;
++    }
++
++    @Override
++    protected void refreshActionList() {
++        int summary;
++        mActions.clear();
++        switch ((ActionType) mState) {
++            case DOLBY_SOUND:
++                String value = "";
++                value = mSharepreference.getString(DRC_MODE, DRC_LINE);
++                if (value.equals(DRC_OFF)) {
++                    summary = R.string.device_sound_dolby_drcoff;
++                } else if (value.equals(DRC_RF)) {
++                    summary = R.string.device_sound_dolby_drcrf;
++                } else {
++                    summary = R.string.device_sound_dolby_drcline;
++                }
++                mActions.add(ActionType.DOLBY_DRC_MODE.toAction(mResources, getString(R.string.device_sound_dolby_drcmode), getString(summary)));
++                break;
++            case DOLBY_DRC_MODE:
++                mActions.add(ActionType.DOLBY_DRC_OFF.toAction(mResources, getString(R.string.device_sound_dolby_drcoff), null));
++                mActions.add(ActionType.DOLBY_DRC_LINE.toAction(mResources, getString(R.string.device_sound_dolby_drcline), null));
++                mActions.add(ActionType.DOLBY_DRC_RF.toAction(mResources, getString(R.string.device_sound_dolby_drcrf), null));
++                break;
++            default:
++                break;
++        }
++    }
++
++    @Override
++    protected void updateView() {
++        refreshActionList();
++        switch ((ActionType) mState) {
++            case DOLBY_SOUND:
++                setView(R.string.device_sound_dolby, R.string.header_category_device, 0, R.drawable.ic_settings_sound_on);
++                break;
++            case DOLBY_DRC_MODE:
++                setView(R.string.device_sound_dolby_drcmode, R.string.device_sound_dts, 0, R.drawable.ic_settings_sound_on);
++                break;
++            default:
++                break;
++        }
++    }
++
++    @Override
++    protected void setProperty(boolean enable) {
++    }
++
++    private void savePreference(String key, String value) {
++        Editor editor = getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE).edit();
++        editor.putString(key, value);
++        editor.commit();
++    }
++}
++
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiCecActivity.java b/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiCecActivity.java
+index dcffe2e..ab50553 100644
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiCecActivity.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiCecActivity.java
+@@ -23,130 +23,37 @@ import com.android.tv.settings.R;
+ import com.android.tv.settings.dialog.old.Action;
+ import com.android.tv.settings.dialog.old.ActionAdapter;
+ 
+-import android.app.ActivityManager.RunningServiceInfo;
+-import android.app.ActivityManager;
+-import android.content.Intent;
+-import android.content.Context;
+-import android.content.SharedPreferences;
+-import android.content.res.Configuration;
+-import android.content.SharedPreferences.Editor;
+ import android.os.Bundle;
+-import android.widget.Toast;
+ import android.text.TextUtils;
++import android.provider.Settings.Global;
+ import android.util.Log;
+ 
+ import com.droidlogic.app.HdmiCecManager;
+ 
+-
+ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapter.Listener {
+     private static final String TAG = "HdmiCecOutput";
+-
+-    //For sharedPreferences
+-    private static final String PREFERENCE_BOX_SETTING = "preference_box_settings";
+-    private static final String SWITCH_ON = "true";
+-    private static final String SWITCH_OFF = "false";
+-    private static final String SWITCH_CEC = "switch_cec";
+-    private static final String SWITCH_ONE_KEY_PLAY = "switch_one_key_play";
+-    private static final String SWITCH_ONE_KEY_POWER_OFF = "switch_one_key_power_off";
+-    private static final String SWITCH_AUTO_CHANGE_LANGUAGE = "switch_auto_change_languace";
+-
+-    //For start service
+-    private static final String CEC_SERVICE = "com.android.tv.settings.system.CecService";
+-    private static final String CEC_ACTION = "CEC_LANGUAGE_AUTO_SWITCH";
+-
+-    private SharedPreferences mSharepreference = null;
+-    private HdmiCecManager mHdmiCecManager;
+-
++    private static final int DISABLED = 0;
++    private static final int ENABLED = 1;
+ 
+     @Override
+     public void onCreate(Bundle savedInstanceState) {
+-        initCecFun();
+         super.onCreate(savedInstanceState);
+     }
+ 
+-    private boolean isCecServiceRunning() {
+-        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+-        for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+-            if (CEC_SERVICE.equals(service.service.getClassName())) {
+-                return true;
+-            }
+-        }
+-        return false;
+-    }
+-
+     private void switchCec(boolean on) {
+-        String isOpen = mSharepreference.getString(SWITCH_CEC, SWITCH_OFF);
+-        Log.d(TAG, "switch CEC, on:" + on + ", isOpen:" + isOpen);
+-        Editor editor = this.getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE).edit();
+-        if (isOpen.equals(SWITCH_ON) && !on) {
+-            editor.putString(SWITCH_CEC, SWITCH_OFF);
+-            editor.putString(SWITCH_ONE_KEY_PLAY, SWITCH_OFF);
+-            editor.putString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_OFF);
+-            editor.putString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_OFF);
+-            editor.commit();
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_CEC, HdmiCecManager.FUN_CLOSE);
+-        } else if (isOpen.equals(SWITCH_OFF) && on) {
+-            editor.putString(SWITCH_CEC, SWITCH_ON);
+-            editor.putString(SWITCH_ONE_KEY_PLAY, SWITCH_ON);
+-            editor.putString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_ON);
+-            editor.putString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_ON);
+-            editor.commit();
+-            if (!isCecServiceRunning()) {
+-                Intent serviceIntent = new Intent();
+-                serviceIntent.setAction(CEC_ACTION);
+-                this.startService(serviceIntent);
+-            }
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_CEC, HdmiCecManager.FUN_OPEN);
+-            updateCecLanguage();
+-        }
++        writeCecOption(Global.HDMI_CONTROL_ENABLED, on);
+     }
+ 
+-    private void switchOneKeyPlay(boolean on) {
+-        String isOpen = mSharepreference.getString(SWITCH_ONE_KEY_PLAY, SWITCH_OFF);
+-        Editor editor = this.getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE).edit();
+-        if (isOpen.equals(SWITCH_ON) && !on) {
+-            editor.putString(SWITCH_ONE_KEY_PLAY, SWITCH_OFF);
+-            editor.commit();
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_ONE_KEY_PLAY, HdmiCecManager.FUN_CLOSE);
+-        } else if (isOpen.equals(SWITCH_OFF) && on) {
+-            editor.putString(SWITCH_ONE_KEY_PLAY, SWITCH_ON);
+-            editor.commit();
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_ONE_KEY_PLAY, HdmiCecManager.FUN_OPEN);
+-        }
++    private void switchOneTouchPlay(boolean on) {
++        writeCecOption(HdmiCecManager.HDMI_CONTROL_ONE_TOUCH_PLAY_ENABLED, on);
+     }
+ 
+-    private void switchOneKeyPowerOff(boolean on) {
+-        String isOpen = mSharepreference.getString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_OFF);
+-        Editor editor = this.getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE).edit();
+-        if (isOpen.equals(SWITCH_ON) && !on) {
+-            editor.putString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_OFF);
+-            editor.commit();
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_ONE_KEY_POWER_OFF, HdmiCecManager.FUN_CLOSE);
+-        } else if (isOpen.equals(SWITCH_OFF) && on) {
+-            editor.putString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_ON);
+-            editor.commit();
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_ONE_KEY_POWER_OFF, HdmiCecManager.FUN_OPEN);
+-        }
++    private void switchOneTouchPowerOff(boolean on) {
++        writeCecOption(Global.HDMI_CONTROL_AUTO_DEVICE_OFF_ENABLED, on);
+     }
+ 
+     private void switchAutoChangeLanguage(boolean on) {
+-        String isOpen = mSharepreference.getString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_OFF);
+-        Editor editor = this.getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE).edit();
+-        if (isOpen.equals(SWITCH_ON) && !on) {
+-            editor.putString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_OFF);
+-            editor.commit();
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_AUTO_CHANGE_LANGUAGE, HdmiCecManager.FUN_CLOSE);
+-        } else if (isOpen.equals(SWITCH_OFF) && on) {
+-            editor.putString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_ON);
+-            editor.commit();
+-            if (!isCecServiceRunning()) {
+-                Intent serviceIntent = new Intent();
+-                serviceIntent.setAction(CEC_ACTION);
+-                this.startService(serviceIntent);
+-            }
+-            mHdmiCecManager.setCecSysfsValue(HdmiCecManager.FUN_AUTO_CHANGE_LANGUAGE, HdmiCecManager.FUN_OPEN);
+-            updateCecLanguage();
+-        }
++        writeCecOption(HdmiCecManager.HDMI_CONTROL_AUTO_CHANGE_LANGUAGE_ENABLED, on);
+     }
+ 
+     @Override
+@@ -154,11 +61,6 @@ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapt
+         /*
+          * For list preferences
+          */
+-        if (!mHdmiCecManager.remoteSupportCec()) {
+-            Toast.makeText(this, this.getResources().getString(R.string.toast_cec), Toast.LENGTH_LONG).show();
+-            return;
+-        }
+-
+         ActionKey<ActionType, ActionBehavior> actionKey = new ActionKey<ActionType, ActionBehavior>(ActionType.class, ActionBehavior.class, action.getKey());
+         final ActionType type = actionKey.getType();
+         switch ((ActionType) mState) {
+@@ -167,11 +69,11 @@ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapt
+                 goBack();
+                 return;
+             case CEC_OVERVIEW_ONE_KEY_PLAY:
+-                switchOneKeyPlay(type == ActionType.CEC_OVERVIEW_SWITCH_ON);
++                switchOneTouchPlay(type == ActionType.CEC_OVERVIEW_SWITCH_ON);
+                 goBack();
+                 return;
+             case CEC_OVERVIEW_ONE_KEY_POWER_OFF:
+-                switchOneKeyPowerOff(type == ActionType.CEC_OVERVIEW_SWITCH_ON);
++                switchOneTouchPowerOff(type == ActionType.CEC_OVERVIEW_SWITCH_ON);
+                 goBack();
+                 return;
+             case CEC_OVERVIEW_AUTO_CHANGE_LANGUAGE:
+@@ -207,9 +109,9 @@ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapt
+                 String isOn = getStatus(isSwitchCecOn());
+                 mActions.add(ActionType.CEC_OVERVIEW_SWITCH.toAction(mResources, TextUtils.isEmpty(isOn) ? "" : isOn));
+                 if (getString(R.string.settings_on).equals(isOn)) {
+-                    isOn = getStatus(isOneKeyPlayOn());
++                    isOn = getStatus(isOneTouchPlayOn());
+                     mActions.add(ActionType.CEC_OVERVIEW_ONE_KEY_PLAY.toAction(mResources, TextUtils.isEmpty(isOn) ? "" : isOn));
+-                    isOn = getStatus(isOneKeyPowerOff());
++                    isOn = getStatus(isOneTouchPowerOff());
+                     mActions.add(ActionType.CEC_OVERVIEW_ONE_KEY_POWER_OFF.toAction(mResources, TextUtils.isEmpty(isOn) ? "" : isOn));
+                     isOn = getStatus(isAutoChangeLanguage());
+                     mActions.add(ActionType.CEC_OVERVIEW_AUTO_CHANGE_LANGUAGE.toAction(mResources, TextUtils.isEmpty(isOn) ? "" : isOn));
+@@ -231,7 +133,7 @@ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapt
+             case CEC_OVERVIEW_ONE_KEY_PLAY:
+                 Action one_key_play_on = ActionType.CEC_OVERVIEW_SWITCH_ON.toAction(mResources);
+                 Action one_key_play_off = ActionType.CEC_OVERVIEW_SWITCH_OFF.toAction(mResources);
+-                if (isOneKeyPlayOn()) {
++                if (isOneTouchPlayOn()) {
+                     one_key_play_on.setChecked(true);
+                     one_key_play_off.setChecked(false);
+                 } else {
+@@ -244,7 +146,7 @@ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapt
+             case CEC_OVERVIEW_ONE_KEY_POWER_OFF:
+                 Action one_key_power_off_on = ActionType.CEC_OVERVIEW_SWITCH_ON.toAction(mResources);
+                 Action one_key_power_off_off = ActionType.CEC_OVERVIEW_SWITCH_OFF.toAction(mResources);
+-                if (isOneKeyPowerOff()) {
++                if (isOneTouchPowerOff()) {
+                     one_key_power_off_on.setChecked(true);
+                     one_key_power_off_off.setChecked(false);
+                 } else {
+@@ -300,64 +202,32 @@ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapt
+     protected void setProperty(boolean enable) {
+     }
+ 
+-    private void initCecFun(){
+-        mHdmiCecManager = new HdmiCecManager(this);
+-        mSharepreference = getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE);
++    private boolean isSwitchCecOn() {
++        return readCecOption(Global.HDMI_CONTROL_ENABLED);
++    }
+ 
+-        Editor editor = this.getSharedPreferences(PREFERENCE_BOX_SETTING, Context.MODE_PRIVATE).edit();
+-        String str = mHdmiCecManager.getCurConfig();
+-        if (!mHdmiCecManager.remoteSupportCec()) {
+-            switchCec(false);
+-            return;
+-        }
+-        // get rid of '0x' prefix
+-        int cec_config = Integer.valueOf(str.substring(2, str.length()), 16);
+-        Log.d(TAG, "cec config str:" + str + ", value:" + cec_config);
+-        if ((cec_config & HdmiCecManager.MASK_FUN_CEC) != 0) {
+-            if ((cec_config & HdmiCecManager.MASK_ONE_KEY_PLAY) != 0) {
+-                editor.putString(SWITCH_ONE_KEY_PLAY, SWITCH_ON);
+-            } else {
+-                editor.putString(SWITCH_ONE_KEY_PLAY, SWITCH_OFF);
+-            }
+-            if ((cec_config & HdmiCecManager.MASK_ONE_KEY_STANDBY) != 0) {
+-                editor.putString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_ON);
+-            } else {
+-                editor.putString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_OFF);
+-            }
+-            if ((cec_config & HdmiCecManager.MASK_AUTO_CHANGE_LANGUAGE) != 0) {
+-                editor.putString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_ON);
+-            } else {
+-                editor.putString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_OFF);
+-            }
+-            editor.putString(SWITCH_CEC, SWITCH_ON);
+-        } else {
+-            editor.putString(SWITCH_ONE_KEY_PLAY, SWITCH_OFF);
+-            editor.putString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_OFF);
+-            editor.putString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_OFF);
+-            editor.putString(SWITCH_CEC, SWITCH_OFF);
+-        }
+-        editor.commit();
+-        mHdmiCecManager.setCecEnv(cec_config);
++    private boolean isOneTouchPlayOn() {
++        return readCecOption(HdmiCecManager.HDMI_CONTROL_ONE_TOUCH_PLAY_ENABLED);
+     }
+ 
+-    private boolean isSwitchCecOn() {
+-        String isSwitchCecOn = mSharepreference.getString(SWITCH_CEC, SWITCH_OFF);
+-        return isSwitchCecOn.equals(SWITCH_ON);
++    private boolean isOneTouchPowerOff() {
++        return readCecOption(Global.HDMI_CONTROL_AUTO_DEVICE_OFF_ENABLED);
+     }
+ 
+-    private boolean isOneKeyPlayOn() {
+-        String isOneKeyPlayOn = mSharepreference.getString(SWITCH_ONE_KEY_PLAY, SWITCH_OFF);
+-        return isOneKeyPlayOn.equals(SWITCH_ON);
++    private boolean isAutoChangeLanguage() {
++        return readCecOption(HdmiCecManager.HDMI_CONTROL_AUTO_CHANGE_LANGUAGE_ENABLED);
+     }
+ 
+-    private boolean isOneKeyPowerOff() {
+-        String isOneKeyPowerOff = mSharepreference.getString(SWITCH_ONE_KEY_POWER_OFF, SWITCH_OFF);
+-        return isOneKeyPowerOff.equals(SWITCH_ON);
++    private void writeCecOption(String key, boolean value) {
++        Global.putInt(getContentResolver(), key, toInt(value));
+     }
+ 
+-    private boolean isAutoChangeLanguage() {
+-        String isAutoChangeLanguage = mSharepreference.getString(SWITCH_AUTO_CHANGE_LANGUAGE, SWITCH_OFF);
+-        return isAutoChangeLanguage.equals(SWITCH_ON);
++    private boolean readCecOption(String key) {
++        return Global.getInt(getContentResolver(), key, toInt(true)) == ENABLED;
++    }
++
++    private int toInt(boolean enabled) {
++        return enabled ? ENABLED : DISABLED;
+     }
+ 
+     private String getStatus(boolean status) {
+@@ -367,18 +237,5 @@ public class HdmiCecActivity extends BaseSettingsActivity implements ActionAdapt
+             return getString(R.string.settings_off);
+         }
+     }
+-
+-    private void updateCecLanguage(){
+-        String curLanguage = mHdmiCecManager.getCurLanguage();
+-        Log.d(TAG,"update curLanguage:" + curLanguage);
+-        if (curLanguage == null) return;
+-
+-        String[] cec_language_list = getResources().getStringArray(R.array.cec_language);
+-        String[] language_list = getResources().getStringArray(R.array.language);
+-        String[] country_list = getResources().getStringArray(R.array.country);
+-        mHdmiCecManager.setLanguageList(cec_language_list, language_list, country_list);
+-        mHdmiCecManager.doUpdateCECLanguage(curLanguage);
+-
+-    }
+ }
+ 
+diff --git a/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiInputsActivity.java b/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiInputsActivity.java
+index 53a114f..50ddd3d 100644
+--- a/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiInputsActivity.java
++++ b/apps/TvSettings/Settings/src/com/android/tv/settings/system/HdmiInputsActivity.java
+@@ -249,9 +249,8 @@ public class HdmiInputsActivity extends BaseSettingsActivity implements ActionAd
+             if (!port.equals("") && port.length() == 1) {
+                 int deviceid = Integer.parseInt(port);
+                 if (deviceid == portid) {
+-                    SystemProperties.set(DroidLogicTvUtils.SOURCE_NAME, name);
+                     Intent intent = new Intent(Intent.ACTION_MAIN);
+-                    intent.putExtra(DroidLogicTvUtils.EXTRA_CHANNEL_NUMBER, name);
++                    intent.putExtra(DroidLogicTvUtils.SOURCE_INPUT_ID, info.getId());
+                     intent.setClassName("com.droidlogic.tvsource", "com.droidlogic.tvsource.DroidLogicTv");
+                     startActivity(intent);
+                     return;
+diff --git a/screensavers/PhotoTable/AndroidManifest.xml b/screensavers/PhotoTable/AndroidManifest.xml
+index c401ef7..e748a08 100644
+--- a/screensavers/PhotoTable/AndroidManifest.xml
++++ b/screensavers/PhotoTable/AndroidManifest.xml
+@@ -6,7 +6,7 @@
+   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+   <uses-permission android:name="android.permission.WAKE_LOCK" />
+   <uses-permission android:name="com.google.android.gallery3d.permission.PICASA_STORE" />
+-  <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="17"/>
++  <uses-sdk android:minSdkVersion="17" android:targetSdkVersion="23"/>
+ 
+   <application
+       android:label="@string/app_name"

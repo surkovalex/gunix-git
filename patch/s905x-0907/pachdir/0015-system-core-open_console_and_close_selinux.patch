@@ -1,0 +1,35 @@
+diff --git a/init/Android.mk b/init/Android.mk
+index b410c65..dd62138 100644
+--- a/init/Android.mk
++++ b/init/Android.mk
+@@ -4,11 +4,11 @@ LOCAL_PATH:= $(call my-dir)
+ 
+ # --
+ 
+-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
++#ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
+ init_options += -DALLOW_LOCAL_PROP_OVERRIDE=1 -DALLOW_DISABLE_SELINUX=1
+-else
+-init_options += -DALLOW_LOCAL_PROP_OVERRIDE=0 -DALLOW_DISABLE_SELINUX=0
+-endif
++#else
++#init_options += -DALLOW_LOCAL_PROP_OVERRIDE=0 -DALLOW_DISABLE_SELINUX=0
++#endif
+ 
+ init_options += -DLOG_UEVENTS=0
+ 
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index 8ac71f2..8f5ea48 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -587,9 +587,7 @@ service healthd /sbin/healthd
+ service console /system/bin/sh
+     class core
+     console
+-    disabled
+-    user shell
+-    group shell log
++    group shell log root
+     seclabel u:r:shell:s0
+ 
+ on property:ro.debuggable=1

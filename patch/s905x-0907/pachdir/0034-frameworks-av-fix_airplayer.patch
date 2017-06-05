@@ -1,0 +1,87 @@
+diff --git a/media/libstagefright/Android.mk b/media/libstagefright/Android.mk
+index 896d870..8db6ad5 100644
+--- a/media/libstagefright/Android.mk
++++ b/media/libstagefright/Android.mk
+@@ -145,10 +145,6 @@ LOCAL_C_INCLUDES+= \
+ 	$(TOP)/frameworks/av/media/libstagefright/include  \
+ 	$(TOP)/frameworks/av/media/libmediaplayerservice  \
+ 
+-ifeq ($(USE_MEDIACODEC_SECURE), true)
+-LOCAL_CFLAGS += -DUSE_MEDIACODEC_SECURE
+-endif
+-
+ 
+ ####	$(TOP)/external/ffmpeg
+ 
+diff --git a/media/libstagefright/MediaCodec.cpp b/media/libstagefright/MediaCodec.cpp
+index 0223b95..8e5b690 100644
+--- a/media/libstagefright/MediaCodec.cpp
++++ b/media/libstagefright/MediaCodec.cpp
+@@ -14,7 +14,7 @@
+  * limitations under the License.
+  */
+ 
+-#define LOG_NDEBUG 0
++//#define LOG_NDEBUG 0
+ #define LOG_TAG "MediaCodec"
+ #include <inttypes.h>
+ 
+@@ -52,29 +52,8 @@
+ #include <utils/Log.h>
+ #include <utils/Singleton.h>
+ 
+-#include <sys/types.h>
+-#include <sys/stat.h>
+-#include <fcntl.h>
+-
+-
+ namespace android {
+ 
+-static int read_sysfs_int(const char *path) {
+-    int fd;
+-    int val = 0;
+-    char  bcmd[16];
+-    fd = open(path, O_RDONLY);
+-    if (fd >= 0) {
+-        read(fd, bcmd, sizeof(bcmd));
+-        val = strtol(bcmd, NULL, 10);
+-        close(fd);
+-    } else {
+-        ALOGD("unable to open file %s,err: %s", path, strerror(errno));
+-    }
+-    return val;
+-}
+-
+-
+ static int64_t getId(sp<IResourceManagerClient> client) {
+     return (int64_t) client.get();
+ }
+@@ -2026,13 +2005,7 @@ void MediaCodec::onMessageReceived(const sp<AMessage> &msg) {
+                 PostReplyWithError(replyID, -EAGAIN);
+                 break;
+             }
+-            if (timeoutUs > 100000 && mComponentName == AString("OMX.amlogic.vp9.decoder.awesome")) {
+-                int nokeyframe = read_sysfs_int("/sys/module/amvdec_vp9/parameters/on_no_keyframe_skiped");
+-                if (nokeyframe) {
+-                    timeoutUs = 10000; /*no keyframe found, less wait for fast out.*/
+-                    ALOGD("No keyframe found, less wait less time\n");
+-                }
+-            }
++
+             mFlags |= kFlagDequeueOutputPending;
+             mDequeueOutputReplyID = replyID;
+ 
+diff --git a/media/libstagefright/MediaCodecList.cpp b/media/libstagefright/MediaCodecList.cpp
+index f172822..5edc04c 100644
+--- a/media/libstagefright/MediaCodecList.cpp
++++ b/media/libstagefright/MediaCodecList.cpp
+@@ -174,9 +174,6 @@ MediaCodecList::MediaCodecList()
+     : mInitCheck(NO_INIT),
+       mUpdate(false),
+       mGlobalSettings(new AMessage()) {
+-#ifdef USE_MEDIACODEC_SECURE
+-    parseTopLevelXMLFile("/etc/media_codecs_secure.xml");
+-#endif
+     parseTopLevelXMLFile("/etc/media_codecs.xml");
+     parseTopLevelXMLFile("/etc/media_codecs_performance.xml", true/* ignore_errors */);
+     parseTopLevelXMLFile(kProfilingResults, true/* ignore_errors */);

@@ -1,0 +1,53 @@
+From 48cc6a6523ff7f228201d815e88a9003bfc3d465 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Mon, 26 Dec 2016 17:58:34 +0800
+Subject: [PATCH] set selinux2permissive
+
+---
+ board/amlogic/configs/gxl_p212_v1.h | 2 +-
+ board/amlogic/configs/gxm_q200_v1.h | 2 +-
+ board/amlogic/configs/gxm_q201_v1.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/amlogic/configs/gxl_p212_v1.h b/board/amlogic/configs/gxl_p212_v1.h
+index 62febed..e2e1c7d 100644
+--- a/board/amlogic/configs/gxl_p212_v1.h
++++ b/board/amlogic/configs/gxl_p212_v1.h
+@@ -95,7 +95,7 @@
+         "sdc_burning=sdc_burn ${sdcburncfg}\0"\
+         "wipe_data=successful\0"\
+         "wipe_cache=successful\0"\
+-        "EnableSelinux=enforcing\0"\
++        "EnableSelinux=permissive\0"\
+         "recovery_part=recovery\0"\
+         "recovery_offset=0\0"\
+         "cvbs_drv=0\0"\
+diff --git a/board/amlogic/configs/gxm_q200_v1.h b/board/amlogic/configs/gxm_q200_v1.h
+index 3a0737a..d8ce8c9 100644
+--- a/board/amlogic/configs/gxm_q200_v1.h
++++ b/board/amlogic/configs/gxm_q200_v1.h
+@@ -98,7 +98,7 @@
+         "sdc_burning=sdc_burn ${sdcburncfg}\0"\
+         "wipe_data=successful\0"\
+         "wipe_cache=successful\0"\
+-        "EnableSelinux=enforcing\0"\
++        "EnableSelinux=permissive\0"\
+         "recovery_part=recovery\0"\
+         "recovery_offset=0\0"\
+         "cvbs_drv=0\0"\
+diff --git a/board/amlogic/configs/gxm_q201_v1.h b/board/amlogic/configs/gxm_q201_v1.h
+index 765ee31..7f9f9df 100644
+--- a/board/amlogic/configs/gxm_q201_v1.h
++++ b/board/amlogic/configs/gxm_q201_v1.h
+@@ -98,7 +98,7 @@
+         "sdc_burning=sdc_burn ${sdcburncfg}\0"\
+         "wipe_data=successful\0"\
+         "wipe_cache=successful\0"\
+-        "EnableSelinux=enforcing\0"\
++        "EnableSelinux=permissive\0"\
+         "recovery_part=recovery\0"\
+         "recovery_offset=0\0"\
+         "cvbs_drv=0\0"\
+-- 
+1.9.1
+

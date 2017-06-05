@@ -1,0 +1,64 @@
+From ddb3f52c3d83bb633009d7db6ddd8a19de18b0ae Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Sat, 24 Dec 2016 11:47:56 +0800
+Subject: [PATCH] checkout dm2016 open i2c_b
+
+---
+ arch/arm64/boot/dts/amlogic/mesongxl.dtsi |  2 +-
+ arch/arm64/boot/dts/amlogic/mesongxm.dtsi | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/mesongxl.dtsi b/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
+index b243af2..5482d57 100644
+--- a/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
++++ b/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
+@@ -542,7 +542,7 @@
+ 	i2c_b: i2c@c11087c0{ /*I2C-B*/
+ 		compatible = "amlogic, meson-i2c";
+ 		dev_name = "i2c-B";
+-		status = "disabled";
++		status = "okay";
+ 		reg = <0x0 0xc11087c0 0x0 0x20>;
+ 		device_id = <2>;
+ 		pinctrl-names="default";
+diff --git a/arch/arm64/boot/dts/amlogic/mesongxm.dtsi b/arch/arm64/boot/dts/amlogic/mesongxm.dtsi
+index 54cc6ab..d568ae0 100644
+--- a/arch/arm64/boot/dts/amlogic/mesongxm.dtsi
++++ b/arch/arm64/boot/dts/amlogic/mesongxm.dtsi
+@@ -557,9 +557,9 @@
+ 			amlogic,pins="GPIODV_26","GPIODV_27";
+ 		};
+ 		c_i2c_master:c_i2c{
+-			amlogic,setmask=<1 0xc00>;
+-			amlogic,clrmask=<2 0x1800 1 0x200 2 0x20>;
+-			amlogic,pins="GPIODV_28","GPIODV_29";
++			amlogic,setmask=<1 0x30000>;
++			amlogic,clrmask=<3 0x20 1 0x2000000>;
++			amlogic,pins="GPIODV_18","GPIODV_19";
+ 		};
+ 		d_i2c_master:d_i2c{
+ 			amlogic,setmask=<5 0x30>;
+@@ -628,7 +628,7 @@
+ 		dev_name = "i2c-B";
+ 		status = "disabled";
+ 		reg = <0x0 0xc11087c0 0x0 0x20>;
+-		device_id = <2>;
++		device_id = <3>;
+ 		pinctrl-names="default";
+ 		pinctrl-0=<&b_i2c_master>;
+ 		#address-cells = <1>;
+@@ -642,9 +642,9 @@
+ 	i2c_c: i2c@c11087e0{ /*I2C-C*/
+ 		compatible = "amlogic, meson-i2c";
+ 		dev_name = "i2c-C";
+-		status = "disabled";
++		status = "okay";
+ 		reg = <0x0 0xc11087e0 0x0 0x20>;
+-		device_id = <3>;
++		device_id = <2>;
+ 		pinctrl-names="default";
+ 		pinctrl-0=<&c_i2c_master>;
+ 		#address-cells = <1>;
+-- 
+1.9.1
+

@@ -1,0 +1,20 @@
+diff --git a/Settings/src/com/android/tv/settings/device/storage/NewStorageActivity.java b/Settings/src/com/android/tv/settings/device/storage/NewStorageActivity.java
+index fccf9d2..36c0f7d 100644
+--- a/Settings/src/com/android/tv/settings/device/storage/NewStorageActivity.java
++++ b/Settings/src/com/android/tv/settings/device/storage/NewStorageActivity.java
+@@ -281,6 +281,7 @@ public class NewStorageActivity extends Activity {
+         private StorageManager mStorageManager;
+         @Override
+         public void onReceive(Context context, Intent intent) {
++            /* masked by jimmy for not popup the prompt for storage device, begin
+             final UserManager userManager =
+                     (UserManager) context.getSystemService(Context.USER_SERVICE);
+             final UserInfo userInfo = userManager.getUserInfo(UserHandle.myUserId());
+@@ -314,6 +315,7 @@ public class NewStorageActivity extends Activity {
+                     "com.google.android.tungsten.setupwraith.TV_SETTINGS_POST_SETUP")) {
+                 handleSetupComplete(context);
+             }
++            masked by jimmy for not popup the prompt for storage device, end */
+         }
+ 
+         private void handleScan(Context context, Intent intent) {

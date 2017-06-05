@@ -1,0 +1,5660 @@
+From 2491136ab731cb7f76a4577e9f5def4256697b70 Mon Sep 17 00:00:00 2001
+From: cuihuijuan <cuihuijuan@mail.sdmc.com>
+Date: Tue, 8 Nov 2016 12:47:11 +0800
+Subject: [PATCH] adapt 4G dongle
+
+---
+ usbmodeswitch/Android.mk                   |  216 ++++
+ usbmodeswitch/CopyConfigs.mk               |   18 +
+ usbmodeswitch/usb_modeswitch.c             | 1567 ++++++++++++++++++++++++++++
+ usbmodeswitch/usb_modeswitch.d/0421_060c   |   12 +
+ usbmodeswitch/usb_modeswitch.d/0421_0610   |   12 +
+ usbmodeswitch/usb_modeswitch.d/0421_0622   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0421_0627   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0471_1237   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0482_024d   |   11 +
+ usbmodeswitch/usb_modeswitch.d/04cc_225a   |    2 +
+ usbmodeswitch/usb_modeswitch.d/04e8_689a   |   15 +
+ usbmodeswitch/usb_modeswitch.d/04e8_f000   |   12 +
+ usbmodeswitch/usb_modeswitch.d/057c_84ff   |   15 +
+ usbmodeswitch/usb_modeswitch.d/05c6_1000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/05c6_2000   |   14 +
+ usbmodeswitch/usb_modeswitch.d/05c6_2001   |   14 +
+ usbmodeswitch/usb_modeswitch.d/05c6_6000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/05c6_f000   |   12 +
+ usbmodeswitch/usb_modeswitch.d/05c7_1000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/072f_100d   |   15 +
+ usbmodeswitch/usb_modeswitch.d/07d1_a800   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0930_0d46   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0ace_2011   |   12 +
+ usbmodeswitch/usb_modeswitch.d/0ace_20ff   |   12 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6711   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6731   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6751   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6771   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6791   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6811   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6911   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6951   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_6971   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7011   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7031   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7051   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7071   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7111   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7211   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7251   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7271   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7301   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7311   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7361   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7381   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7401   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7501   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7601   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7701   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7801   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_7901   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_8200   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_8201   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_8300   |   11 +
+ usbmodeswitch/usb_modeswitch.d/0af0_8302   |   11 +
+ usbmodeswitch/usb_modeswitch.d/0af0_8304   |   11 +
+ usbmodeswitch/usb_modeswitch.d/0af0_8400   |   11 +
+ usbmodeswitch/usb_modeswitch.d/0af0_c031   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_c100   |   11 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d013   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d031   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d033   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d035   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d055   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d057   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d058   |   11 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d155   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d157   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d255   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d257   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0af0_d357   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0b3c_c700   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0b3c_f000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0cf3_20ff   |   14 +
+ usbmodeswitch/usb_modeswitch.d/0d46_45a1   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0d46_45a5   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0e8d_7109   |   15 +
+ usbmodeswitch/usb_modeswitch.d/0fce_d0cf   |   12 +
+ usbmodeswitch/usb_modeswitch.d/0fce_d0e1   |   12 +
+ usbmodeswitch/usb_modeswitch.d/0fce_d103   |   13 +
+ usbmodeswitch/usb_modeswitch.d/0fd1_1000   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1004_1000   |   11 +
+ usbmodeswitch/usb_modeswitch.d/1004_607f   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1004_613a   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1004_613f   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1004_6190   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1033_0035   |   12 +
+ usbmodeswitch/usb_modeswitch.d/106c_3b03   |   12 +
+ usbmodeswitch/usb_modeswitch.d/106c_3b05   |   13 +
+ usbmodeswitch/usb_modeswitch.d/106c_3b06   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1076_7f40   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1199_0fff   |   14 +
+ usbmodeswitch/usb_modeswitch.d/1266_1000   |   16 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1001   |   11 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1003   |   11 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1009   |   13 +
+ usbmodeswitch/usb_modeswitch.d/12d1_101e   |   11 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1031   |   15 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1414   |   11 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1446   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1449   |   13 +
+ usbmodeswitch/usb_modeswitch.d/12d1_14ad   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_14c1   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_14d1   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_14fe   |    7 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1505   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1520   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1521   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1523   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1526   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1553   |   13 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1557   |   12 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1c0b   |   13 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1da1   |   14 +
+ usbmodeswitch/usb_modeswitch.d/12d1_1f01   |   11 +
+ usbmodeswitch/usb_modeswitch.d/12d1_380b   |   14 +
+ usbmodeswitch/usb_modeswitch.d/1410_5010   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1410_5020   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1410_5030   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1410_5031   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1410_5041   |   12 +
+ usbmodeswitch/usb_modeswitch.d/148f_2578   |   15 +
+ usbmodeswitch/usb_modeswitch.d/15eb_0001   |   11 +
+ usbmodeswitch/usb_modeswitch.d/15eb_7153   |   13 +
+ usbmodeswitch/usb_modeswitch.d/16d8_6281   |   12 +
+ usbmodeswitch/usb_modeswitch.d/16d8_6803   |   11 +
+ usbmodeswitch/usb_modeswitch.d/16d8_6803__ |   12 +
+ usbmodeswitch/usb_modeswitch.d/16d8_700a   |   11 +
+ usbmodeswitch/usb_modeswitch.d/16d8_f000   |   12 +
+ usbmodeswitch/usb_modeswitch.d/198f_bccd   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0003   |   13 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0026   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0040   |   13 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0053   |   16 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0083   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0101   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0103   |   16 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0110   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0115   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0120   |   14 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0146   |   12 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0166   |   10 +
+ usbmodeswitch/usb_modeswitch.d/19d2_0169   |   11 +
+ usbmodeswitch/usb_modeswitch.d/19d2_1001   |   20 +
+ usbmodeswitch/usb_modeswitch.d/19d2_1007   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_1009   |   15 +
+ usbmodeswitch/usb_modeswitch.d/19d2_1013   |   20 +
+ usbmodeswitch/usb_modeswitch.d/19d2_1175   |   12 +
+ usbmodeswitch/usb_modeswitch.d/19d2_1514   |    9 +
+ usbmodeswitch/usb_modeswitch.d/19d2_2000   |   17 +
+ usbmodeswitch/usb_modeswitch.d/19d2_fff5   |   13 +
+ usbmodeswitch/usb_modeswitch.d/19d2_fff6   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1a8d_1000   |   16 +
+ usbmodeswitch/usb_modeswitch.d/1ab7_5700   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1b7d_0700   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1bbb_f000   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1c9e_1001   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1c9e_6061   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1c9e_9200   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1c9e_9913   |   10 +
+ usbmodeswitch/usb_modeswitch.d/1c9e_9e00   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1c9e_f000   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1d09_1000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1dd6_1000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1e0e_f000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1edf_6003   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1ee8_0009   |   14 +
+ usbmodeswitch/usb_modeswitch.d/1ee8_0013   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1ee8_0040   |   14 +
+ usbmodeswitch/usb_modeswitch.d/1f28_0021   |   12 +
+ usbmodeswitch/usb_modeswitch.d/1fac_0032   |   13 +
+ usbmodeswitch/usb_modeswitch.d/1fac_0130   |   13 +
+ usbmodeswitch/usb_modeswitch.d/2001_a80b   |   13 +
+ usbmodeswitch/usb_modeswitch.d/201e_2009   |   15 +
+ usbmodeswitch/usb_modeswitch.d/20a6_f00e   |   18 +
+ usbmodeswitch/usb_modeswitch.d/21f5_1000   |   13 +
+ usbmodeswitch/usb_modeswitch.d/230d_0001   |   12 +
+ usbmodeswitch/usb_modeswitch.d/230d_000d   |   12 +
+ usbmodeswitch/usb_modeswitch.d/8888_6500   |   13 +
+ usbmodeswitch/usb_modeswitch.h             |  103 ++
+ 180 files changed, 4204 insertions(+)
+ create mode 100644 usbmodeswitch/Android.mk
+ create mode 100644 usbmodeswitch/CopyConfigs.mk
+ create mode 100644 usbmodeswitch/usb_modeswitch.c
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0421_060c
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0421_0610
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0421_0622
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0421_0627
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0471_1237
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0482_024d
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/04cc_225a
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/04e8_689a
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/04e8_f000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/057c_84ff
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/05c6_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/05c6_2000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/05c6_2001
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/05c6_6000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/05c6_f000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/05c7_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/072f_100d
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/07d1_a800
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0930_0d46
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0ace_2011
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0ace_20ff
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6711
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6731
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6751
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6771
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6791
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6811
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6911
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6951
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_6971
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7011
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7031
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7051
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7071
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7111
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7211
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7251
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7271
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7301
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7311
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7361
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7381
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7401
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7501
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7601
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7701
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7801
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_7901
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_8200
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_8201
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_8300
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_8302
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_8304
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_8400
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_c031
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_c100
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d013
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d031
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d033
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d035
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d055
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d057
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d058
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d155
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d157
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d255
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d257
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0af0_d357
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0b3c_c700
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0b3c_f000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0cf3_20ff
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0d46_45a1
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0d46_45a5
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0e8d_7109
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0fce_d0cf
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0fce_d0e1
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0fce_d103
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/0fd1_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1004_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1004_607f
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1004_613a
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1004_613f
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1004_6190
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1033_0035
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/106c_3b03
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/106c_3b05
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/106c_3b06
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1076_7f40
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1199_0fff
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1266_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1001
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1003
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1009
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_101e
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1031
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1414
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1446
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1449
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_14ad
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_14c1
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_14d1
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_14fe
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1505
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1520
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1521
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1523
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1526
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1553
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1557
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1c0b
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1da1
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_1f01
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/12d1_380b
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1410_5010
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1410_5020
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1410_5030
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1410_5031
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1410_5041
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/148f_2578
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/15eb_0001
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/15eb_7153
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/16d8_6281
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/16d8_6803
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/16d8_6803__
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/16d8_700a
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/16d8_f000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/198f_bccd
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0003
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0026
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0040
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0053
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0083
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0101
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0103
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0110
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0115
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0120
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0146
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0166
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_0169
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_1001
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_1007
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_1009
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_1013
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_1175
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_1514
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_2000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_fff5
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/19d2_fff6
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1a8d_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1ab7_5700
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1b7d_0700
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1bbb_f000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1c9e_1001
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1c9e_6061
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1c9e_9200
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1c9e_9913
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1c9e_9e00
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1c9e_f000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1d09_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1dd6_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1e0e_f000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1edf_6003
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1ee8_0009
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1ee8_0013
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1ee8_0040
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1f28_0021
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1fac_0032
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/1fac_0130
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/2001_a80b
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/201e_2009
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/20a6_f00e
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/21f5_1000
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/230d_0001
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/230d_000d
+ create mode 100644 usbmodeswitch/usb_modeswitch.d/8888_6500
+ create mode 100644 usbmodeswitch/usb_modeswitch.h
+
+diff --git a/usbmodeswitch/Android.mk b/usbmodeswitch/Android.mk
+new file mode 100644
+index 0000000..7f4c392
+--- /dev/null
++++ b/usbmodeswitch/Android.mk
+@@ -0,0 +1,216 @@
++# Copyright (C) 2011 Amlogic Inc.
++#
++# Licensed under the Apache License, Version 2.0 (the "License");
++# you may not use this file except in compliance with the License.
++# You may obtain a copy of the License at
++#
++#      http://www.apache.org/licenses/LICENSE-2.0
++#
++# Unless required by applicable law or agreed to in writing, software
++# distributed under the License is distributed on an "AS IS" BASIS,
++# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++# See the License for the specific language governing permissions and
++# limitations under the License.
++
++LOCAL_PATH:= $(call my-dir)
++
++include $(CLEAR_VARS)
++
++LOCAL_SRC_FILES:=  \
++		usb_modeswitch.c
++
++LOCAL_MODULE:= usb_modeswitch
++
++LOCAL_MODULE_TAGS := optional
++
++LOCAL_C_INCLUDES := $(LOCAL_PATH)/../libusb-0.1.12/
++
++LOCAL_CFLAGS := 
++
++LOCAL_SHARED_LIBRARIES := \
++	libusb   
++
++include $(BUILD_EXECUTABLE)
++
++##############################################################
++include $(CLEAR_VARS)
++
++copy_from :=                  \
++    0421_060c                 \
++    0421_0610                 \
++    0421_0622                 \
++    0421_0627                 \
++    0471_1210_uMa=Philips     \
++    0471_1210_uMa=Wisue       \
++    0471_1237                 \
++    0482_024d                 \
++    04e8_689a                 \
++    04e8_f000                 \
++    057c_84ff                 \
++    05c6_1000_sVe=Option      \
++    05c6_1000_uMa=AnyDATA     \
++    05c6_1000_uMa=Option      \
++    05c6_1000_uMa=SAMSUNG     \
++    05c6_1000_uMa=SSE         \
++    05c6_1000_uMa=Vertex      \
++    05c6_2000                 \
++    05c6_2001                 \
++    05c6_f000                 \
++    05c7_1000                 \
++    072f_100d                 \
++    07d1_a800                 \
++    0930_0d46                 \
++    0ace_2011                 \
++    0ace_20ff                 \
++    0af0_6711                 \
++    0af0_6731                 \
++    0af0_6751                 \
++    0af0_6771                 \
++    0af0_6791                 \
++    0af0_6811                 \
++    0af0_6911                 \
++    0af0_6951                 \
++    0af0_6971                 \
++    0af0_7011                 \
++    0af0_7031                 \
++    0af0_7051                 \
++    0af0_7071                 \
++    0af0_7111                 \
++    0af0_7211                 \
++    0af0_7251                 \
++    0af0_7271                 \
++    0af0_7301                 \
++    0af0_7311                 \
++    0af0_7361                 \
++    0af0_7381                 \
++    0af0_7401                 \
++    0af0_7501                 \
++    0af0_7601                 \
++    0af0_7701                 \
++    0af0_7801                 \
++    0af0_7901                 \
++    0af0_8200                 \
++    0af0_8201                 \
++    0af0_8300                 \
++    0af0_8302                 \
++    0af0_8304                 \
++    0af0_8400                 \
++    0af0_c031                 \
++    0af0_c100                 \
++    0af0_d013                 \
++    0af0_d031                 \
++    0af0_d033                 \
++    0af0_d035                 \
++    0af0_d055                 \
++    0af0_d057                 \
++    0af0_d058                 \
++    0af0_d155                 \
++    0af0_d157                 \
++    0af0_d255                 \
++    0af0_d257                 \
++    0af0_d357                 \
++    0b3c_c700                 \
++    0b3c_f000                 \
++    0cf3_20ff                 \
++    0d46_45a1                 \
++    0d46_45a5                 \
++    0e8d_7109                 \
++    0fce_d0cf                 \
++    0fce_d0e1                 \
++    0fce_d103                 \
++    0fd1_1000                 \
++    1004_1000                 \
++    1004_607f                 \
++    1004_613a                 \
++    1004_613f                 \
++    1004_6190                 \
++    1033_0035                 \
++    106c_3b03                 \
++    106c_3b05                 \
++    106c_3b06                 \
++    1076_7f40                 \
++    1199_0fff                 \
++    1266_1000                 \
++    12d1_1001                 \
++    12d1_1003                 \
++    12d1_1009                 \
++    12d1_101e                 \
++    12d1_1031                 \
++    12d1_1414                 \
++    12d1_1446                 \
++    12d1_1449                 \
++    12d1_14ad                 \
++    12d1_14c1                 \
++    12d1_1520                 \
++    12d1_1521                 \
++    12d1_1523                 \
++    12d1_1553                 \
++    12d1_1557                 \
++    12d1_1c0b                 \
++    12d1_1da1                 \
++    12d1_380b                 \
++    1410_5010                 \
++    1410_5020                 \
++    1410_5030                 \
++    1410_5031                 \
++    1410_5041                 \
++    148f_2578                 \
++    16d8_6281                 \
++    16d8_6803                 \
++    16d8_6803__               \
++    16d8_700a                 \
++    16d8_f000                 \
++    198f_bccd                 \
++    19d2_0003                 \
++    19d2_0026                 \
++    19d2_0040                 \
++    19d2_0053                 \
++    19d2_0083                 \
++    19d2_0101                 \
++    19d2_0103                 \
++    19d2_0110                 \
++    19d2_0115                 \
++    19d2_1001                 \
++    19d2_1007                 \
++    19d2_1009                 \
++    19d2_1013                 \
++    19d2_2000                 \
++    19d2_fff5                 \
++    19d2_fff6                 \
++    1a8d_1000                 \
++    1ab7_5700                 \
++    1b7d_0700                 \
++    1bbb_f000                 \
++    1c9e_1001                 \
++    1c9e_6061                 \
++    1c9e_9200                 \
++    1c9e_9e00                 \
++    1c9e_f000                 \
++    1dd6_1000                 \
++    1e0e_f000                 \
++    1edf_6003                 \
++    1ee8_0009                 \
++    1ee8_0013                 \
++    1ee8_0040                 \
++    1f28_0021                 \
++    1fac_0032                 \
++    1fac_0130                 \
++    201e_2009                 \
++    230d_0001                 \
++    8888_6500                 \
++    12d1_14d1                 \
++    12d1_1505                 \
++    230d_000d                 \
++    19d2_0120                 \
++    04cc_225a
++
++#copy_from = $(wildcard usb_modeswitch.d/*)
++
++#copy_to := $(addprefix $(TARGET_OUT)/etc/usb_modeswitch.d/,$(copy_from))
++#copy_from := $(addprefix $(LOCAL_PATH)/usb_modeswitch.d/,$(copy_from))
++#$(copy_to) : $(TARGET_OUT)/etc/usb_modeswitch.d/% : $(LOCAL_PATH)/usb_modeswitch.d/% | $(ACP)
++#	   $(transform-prebuilt-to-target)
++
++#ALL_PREBUILT += $(copy_to)
++
++
+diff --git a/usbmodeswitch/CopyConfigs.mk b/usbmodeswitch/CopyConfigs.mk
+new file mode 100644
+index 0000000..7641417
+--- /dev/null
++++ b/usbmodeswitch/CopyConfigs.mk
+@@ -0,0 +1,18 @@
++#
++# CopyConfigs.mk 
++# Copy usb_modeswitch configs to out
++#
++#
++#
++
++#LOCAL_PATH := external/libusb/usbmodeswitch
++
++allfiles := $(wildcard external/libusb/usbmodeswitch/usb_modeswitch.d/*)                   
++src_file := $(notdir $(allfiles))
++
++
++PRODUCT_COPY_FILES += $(foreach file,$(src_file), \
++	external/libusb/usbmodeswitch/usb_modeswitch.d/$(file):system/etc/usb_modeswitch.d/$(file))
++
++
++
+diff --git a/usbmodeswitch/usb_modeswitch.c b/usbmodeswitch/usb_modeswitch.c
+new file mode 100644
+index 0000000..fd97710
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.c
+@@ -0,0 +1,1567 @@
++/*
++  Mode switching tool for controlling flip flop (multiple device) USB gear
++  Version 1.1.7, 2011/02/27
++
++  Copyright (C) 2007 - 2011 Josua Dietze (mail to "usb_admin" at the domain
++  from the README; please do not post the complete address to the Internet!
++  Or write a personal message through the forum to "Josh". NO SUPPORT VIA
++  E-MAIL - please use the forum for that)
++
++  Command line parsing, decent usage/config output/handling, bugfixes and advanced
++  options added by:
++    Joakim Wennergren (jokedst) (gmail.com)
++
++  TargetClass parameter implementation to support new Option devices/firmware:
++    Paul Hardwick (http://www.pharscape.org)
++
++  Created with initial help from:
++    "usbsnoop2libusb.pl" by Timo Lindfors (http://iki.fi/lindi/usb/usbsnoop2libusb.pl)
++
++  Config file parsing stuff borrowed from:
++    Guillaume Dargaud (http://www.gdargaud.net/Hack/SourceCode.html)
++
++  Hexstr2bin function borrowed from:
++    Jouni Malinen (http://hostap.epitest.fi/wpa_supplicant, from "common.c")
++
++  Other contributions: see README
++
++  Device information contributors are named in the "usb_modeswitch.setup" file.
++
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
++
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details:
++
++  http://www.gnu.org/licenses/gpl.txt
++
++*/
++
++/* Recommended tab size: 4 */
++
++#define VERSION "1.1.6"
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <assert.h>
++#include <signal.h>
++#include <ctype.h>
++#include <getopt.h>
++#include <syslog.h>
++
++#include <usb.h>
++#include "usb_modeswitch.h"
++
++#define LINE_DIM 1024
++#define BUF_SIZE 4096
++#define DESCR_MAX 129
++
++#define SEARCH_DEFAULT 0
++#define SEARCH_TARGET 1
++
++#define SHOW_PROGRESS if (show_progress) printf
++
++//int write_bulk(int endpoint, char *message, int length);
++//int read_bulk(int endpoint, char *buffer, int length);
++
++//int find_first_bulk_output_endpoint(struct usb_device *dev);
++//int find_first_bulk_input_endpoint(struct usb_device *dev);
++
++char *TempPP=NULL;
++
++struct usb_device *dev;
++struct usb_dev_handle *devh;
++
++int DefaultVendor=0, DefaultProduct=0, TargetVendor=0, TargetProduct=-1, TargetClass=0;
++int MessageEndpoint=0, ResponseEndpoint=0, ReleaseDelay=0;
++int targetDeviceCount=0;
++int devnum=-1, busnum=-1;
++int ret;
++
++char DetachStorageOnly=0, HuaweiMode=0, SierraMode=0, SonyMode=0, GCTMode=0, KobilMode=0,EvdoMode=0;
++char verbose=0, show_progress=1, ResetUSB=0, CheckSuccess=0, config_read=0;
++char NeedResponse=0, NoDriverLoading=0, InquireDevice=1, sysmode=0;
++
++char imanufact[DESCR_MAX], iproduct[DESCR_MAX], iserial[DESCR_MAX];
++
++char MessageContent[LINE_DIM];
++char MessageContent2[LINE_DIM];
++char MessageContent3[LINE_DIM];
++char TargetProductList[LINE_DIM];
++char ByteString[LINE_DIM/2];
++char buffer[BUF_SIZE];
++
++/* Settable Interface and Configuration (for debugging mostly) (jmw) */
++int Interface = 0, Configuration = 0, AltSetting = -1;
++
++
++static struct option long_options[] = {
++	{"help",				no_argument, 0, 'h'},
++	{"version",				no_argument, 0, 'e'},
++	{"default-vendor",		required_argument, 0, 'v'},
++	{"default-product",		required_argument, 0, 'p'},
++	{"target-vendor",		required_argument, 0, 'V'},
++	{"target-product",		required_argument, 0, 'P'},
++	{"target-class",		required_argument, 0, 'C'},
++	{"message-endpoint",	required_argument, 0, 'm'},
++	{"message-content",		required_argument, 0, 'M'},
++	{"message-content2",	required_argument, 0, '2'},
++	{"message-content3",	required_argument, 0, '3'},
++	{"release-delay",		required_argument, 0, 'w'},
++	{"response-endpoint",	required_argument, 0, 'r'},
++	{"detach-only",			no_argument, 0, 'd'},
++	{"huawei-mode",			no_argument, 0, 'H'},
++	{"sierra-mode",			no_argument, 0, 'S'},
++	{"sony-mode",			no_argument, 0, 'O'},
++	{"kobil-mode",			no_argument, 0, 'T'},
++	{"gct-mode",			no_argument, 0, 'G'},
++	{"need-response",		no_argument, 0, 'n'},
++	{"reset-usb",			no_argument, 0, 'R'},
++	{"config-file",			required_argument, 0, 'c'},
++	{"verbose",				no_argument, 0, 'W'},
++	{"quiet",				no_argument, 0, 'Q'},
++	{"sysmode",				no_argument, 0, 'D'},
++	{"no-inquire",			no_argument, 0, 'I'},
++	{"check-success",		required_argument, 0, 's'},
++	{"interface",			required_argument, 0, 'i'},
++	{"configuration",		required_argument, 0, 'u'},
++	{"altsetting",			required_argument, 0, 'a'},
++	{0, 0, 0, 0}
++};
++
++
++void readConfigFile(const char *configFilename)
++{
++	if (verbose) printf("\nReading config file: %s\n", configFilename);
++	ParseParamHex(configFilename, TargetVendor);
++	ParseParamHex(configFilename, TargetProduct);
++	ParseParamString(configFilename, TargetProductList);
++	ParseParamHex(configFilename, TargetClass);
++	ParseParamHex(configFilename, DefaultVendor);
++	ParseParamHex(configFilename, DefaultProduct);
++	ParseParamBool(configFilename, DetachStorageOnly);
++	ParseParamBool(configFilename, HuaweiMode);
++	ParseParamBool(configFilename, SierraMode);
++	ParseParamBool(configFilename, SonyMode);
++	ParseParamBool(configFilename, GCTMode);
++	ParseParamBool(configFilename, KobilMode);
++	ParseParamBool(configFilename, NoDriverLoading);
++	ParseParamBool(configFilename, EvdoMode);
++	ParseParamHex(configFilename, MessageEndpoint);
++	ParseParamString(configFilename, MessageContent);
++	ParseParamString(configFilename, MessageContent2);
++	ParseParamString(configFilename, MessageContent3);
++	ParseParamInt(configFilename, ReleaseDelay);
++	ParseParamHex(configFilename, NeedResponse);
++	ParseParamHex(configFilename, ResponseEndpoint);
++	ParseParamHex(configFilename, ResetUSB);
++	ParseParamHex(configFilename, InquireDevice);
++	ParseParamInt(configFilename, CheckSuccess);
++	ParseParamHex(configFilename, Interface);
++	ParseParamHex(configFilename, Configuration);
++	ParseParamHex(configFilename, AltSetting);
++
++	/* TargetProductList has priority over TargetProduct */
++	if (TargetProduct != -1 && TargetProductList[0] != '\0') {
++		TargetProduct = -1;
++		SHOW_PROGRESS("Warning: TargetProductList overrides TargetProduct!\n");
++	}
++
++	config_read = 1;
++}
++
++
++void printConfig()
++{
++	if ( DefaultVendor )
++		printf ("DefaultVendor=  0x%04x\n",			DefaultVendor);
++	else
++		printf ("DefaultVendor=  not set\n");
++	if ( DefaultProduct )
++		printf ("DefaultProduct= 0x%04x\n",			DefaultProduct);
++	else
++		printf ("DefaultProduct= not set\n");
++	if ( TargetVendor )
++		printf ("TargetVendor=   0x%04x\n",		TargetVendor);
++	else
++		printf ("TargetVendor=   not set\n");
++	if ( TargetProduct > -1 )
++		printf ("TargetProduct=  0x%04x\n",		TargetProduct);
++	else
++		printf ("TargetProduct=  not set\n");
++	if ( TargetClass )
++		printf ("TargetClass=    0x%02x\n",		TargetClass);
++	else
++		printf ("TargetClass=    not set\n");
++	printf ("TargetProductList=\"%s\"\n",		TargetProductList);
++	printf ("\nDetachStorageOnly=%i\n",	(int)DetachStorageOnly);
++	printf ("HuaweiMode=%i\n",			(int)HuaweiMode);
++	printf ("SierraMode=%i\n",			(int)SierraMode);
++	printf ("SonyMode=%i\n",			(int)SonyMode);
++	printf ("GCTMode=%i\n",			(int)GCTMode);
++	printf ("KobilMode=%i\n",		(int)KobilMode);
++	if ( MessageEndpoint )
++		printf ("MessageEndpoint=0x%02x\n",	MessageEndpoint);
++	else
++		printf ("MessageEndpoint=  not set\n");
++	printf ("MessageContent=\"%s\"\n",	MessageContent);
++	if ( strlen(MessageContent2) )
++		printf ("MessageContent2=\"%s\"\n",	MessageContent2);
++	if ( strlen(MessageContent3) )
++		printf ("MessageContent3=\"%s\"\n",	MessageContent3);
++	printf ("NeedResponse=%i\n",		(int)NeedResponse);
++	if ( ResponseEndpoint )
++		printf ("ResponseEndpoint=0x%02x\n",	ResponseEndpoint);
++	else
++		printf ("ResponseEndpoint= not set\n");
++	printf ("Interface=0x%02x\n",			Interface);
++	if ( Configuration > 0 )
++		printf ("Configuration=0x%02x\n",	Configuration);
++	if ( AltSetting > -1 )
++		printf ("AltSetting=0x%02x\n",	AltSetting);
++	if ( InquireDevice )
++		printf ("\nInquireDevice enabled (default)\n");
++	else
++		printf ("\nInquireDevice disabled\n");
++	if ( CheckSuccess )
++		printf ("Success check enabled, max. wait time %d seconds\n", CheckSuccess);
++	else
++		printf ("Success check disabled\n");
++	if ( sysmode )
++		printf ("System integration mode enabled\n");
++	else
++		printf ("System integration mode disabled\n");
++	printf ("\n");
++}
++
++
++int readArguments(int argc, char **argv)
++{
++	int c, option_index = 0, count=0;
++	if (argc==1)
++	{
++		printHelp();
++		printVersion();
++		exit(1);
++	}
++
++	while (1)
++	{
++		c = getopt_long (argc, argv, "heWQDndHSOGTRIv:p:V:P:C:m:M:2:3:w:r:c:i:u:a:s:",
++						long_options, &option_index);
++
++		/* Detect the end of the options. */
++		if (c == -1)
++			break;
++		count++;
++		switch (c)
++		{
++			case 'R': ResetUSB = 1; break;
++			case 'v': DefaultVendor = strtol(optarg, NULL, 16); break;
++			case 'p': DefaultProduct = strtol(optarg, NULL, 16); break;
++			case 'V': TargetVendor = strtol(optarg, NULL, 16); break;
++			case 'P': TargetProduct = strtol(optarg, NULL, 16); break;
++			case 'C': TargetClass = strtol(optarg, NULL, 16); break;
++			case 'm': MessageEndpoint = strtol(optarg, NULL, 16); break;
++			case 'M': strcpy(MessageContent, optarg); break;
++			case '2': strcpy(MessageContent2, optarg); break;
++			case '3': strcpy(MessageContent3, optarg); break;
++			case 'w': ReleaseDelay = strtol(optarg, NULL, 10); count--; break;
++			case 'n': NeedResponse = 1; break;
++			case 'r': ResponseEndpoint = strtol(optarg, NULL, 16); break;
++			case 'd': DetachStorageOnly = 1; break;
++			case 'H': HuaweiMode = 1; break;
++			case 'S': SierraMode = 1; break;
++			case 'O': SonyMode = 1; break;
++			case 'G': GCTMode = 1; break;
++			case 'T': KobilMode = 1; break;
++			case 'c': readConfigFile(optarg); break;
++			case 'W': verbose = 1; show_progress = 1; count--; break;
++			case 'Q': show_progress = 0; verbose = 0; count--; break;
++			case 'D': sysmode = 1; count--; break;
++			case 's': CheckSuccess = strtol(optarg, NULL, 10); count--; break;
++			case 'I': InquireDevice = 0; break;
++
++			case 'i': Interface = strtol(optarg, NULL, 16); break;
++			case 'u': Configuration = strtol(optarg, NULL, 16); break;
++			case 'a': AltSetting = strtol(optarg, NULL, 16); break;
++
++			case 'e':
++				printVersion();
++				exit(0);
++				break;
++			case 'h':
++				printVersion();
++				printHelp();
++				exit(0);
++				break;
++
++			default: /* Unsupported - error message has already been printed */
++				printf ("\n");
++				printHelp();
++				exit(1);
++		}
++	}
++
++	return count;
++}
++
++
++int main(int argc, char **argv)
++{
++	int numDefaults=0, specialMode=0, sonySuccess=0;
++	int currentConfig=0, defaultClass=0, interfaceClass=0;
++
++	/* Make sure we have empty strings even if not set by config */
++	TargetProductList[0] = '\0';
++	MessageContent[0] = '\0';
++	MessageContent2[0] = '\0';
++	MessageContent3[0] = '\0';
++
++
++	signal(SIGTERM, release_usb_device);
++	/*
++	 * Parameter parsing, USB preparation/diagnosis, plausibility checks
++	 */
++
++	/* Check command arguments, use params instead of config file when given */
++	switch (readArguments(argc, argv)) {
++		case 0:						/* no argument or -W, -q or -s */
++			break;
++		default:					/* one or more arguments except -W, -q or -s */
++			if (!config_read)		/* if arguments contain -c, the config file was already processed */
++				if (verbose) printf("Taking all parameters from the command line\n\n");
++	}
++
++	if (verbose)
++		printVersion();
++
++	if (verbose)
++		printConfig();
++
++	/* libusb initialization */
++	usb_init();
++
++	if (verbose)
++		usb_set_debug(15);
++
++	usb_find_busses();
++	usb_find_devices();
++
++	/* Plausibility checks. The default IDs are mandatory */
++	if (!(DefaultVendor && DefaultProduct)) {
++		SHOW_PROGRESS("No default vendor/product ID given. Aborting.\n\n");
++		exit(1);
++	}
++	if (strlen(MessageContent)) {
++		if (strlen(MessageContent) % 2 != 0) {
++			fprintf(stderr, "Error: MessageContent hex string has uneven length. Aborting.\n\n");
++			exit(1);
++		}
++		if ( hexstr2bin(MessageContent, ByteString, strlen(MessageContent)/2) == -1) {
++			fprintf(stderr, "Error: MessageContent %s\n is not a hex string. Aborting.\n\n", MessageContent);
++			exit(1);
++		}
++	}
++	SHOW_PROGRESS("\n");
++
++	if (show_progress)
++		if (CheckSuccess && !(TargetVendor || TargetProduct > -1 || TargetProductList[0] != '\0') && !TargetClass)
++			printf("Note: target parameter missing; success check limited\n");
++
++	/* Count existing target devices, remember for success check */
++	if (TargetVendor || TargetClass) {
++		SHOW_PROGRESS("Looking for target devices ...\n");
++		search_devices(&targetDeviceCount, TargetVendor, TargetProduct, TargetProductList, TargetClass, 0, SEARCH_TARGET);
++		if (targetDeviceCount) {
++			SHOW_PROGRESS(" Found devices in target mode or class (%d)\n", targetDeviceCount);
++		} else
++			SHOW_PROGRESS(" No devices in target mode or class found\n");
++	}
++
++	/* Count default devices, get the last one found */
++	SHOW_PROGRESS("Looking for default devices ...\n");
++	dev = search_devices(&numDefaults, DefaultVendor, DefaultProduct, "\0", TargetClass, Configuration, SEARCH_DEFAULT);
++	if (numDefaults) {
++		SHOW_PROGRESS(" Found devices in default mode, class or configuration (%d)\n", numDefaults);
++	} else {
++		SHOW_PROGRESS(" No devices in default mode found. Nothing to do. Bye.\n\n");
++		exit(0);
++	}
++	if (dev != NULL) {
++		devnum = dev->devnum;
++		busnum = (int)strtol(dev->bus->dirname,NULL,10);
++		SHOW_PROGRESS("Accessing device %03d on bus %03d ...\n", devnum, busnum);
++		devh = usb_open(dev);
++	} else {
++		SHOW_PROGRESS(" No default device found. Is it connected? Bye.\n\n");
++		exit(0);
++	}
++
++	/* Get current configuration of default device */
++	currentConfig = get_current_configuration(devh);
++
++	/* Get class of default device/interface */
++	defaultClass = dev->descriptor.bDeviceClass;
++	interfaceClass = get_interface0_class(dev, currentConfig);
++	if (interfaceClass == -1) {
++		fprintf(stderr, "Error: getting the interface class failed. Aborting.\n\n");
++		exit(1);
++	}
++
++	if (defaultClass == 0)
++		defaultClass = interfaceClass;
++	else
++		if (interfaceClass == 8 && defaultClass != 8) {
++			/* Weird device with default class other than 0 and differing interface class */
++			SHOW_PROGRESS("Ambiguous Class/InterfaceClass: 0x%02x/0x08\n", defaultClass);
++			defaultClass = 8;
++		}
++
++	/* Check or get endpoints */
++	if (strlen(MessageContent) || InquireDevice) {
++		if (!MessageEndpoint)
++			MessageEndpoint = find_first_bulk_output_endpoint(dev);
++		if (!MessageEndpoint) {
++			fprintf(stderr,"Error: message endpoint not given or found. Aborting.\n\n");
++			exit(1);
++		}
++		if (!ResponseEndpoint)
++			ResponseEndpoint = find_first_bulk_input_endpoint(dev);
++		if (!ResponseEndpoint) {
++			fprintf(stderr,"Error: response endpoint not given or found. Aborting.\n\n");
++			exit(1);
++		}
++		SHOW_PROGRESS("Using endpoints 0x%02x (out) and 0x%02x (in)\n", MessageEndpoint, ResponseEndpoint);
++	}
++
++	if (MessageEndpoint && ResponseEndpoint) {
++		SHOW_PROGRESS("Using endpoints 0x%02x (out) and 0x%02x (in)\n", MessageEndpoint, ResponseEndpoint);
++	} else
++		if (InquireDevice && defaultClass == 0x08) {
++			SHOW_PROGRESS("Endpoints not found, skipping SCSI inquiry\n");
++			InquireDevice = 0;
++		}
++
++	if (InquireDevice && show_progress) {
++		if (defaultClass == 0x08) {
++			SHOW_PROGRESS("Inquiring device details; driver will be detached ...\n");
++			detachDriver();
++			if (deviceInquire() >= 0)
++				InquireDevice = 2;
++		} else
++			SHOW_PROGRESS("Not a storage device, skipping SCSI inquiry\n");
++	}
++
++	deviceDescription();
++	if (show_progress) {
++		printf("\nUSB description data (for identification)\n");
++		printf("-------------------------\n");
++		printf("Manufacturer: %s\n", imanufact);
++		printf("     Product: %s\n", iproduct);
++		printf("  Serial No.: %s\n", iserial);
++		printf("-------------------------\n");
++	}
++
++	/* Some scenarios are exclusive, so check for unwanted combinations */
++ 	specialMode = DetachStorageOnly + HuaweiMode + SierraMode + SonyMode + KobilMode;
++	if ( specialMode > 1 ) {
++		SHOW_PROGRESS("Invalid mode combination. Check your configuration. Aborting.\n\n");
++		exit(1);
++	}
++
++	if ( !specialMode && !strlen(MessageContent) && AltSetting == -1 && Configuration == 0 )
++		SHOW_PROGRESS("Warning: no switching method given.\n");
++
++	/*
++	 * The switching actions
++	 */
++
++	if (sysmode) {
++		openlog("usb_modeswitch", 0, LOG_SYSLOG);
++		syslog(LOG_NOTICE, "switching %04x:%04x (%s: %s)", DefaultVendor, DefaultProduct, imanufact, iproduct);
++	}
++
++	if (DetachStorageOnly) {
++		SHOW_PROGRESS("Only detaching storage driver for switching ...\n");
++		if (InquireDevice == 2) {
++			SHOW_PROGRESS(" Any driver was already detached for inquiry\n");
++		} else {
++			ret = detachDriver();
++			if (ret == 2)
++				SHOW_PROGRESS(" You may want to remove the storage driver manually\n");
++		}
++	}
++
++	if (HuaweiMode) {
++		switchHuaweiMode();
++	}
++	if (SierraMode) {
++		switchSierraMode();
++	}
++	if (GCTMode) {
++		detachDriver();
++		switchGCTMode();
++	}
++	if(KobilMode) {
++		detachDriver();
++		switchKobilMode();
++	}
++	if (SonyMode) {
++		if (CheckSuccess)
++			SHOW_PROGRESS("Note: ignoring CheckSuccess. Separate checks for Sony mode\n");
++		CheckSuccess = 0; /* separate and implied success control */
++		sonySuccess = switchSonyMode();
++	}
++
++	if (strlen(MessageContent) && MessageEndpoint) {
++		if (specialMode == 0) {
++			if (InquireDevice != 2)
++				detachDriver();
++			switchSendMessage();
++		} else
++			SHOW_PROGRESS("Warning: ignoring MessageContent. Can't combine with special mode\n");
++	}
++
++	if (Configuration != 0) {
++		if (currentConfig != Configuration) {
++			if (switchConfiguration()) {
++				currentConfig = get_current_configuration(devh);
++				if (currentConfig == Configuration) {
++					SHOW_PROGRESS("The configuration was set successfully\n");
++				} else {
++					SHOW_PROGRESS("Setting the configuration failed\n");
++				}
++			}
++		} else {
++			SHOW_PROGRESS("Target configuration %d already active. Doing nothing\n", currentConfig);
++		}
++	}
++
++	if (AltSetting != -1) {
++		switchAltSetting();
++	}
++
++	/* No "removal" check if these are set */
++	if ((Configuration != 0 || AltSetting != -1) && !ResetUSB) {
++		usb_close(devh);
++		devh = 0;
++	}
++
++	if (ResetUSB) {
++		resetUSB();
++		usb_close(devh);
++		devh = 0;
++	}
++
++	if (CheckSuccess) {
++		if (checkSuccess()) {
++			if (sysmode) {
++				if (NoDriverLoading)
++					printf("ok:\n");
++				else
++					if (TargetProduct < 1)
++						printf("ok:no_data\n");
++					else
++						printf("ok:%04x:%04x\n", TargetVendor, TargetProduct);
++			}
++		} else
++			if (sysmode)
++				printf("fail:\n");
++	} else {
++		if (SonyMode)
++			if (sonySuccess) {
++				if (sysmode) {
++					syslog(LOG_NOTICE, "switched S.E. MD400 to modem mode");
++					printf("ok:\n"); /* ACM device, no driver action */
++				}
++				SHOW_PROGRESS("-> device should be stable now. Bye.\n\n");
++			} else {
++				if (sysmode)
++					printf("fail:\n");
++				SHOW_PROGRESS("-> switching was probably not completed. Bye.\n\n");
++			}
++		else
++			SHOW_PROGRESS("-> Run lsusb to note any changes. Bye.\n\n");
++	}
++
++	if (sysmode)
++		closelog();
++	if (devh)
++		usb_close(devh);
++	exit(0);
++}
++
++
++/* Get descriptor strings if available (identification details) */
++void deviceDescription ()
++{
++	int ret;
++	char* c;
++	memset (imanufact, ' ', DESCR_MAX);
++	memset (iproduct, ' ', DESCR_MAX);
++	memset (iserial, ' ', DESCR_MAX);
++
++	if (dev->descriptor.iManufacturer) {
++		ret = usb_get_string_simple(devh, dev->descriptor.iManufacturer, imanufact, DESCR_MAX);
++		if (ret < 0)
++			fprintf(stderr, "Error: could not get description string \"manufacturer\"\n");
++	} else
++		strcpy(imanufact, "not provided");
++	c = strstr(imanufact, "    ");
++	if (c)
++		memset((void*)c, '\0', 1);
++
++	if (dev->descriptor.iProduct) {
++		ret = usb_get_string_simple(devh, dev->descriptor.iProduct, iproduct, DESCR_MAX);
++		if (ret < 0)
++			fprintf(stderr, "Error: could not get description string \"product\"\n");
++	} else
++		strcpy(iproduct, "not provided");
++	c = strstr(iproduct, "    ");
++	if (c)
++		memset((void*)c, '\0', 1);
++
++	if (dev->descriptor.iSerialNumber) {
++		ret = usb_get_string_simple(devh, dev->descriptor.iSerialNumber, iserial, DESCR_MAX);
++		if (ret < 0)
++			fprintf(stderr, "Error: could not get description string \"serial number\"\n");
++	} else
++		strcpy(iserial, "not provided");
++	c = strstr(iserial, "    ");
++	if (c)
++		memset((void*)c, '\0', 1);
++
++}
++
++/* Print result of SCSI command INQUIRY (identification details) */
++int deviceInquire ()
++{
++	const unsigned char inquire_msg[] = {
++	  0x55, 0x53, 0x42, 0x43, 0x12, 0x34, 0x56, 0x78,
++	  0x24, 0x00, 0x00, 0x00, 0x80, 0x00, 0x06, 0x12,
++	  0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x00, 0x00,
++	  0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
++	};
++	char *command;
++	char data[36];
++	int i, ret;
++
++	command = malloc(31);
++	if (command == NULL) {
++		ret = 1;
++		goto out;
++	}
++
++	memcpy(command, inquire_msg, sizeof (inquire_msg));
++
++	ret = usb_claim_interface(devh, Interface);
++	if (ret != 0) {
++		SHOW_PROGRESS(" Could not claim interface (error %d). Skipping device inquiry\n", ret);
++		goto out;
++	}
++	if(!EvdoMode)
++		usb_clear_halt(devh, MessageEndpoint);
++
++	ret = usb_bulk_write(devh, MessageEndpoint, (char *)command, 31, 0);
++	if (ret < 0) {
++		SHOW_PROGRESS(" Could not send INQUIRY message (error %d)\n", ret);
++		goto out;
++	}
++
++	ret = usb_bulk_read(devh, ResponseEndpoint, data, 36, 0);
++	if (ret < 0) {
++		SHOW_PROGRESS(" Could not get INQUIRY response (error %d)\n", ret);
++		goto out;
++	}
++
++	i = usb_bulk_read(devh, ResponseEndpoint, command, 13, 0);
++
++	printf("\nSCSI inquiry data (for identification)\n");
++	printf("-------------------------\n");
++
++	printf("  Vendor String: ");
++	for (i = 8; i < 16; i++) printf("%c",data[i]);
++	printf("\n");
++
++	printf("   Model String: ");
++	for (i = 16; i < 32; i++) printf("%c",data[i]);
++	printf("\n");
++
++	printf("Revision String: ");
++	for (i = 32; i < 36; i++) printf("%c",data[i]);
++
++	printf("\n-------------------------\n");
++
++out:
++	if (strlen(MessageContent) == 0)
++		if(!EvdoMode)
++			usb_clear_halt(devh, MessageEndpoint);
++		usb_release_interface(devh, Interface);
++	free(command);
++	return ret;
++}
++
++
++void resetUSB ()
++{
++	int success;
++	int bpoint = 0;
++
++	if (show_progress) {
++		printf("Resetting usb device ");
++		fflush(stdout);
++	}
++
++	sleep( 1 );
++	do {
++		success = usb_reset(devh);
++		if ( ((bpoint % 10) == 0) && show_progress ) {
++			printf(".");
++			fflush(stdout);
++		}
++		bpoint++;
++		if (bpoint > 100)
++			success = 1;
++	} while (success < 0);
++
++	if ( success ) {
++		SHOW_PROGRESS("\n Reset failed. Can be ignored if device switched OK.\n");
++	} else
++		SHOW_PROGRESS("\n OK, device was reset\n");
++}
++
++
++int switchSendMessage ()
++{
++	int ret;
++
++	/* May be activated in future versions */
++//	if (MessageContent2[0] != '\0' || MessageContent3[0] != '\0')
++//		NeedResponse = 1;
++
++	SHOW_PROGRESS("Setting up communication with interface %d ...\n", Interface);
++	if (InquireDevice != 2) {
++		ret = usb_claim_interface(devh, Interface);
++		if (ret != 0) {
++			SHOW_PROGRESS(" Could not claim interface (error %d). Skipping message sending\n", ret);
++			return 0;
++		}
++	}
++	if(!EvdoMode)
++		usb_clear_halt(devh, MessageEndpoint);
++	SHOW_PROGRESS("Using endpoint 0x%02x for message sending ...\n", MessageEndpoint);
++	if (show_progress)
++		fflush(stdout);
++
++	if ( sendMessage(MessageContent, 1) )
++		goto skip;
++
++	if (NeedResponse) {
++		SHOW_PROGRESS("Reading the response to the message (CSW) ...\n");
++		ret = read_bulk(ResponseEndpoint, ByteString, 13);
++		if (ret < 0)
++			goto skip;
++	}
++
++	if (strlen(MessageContent2)) {
++		if ( sendMessage(MessageContent2, 2) )
++			goto skip;
++
++		if (NeedResponse) {
++			SHOW_PROGRESS("Reading the response to message 2 ...\n");
++			ret = read_bulk(ResponseEndpoint, ByteString, 13);
++			if (ret < 0)
++				goto skip;
++		}
++	}
++
++	if (strlen(MessageContent3)) {
++		if ( sendMessage(MessageContent3, 3) )
++			goto skip;
++		if (NeedResponse) {
++			SHOW_PROGRESS("Reading the response to message 3 ...\n");
++			ret = read_bulk(ResponseEndpoint, ByteString, 13);
++			if (ret < 0)
++				goto skip;
++		}
++	}
++
++	if(!EvdoMode){
++		SHOW_PROGRESS("Resetting response endpoint 0x%02x\n", ResponseEndpoint);
++		ret = usb_clear_halt(devh, ResponseEndpoint);
++		if (ret)
++			SHOW_PROGRESS(" Error resetting endpoint: %d\n", ret);
++		SHOW_PROGRESS("Resetting message endpoint 0x%02x\n", MessageEndpoint);
++		ret = usb_clear_halt(devh, MessageEndpoint);
++		if (ret)
++			SHOW_PROGRESS(" Error resetting endpoint: %d\n", ret);
++		}
++	usleep(200000);
++	if (ReleaseDelay) {
++		SHOW_PROGRESS("Blocking the interface for %d ms before releasing ...\n", ReleaseDelay);
++		usleep(ReleaseDelay*1000);
++	}
++	ret = usb_release_interface(devh, Interface);
++	if (ret)
++		goto skip;
++	return 1;
++
++skip:
++	SHOW_PROGRESS(" Device is gone, skipping any further commands\n");
++	usb_close(devh);
++	devh = 0;
++	return 2;
++}
++
++#define SWITCH_CONFIG_MAXTRIES   5
++
++int switchConfiguration ()
++{
++	int count = SWITCH_CONFIG_MAXTRIES; 
++	int ret;
++
++	SHOW_PROGRESS("Changing configuration to %i ...\n", Configuration);
++	while (((ret = usb_set_configuration(devh, Configuration)) < 0) && --count) { 
++		SHOW_PROGRESS(" Device is busy, trying to detach kernel driver\n"); 
++		detachDriver(); 
++	} 
++	if (ret == 0 ) {
++		SHOW_PROGRESS(" OK, configuration set\n");
++		return 1;
++	}
++	SHOW_PROGRESS(" Setting the configuration returned error %d. Trying to continue\n", ret);
++	return 0;
++}
++
++
++int switchAltSetting ()
++{
++	int ret;
++
++	SHOW_PROGRESS("Changing to alt setting %i ...\n", AltSetting);
++	ret = usb_claim_interface(devh, Interface);
++	ret = usb_set_altinterface(devh, AltSetting);
++	usb_release_interface(devh, Interface);
++	if (ret != 0) {
++		SHOW_PROGRESS(" Changing to alt setting returned error %d. Trying to continue\n", ret);
++		return 0;
++	} else {
++		SHOW_PROGRESS(" OK, changed to alt setting\n");
++		return 1;
++	}
++}
++
++
++void switchHuaweiMode ()
++{
++	int ret;
++
++	SHOW_PROGRESS("Sending Huawei control message ...\n");
++	ret = usb_control_msg(devh, USB_TYPE_STANDARD + USB_RECIP_DEVICE, USB_REQ_SET_FEATURE, 00000001, 0, buffer, 0, 1000);
++	if (ret != 0) {
++		fprintf(stderr, "Error: sending Huawei control message failed (error %d). Aborting.\n\n", ret);
++		exit(1);
++	} else
++		SHOW_PROGRESS(" OK, Huawei control message sent\n");
++}
++
++
++void switchSierraMode ()
++{
++	int ret;
++
++	SHOW_PROGRESS("Trying to send Sierra control message\n");
++	ret = usb_control_msg(devh, 0x40, 0x0b, 00000001, 0, buffer, 0, 1000);
++	if (ret != 0) {
++		fprintf(stderr, "Error: sending Sierra control message failed (error %d). Aborting.\n\n", ret);
++	    exit(1);
++	} else
++		SHOW_PROGRESS(" OK, Sierra control message sent\n");
++}
++
++
++void switchGCTMode ()
++{
++	int ret;
++
++	ret = usb_claim_interface(devh, Interface);
++	if (ret != 0) {
++		SHOW_PROGRESS(" Could not claim interface (error %d). Skipping GCT sequence \n", ret);
++		return;
++	}
++
++	SHOW_PROGRESS("Sending GCT control message 1 ...\n");
++	ret = usb_control_msg(devh, 0xa1, 0xa0, 0, Interface, buffer, 1, 1000);
++	SHOW_PROGRESS("Sending GCT control message 2 ...\n");
++	ret = usb_control_msg(devh, 0xa1, 0xfe, 0, Interface, buffer, 1, 1000);
++	SHOW_PROGRESS(" OK, GCT control messages sent\n");
++	usb_release_interface(devh, Interface);
++}
++
++
++int switchKobilMode() {
++	int ret;
++
++	SHOW_PROGRESS("Sending Kobil control message ...\n");
++	ret = usb_control_msg(devh, USB_TYPE_VENDOR | USB_RECIP_DEVICE | USB_ENDPOINT_IN, 0x88, 0, 0, buffer, 8, 1000);
++	if (ret != 0) {
++		fprintf(stderr, "Error: sending Kobil control message failed (error %d). Aborting.\n\n", ret);
++		exit(1);
++	} else
++		SHOW_PROGRESS(" OK, Kobil control message sent\n");
++	return 1;
++}
++
++
++int switchSonyMode ()
++{
++	int i, found, ret;
++	detachDriver();
++
++	if (CheckSuccess) {
++		printf("Note: CheckSuccess pointless with Sony mode, disabling\n");
++		CheckSuccess = 0;
++	}
++
++	SHOW_PROGRESS("Trying to send Sony control message\n");
++	ret = usb_control_msg(devh, 0xc0, 0x11, 2, 0, buffer, 3, 100);
++	if (ret < 0) {
++		fprintf(stderr, "Error: sending Sony control message failed (error %d). Aborting.\n\n", ret);
++		exit(1);
++	} else
++		SHOW_PROGRESS(" OK, control message sent, waiting for device to return ...\n");
++
++	usb_close(devh);
++	devh = 0;
++
++	/* Now waiting for the device to reappear */
++	devnum=-1;
++	busnum=-1;
++	i=0;
++	dev = 0;
++	while ( dev == 0 && i < 30 ) {
++		if ( i > 5 ) {
++			usb_find_busses();
++			usb_find_devices();
++			dev = search_devices(&found, DefaultVendor, DefaultProduct, "\0", TargetClass, 0, SEARCH_TARGET);
++		}
++		if ( dev != 0 )
++			break;
++		sleep(1);
++		if (show_progress) {
++			printf("#");
++			fflush(stdout);
++		}
++		i++;
++	}
++	SHOW_PROGRESS("\n After %d seconds:",i);
++	if ( dev ) {
++		SHOW_PROGRESS(" device came back, proceeding\n");
++		devh = usb_open( dev );
++		if (devh == 0) {
++			fprintf(stderr, "Error: could not get handle on device\n");
++			return 0;
++		}
++	} else {
++		SHOW_PROGRESS(" device still gone, cancelling\n");
++		return 0;
++	}
++	sleep(1);
++
++	SHOW_PROGRESS("Sending Sony control message again ...\n");
++	ret = usb_control_msg(devh, 0xc0, 0x11, 2, 0, buffer, 3, 100);
++	if (ret < 0) {
++		fprintf(stderr, "Error: sending Sony control message (2) failed (error %d)\n", ret);
++		return 0;
++	}
++	SHOW_PROGRESS(" OK, control message sent\n");
++	return 1;
++}
++
++/* Detach driver either as the main action or as preparation for other
++ * switching methods
++ */
++int detachDriver()
++{
++	int ret;
++
++#ifndef LIBUSB_HAS_GET_DRIVER_NP
++	printf(" Cant't do driver detection and detaching on this platform.\n");
++	return 2;
++#endif
++
++	SHOW_PROGRESS("Looking for active driver ...\n");
++	ret = usb_get_driver_np(devh, Interface, buffer, BUF_SIZE);
++	if (ret != 0) {
++		SHOW_PROGRESS(" No driver found. Either detached before or never attached\n");
++		return 1;
++	}
++	SHOW_PROGRESS(" OK, driver found (\"%s\")\n", buffer);
++	if (DetachStorageOnly && strcmp(buffer,"usb-storage")) {
++		SHOW_PROGRESS(" Warning: driver is not usb-storage\n");
++	}
++
++#ifndef LIBUSB_HAS_DETACH_KERNEL_DRIVER_NP
++	SHOW_PROGRESS(" Can't do driver detaching on this platform\n");
++	return 2;
++#endif
++
++
++	ret = usb_detach_kernel_driver_np(devh, Interface);
++	if (ret == 0) {
++		SHOW_PROGRESS(" OK, driver \"%s\" detached\n", buffer);
++	} else
++		SHOW_PROGRESS(" Driver \"%s\" detach failed with error %d. Trying to continue\n", buffer, ret);
++	return 1;
++}
++
++
++int sendMessage(char* message, int count)
++{
++	int message_length, ret;
++
++	if (strlen(message) % 2 != 0) {
++		fprintf(stderr, "Error: MessageContent %d hex string has uneven length. Skipping ...\n", count);
++		return 1;
++	}
++	message_length = strlen(message) / 2;
++	if ( hexstr2bin(message, ByteString, message_length) == -1) {
++		fprintf(stderr, "Error: MessageContent %d %s\n is not a hex string. Skipping ...\n", count, MessageContent);
++		return 1;
++	}
++	SHOW_PROGRESS("Trying to send message %d to endpoint 0x%02x ...\n", count, MessageEndpoint);
++	fflush(stdout);
++	ret = write_bulk(MessageEndpoint, ByteString, message_length);
++	if (ret == -19)
++		return 1;
++
++	return 0;
++}
++
++
++int checkSuccess()
++{
++	int i=0, ret;
++	int newTargetCount, success=0;
++
++	SHOW_PROGRESS("\nChecking for mode switch (max. %d times, once per second) ...\n", CheckSuccess);
++	sleep(1);
++
++	/* if target ID is not given but target class is, assign default as target;
++	 * it will be needed for sysmode output
++	 */
++	if (!TargetVendor && TargetClass) {
++		TargetVendor = DefaultVendor;
++		TargetProduct = DefaultProduct;
++	}
++
++	if (devh) // devh is 0 if device vanished during command transmission
++		for (i=0; i < CheckSuccess; i++) {
++
++			/* Test if default device still can be accessed; positive result does
++			 * not necessarily mean failure
++			 */
++			SHOW_PROGRESS(" Waiting for original device to vanish ...\n");
++
++			ret = usb_claim_interface(devh, Interface);
++			usb_release_interface(devh, Interface);
++			if (ret < 0) {
++				SHOW_PROGRESS(" Original device can't be accessed anymore. Good.\n");
++				if (i == CheckSuccess-1)
++					SHOW_PROGRESS(" If you want target checking, increase 'CheckSuccess' value.\n");
++				usb_close(devh);
++				devh = 0;
++				break;
++			}
++			if (i == CheckSuccess-1) {
++				SHOW_PROGRESS(" Original device still present after the timeout\n\nMode switch most likely failed. Bye.\n\n");
++			} else
++				sleep(1);
++		}
++
++
++	if ( TargetVendor && (TargetProduct > -1 || TargetProductList[0] != '\0') ) {
++
++		/* Recount target devices (compare with previous count) if target data is given.
++		 * Target device on the same bus with higher device number is returned,
++		 * description is read for syslog message
++		 */
++		for (i=i; i < CheckSuccess; i++) {
++			SHOW_PROGRESS(" Searching for target devices ...\n");
++			ret = usb_find_busses();
++			if (ret >= 0)
++				ret = usb_find_devices();
++			if (ret < 0) {
++				SHOW_PROGRESS("Error: libusb1 bug, no more searching, try to work around\n");
++				success = 3;
++				break;
++			}
++			dev = search_devices(&newTargetCount, TargetVendor, TargetProduct, TargetProductList, TargetClass, 0, SEARCH_TARGET);
++			if (dev && (newTargetCount > targetDeviceCount)) {
++				printf("\nFound target device, now opening\n");
++				devh = usb_open(dev);
++				deviceDescription();
++				usb_close(devh);
++				devh = 0;
++				if (verbose) {
++					printf("\nFound target device %03d on bus %03d\n", \
++					dev->devnum, (int)strtol(dev->bus->dirname,NULL,10));
++					printf("\nTarget device description data\n");
++					printf("-------------------------\n");
++					printf("Manufacturer: %s\n", imanufact);
++					printf("     Product: %s\n", iproduct);
++					printf("  Serial No.: %s\n", iserial);
++					printf("-------------------------\n");
++				}
++				SHOW_PROGRESS(" Found correct target device\n\nMode switch succeeded. Bye.\n\n");
++				success = 2;
++				break;
++			}
++			if (i == CheckSuccess-1) {
++				SHOW_PROGRESS(" No new devices in target mode or class found\n\nMode switch has failed. Bye.\n\n");
++			} else
++				sleep(1);
++		}
++	} else
++		/* No target data given, rely on the vanished device */
++		if (!devh) {
++			SHOW_PROGRESS(" (For a better success check provide target IDs or class)\n");
++			SHOW_PROGRESS(" Original device vanished after switching\n\nMode switch most likely succeeded. Bye.\n\n");
++			success = 1;
++		}
++
++	switch (success) {
++		case 3: 
++			if (sysmode)
++				syslog(LOG_NOTICE, "switched to new device, but hit libusb1 bug");
++			TargetProduct = -1;
++			success = 1;
++			break;
++		case 2: 
++			if (sysmode)
++				syslog(LOG_NOTICE, "switched to %04x:%04x (%s: %s)", TargetVendor, TargetProduct, imanufact, iproduct);
++			success = 1;
++			break;
++		case 1:
++			if (sysmode)
++				syslog(LOG_NOTICE, "device seems to have switched");
++		default:
++			;
++	}
++	if (sysmode)
++		closelog();
++
++	return success;
++
++}
++
++
++int write_bulk(int endpoint, char *message, int length)
++{
++	int ret;
++	ret = usb_bulk_write(devh, endpoint, message, length, 3000);
++	if (ret >= 0 ) {
++		SHOW_PROGRESS(" OK, message successfully sent\n");
++	} else
++		if (ret == -19) {
++			SHOW_PROGRESS(" Device seems to have vanished right after sending. Good.\n");
++		} else
++			SHOW_PROGRESS(" Sending the message returned error %d. Trying to continue\n", ret);
++	return ret;
++
++}
++
++int read_bulk(int endpoint, char *buffer, int length)
++{
++	int ret;
++	ret = usb_bulk_read(devh, endpoint, buffer, length, 3000);
++	usb_bulk_read(devh, endpoint, buffer, 13, 100);
++	if (ret >= 0 ) {
++		SHOW_PROGRESS(" OK, response successfully read (%d bytes).\n", ret);
++	} else
++		if (ret == -19) {
++			SHOW_PROGRESS(" Device seems to have vanished after reading. Good.\n");
++		} else
++			SHOW_PROGRESS(" Response reading got error %d, can probably be ignored\n", ret);
++	return ret;
++
++}
++
++void release_usb_device(int dummy) {
++	SHOW_PROGRESS("Program cancelled by system. Bye.\n\n");
++	if (devh) {
++		usb_release_interface(devh, Interface);
++		usb_close(devh);
++	}
++	if (sysmode)
++		closelog();
++	exit(0);
++
++}
++
++
++/* Iterates over busses and devices, counts the ones with the given
++ * ID/class and returns the last one of them
++*/
++struct usb_device* search_devices( int *numFound, int vendor, int product, char* productList, int targetClass, int configuration, int mode)
++{
++	struct usb_bus *bus;
++	char *listcopy, *token, buffer[2];
++	int devClass;
++	struct usb_device* right_dev = NULL;
++	struct usb_dev_handle *testdevh;
++
++	/* only target class given, target vendor and product assumed unchanged */
++	if ( targetClass && !(vendor || product) ) {
++		vendor = DefaultVendor;
++		product = DefaultProduct;
++	}
++	*numFound = 0;
++
++	/* Sanity check */
++	if (!vendor || (!product && productList == '\0') )
++		return NULL;
++
++	if (productList != '\0')
++		listcopy = malloc(strlen(productList)+1);
++
++	for (bus = usb_get_busses(); bus; bus = bus->next) {
++		struct usb_device *dev;
++		for (dev = bus->devices; dev; dev = dev->next) {
++			if (verbose)
++				printf ("  searching devices, found USB ID %04x:%04x\n", dev->descriptor.idVendor, dev->descriptor.idProduct);
++			if (dev->descriptor.idVendor != vendor)
++				continue;
++			if (verbose)
++				printf ("   found matching vendor ID\n");
++			// product list given
++			if ( strlen(productList) ) {
++				strcpy(listcopy, productList);
++				token = strtok(listcopy, ",");
++				while (token != NULL) {
++					if (strlen(token) != 4) {
++						SHOW_PROGRESS("Error: entry in product ID list has wrong length: %s. Ignoring\n", token);
++						goto NextToken;
++					}
++					if ( hexstr2bin(token, buffer, strlen(token)/2) == -1) {
++						SHOW_PROGRESS("Error: entry in product ID list is not a hex string: %s. Ignoring\n", token);
++						goto NextToken;
++					}
++					product = 0;
++					product += (unsigned char)buffer[0];
++					product <<= 8;
++					product += (unsigned char)buffer[1];
++					if (product == dev->descriptor.idProduct) {
++						if (verbose)
++							printf ("   found matching product ID from list\n");
++						(*numFound)++;
++						if (busnum == -1)
++							right_dev = dev;
++						else
++							if (dev->devnum >= devnum && (int)strtol(dev->bus->dirname,NULL,10) == busnum) {
++								right_dev = dev;
++								TargetProduct = dev->descriptor.idProduct;
++								break;
++							}
++					}
++
++					NextToken:
++					token = strtok(NULL, ",");
++				}
++			/* Product ID is given */
++			} else
++				if (product == dev->descriptor.idProduct) {
++					if (verbose)
++						printf ("   found matching product ID\n");
++					if (targetClass == 0 && configuration == 0) {
++						(*numFound)++;
++						right_dev = dev;
++						if (verbose)
++							printf ("   adding device\n");
++					} else {
++						if (targetClass != 0) {
++							devClass = dev->descriptor.bDeviceClass;
++							if (devClass == 0)
++								devClass = dev->config[0].interface[0].altsetting[0].bInterfaceClass;
++							else
++								/* Check for some quirky devices */
++								if (devClass != dev->config[0].interface[0].altsetting[0].bInterfaceClass)
++									devClass = dev->config[0].interface[0].altsetting[0].bInterfaceClass;
++							if (devClass == targetClass) {
++								if (verbose)
++									printf ("   target class %02x matching\n", targetClass);
++								if (mode == SEARCH_TARGET) {
++									(*numFound)++;
++									right_dev = dev;
++									if (verbose)
++										printf ("   adding device\n");
++								} else
++									if (verbose)
++										printf ("   not adding device\n");
++							} else {
++								if (verbose)
++									printf ("   target class %02x not matching\n", targetClass);
++								if (mode == SEARCH_DEFAULT) {
++									(*numFound)++;
++									right_dev = dev;
++									if (verbose)
++										printf ("   adding device\n");
++								}
++							}
++						} else {
++							// check configuration (only if no target class given)
++							testdevh = usb_open(dev);
++							int testconfig = get_current_configuration(testdevh);
++							if (testconfig != configuration) {
++								if (verbose)
++									printf ("   device configuration %d not matching parameter\n", testconfig);
++								(*numFound)++;
++								right_dev = dev;
++								if (verbose)
++									printf ("   adding device\n");
++							} else
++								if (verbose)
++									printf ("   not adding device, target configuration already set\n");
++						}
++					}
++					/* hack: if busnum has other than init value, we are called from
++					 * successCheck() and do probe for plausible new devnum/busnum
++					 */
++					if (busnum != -1)
++						if (dev->devnum < devnum || (int)strtol(dev->bus->dirname,NULL,10) != busnum) {
++							if (verbose)
++								printf ("   busnum/devnum indicates an unrelated device\n");
++							right_dev = NULL;
++						}
++				}
++		}
++	}
++	if (productList != NULL)
++		free(listcopy);
++	return right_dev;
++}
++
++
++#define USB_DIR_OUT 0x00
++#define USB_DIR_IN  0x80
++
++/* Autodetect bulk endpoints (ab) */
++
++int find_first_bulk_output_endpoint(struct usb_device *dev)
++{
++	int i;
++	struct usb_interface_descriptor *alt = &(dev->config[0].interface[0].altsetting[0]);
++	struct usb_endpoint_descriptor *ep;
++
++	for(i=0;i < alt->bNumEndpoints;i++) {
++		ep=&(alt->endpoint[i]);
++		if( ( (ep->bmAttributes & USB_ENDPOINT_TYPE_MASK) == USB_ENDPOINT_TYPE_BULK) &&
++		    ( (ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_DIR_OUT ) ) {
++			return ep->bEndpointAddress;
++		}
++	}
++
++	return 0;
++}
++
++
++int find_first_bulk_input_endpoint(struct usb_device *dev)
++{
++	int i;
++	struct usb_interface_descriptor *alt = &(dev->config[0].interface[0].altsetting[0]);
++	struct usb_endpoint_descriptor *ep;
++
++	for(i=0;i < alt->bNumEndpoints;i++) {
++		ep=&(alt->endpoint[i]);
++		if( ( (ep->bmAttributes & USB_ENDPOINT_TYPE_MASK) == USB_ENDPOINT_TYPE_BULK) &&
++		    ( (ep->bEndpointAddress & USB_ENDPOINT_DIR_MASK) == USB_DIR_IN ) ) {
++			return ep->bEndpointAddress;
++		}
++	}
++
++	return 0;
++}
++
++int get_current_configuration(struct usb_dev_handle* devh)
++{
++	int ret;
++
++	SHOW_PROGRESS("Getting the current device configuration ...\n");
++	ret = usb_control_msg(devh, USB_DIR_IN + USB_TYPE_STANDARD + USB_RECIP_DEVICE, USB_REQ_GET_CONFIGURATION, 0, 0, buffer, 1, 1000);
++	if (ret < 0) {
++		fprintf(stderr, "Error: getting the current configuration failed (error %d). Aborting.\n\n", ret);
++		exit(1);
++	} else {
++		SHOW_PROGRESS(" OK, got current device configuration (%d)\n", buffer[0]);
++		return buffer[0];
++	}
++}
++
++
++int get_interface0_class(struct usb_device *dev, int devconfig)
++{
++	int i;
++	for (i=0; i<dev->descriptor.bNumConfigurations; i++)
++		if (dev->config[i].bConfigurationValue == devconfig)
++			return dev->config[i].interface[0].altsetting[0].bInterfaceClass;
++	return -1;
++}
++
++
++/* Parameter parsing */
++
++char* ReadParseParam(const char* FileName, char *VariableName)
++{
++	static char Str[LINE_DIM];
++	char *VarName, *Comment=NULL, *Equal=NULL;
++	char *FirstQuote, *LastQuote, *P1, *P2;
++	int Line=0, Len=0, Pos=0;
++	FILE *file=fopen(FileName, "r");
++
++	if (file==NULL) {
++		fprintf(stderr, "Error: Could not find file %s\n\n", FileName);
++		exit(1);
++	}
++
++	while (fgets(Str, LINE_DIM-1, file) != NULL) {
++		Line++;
++		Len=strlen(Str);
++		if (Len==0) goto Next;
++		if (Str[Len-1]=='\n' or Str[Len-1]=='\r') Str[--Len]='\0';
++		Equal = strchr (Str, '=');			// search for equal sign
++		Pos = strcspn (Str, ";#!");			// search for comment
++		Comment = (Pos==Len) ? NULL : Str+Pos;
++		if (Equal==NULL or ( Comment!=NULL and Comment<=Equal)) goto Next;	// Only comment
++		*Equal++ = '\0';
++		if (Comment!=NULL) *Comment='\0';
++
++		// String
++		FirstQuote=strchr (Equal, '"');		// search for double quote char
++		LastQuote=strrchr (Equal, '"');
++		if (FirstQuote!=NULL) {
++			if (LastQuote==NULL) {
++				fprintf(stderr, "Error reading parameter file %s line %d - Missing end quote.\n", FileName, Line);
++				goto Next;
++			}
++			*FirstQuote=*LastQuote='\0';
++			Equal=FirstQuote+1;
++		}
++
++		// removes leading/trailing spaces
++		Pos=strspn (Str, " \t");
++		if (Pos==strlen(Str)) {
++			fprintf(stderr, "Error reading parameter file %s line %d - Missing variable name.\n", FileName, Line);
++			goto Next;		// No function name
++		}
++		while ((P1=strrchr(Str, ' '))!=NULL or (P2=strrchr(Str, '\t'))!=NULL)
++			if (P1!=NULL) *P1='\0';
++			else if (P2!=NULL) *P2='\0';
++		VarName=Str+Pos;
++
++		Pos=strspn (Equal, " \t");
++		if (Pos==strlen(Equal)) {
++			fprintf(stderr, "Error reading parameter file %s line %d - Missing value.\n", FileName, Line);
++			goto Next;		// No function name
++		}
++		Equal+=Pos;
++
++		if (strcmp(VarName, VariableName)==0) {		// Found it
++			fclose(file);
++			return Equal;
++		}
++		Next:;
++	}
++
++	fclose(file);
++	return NULL;
++}
++
++
++int hex2num(char c)
++{
++	if (c >= '0' && c <= '9')
++	return c - '0';
++	if (c >= 'a' && c <= 'f')
++	return c - 'a' + 10;
++	if (c >= 'A' && c <= 'F')
++	return c - 'A' + 10;
++	return -1;
++}
++
++
++int hex2byte(const char *hex)
++{
++	int a, b;
++	a = hex2num(*hex++);
++	if (a < 0)
++		return -1;
++	b = hex2num(*hex++);
++	if (b < 0)
++		return -1;
++	return (a << 4) | b;
++}
++
++int hexstr2bin(const char *hex, char *buffer, int len)
++{
++	int i;
++	int a;
++	const char *ipos = hex;
++	char *opos = buffer;
++
++	for (i = 0; i < len; i++) {
++	a = hex2byte(ipos);
++	if (a < 0)
++		return -1;
++	*opos++ = a;
++	ipos += 2;
++	}
++	return 0;
++}
++
++void printVersion()
++{
++	char* version = VERSION;
++	printf("\n * usb_modeswitch: handle USB devices with multiple modes\n");
++	printf(" * Version %s (C) Josua Dietze 2010\n", version);
++	printf(" * Based on libusb0 (0.1.12 and above)\n\n");
++	printf(" ! PLEASE REPORT NEW CONFIGURATIONS !\n\n");
++}
++
++void printHelp()
++{
++	printf ("Usage: usb_modeswitch [-hvpVPmMrdHn] [-c filename]\n\n");
++	printf (" -h, --help                    this help\n");
++	printf (" -e, --version                 print version information and exit\n");
++	printf (" -v, --default-vendor NUM      vendor ID of original mode (mandatory)\n");
++	printf (" -p, --default-product NUM     product ID of original mode (mandatory)\n");
++	printf (" -V, --target-vendor NUM       target mode vendor ID (optional)\n");
++	printf (" -P, --target-product NUM      target mode product ID (optional)\n");
++	printf (" -C, --target-class NUM        target mode device class (optional)\n");
++	printf (" -m, --message-endpoint NUM    direct the message transfer there (optional)\n");
++	printf (" -M, --message-content <msg>   message to send (hex number as string)\n");
++	printf (" -2 <msg>, -3 <msg>            additional messages to send (-n recommended)\n");
++	printf (" -n, --need-response           read response to the message transfer (CSW)\n");
++	printf (" -r, --response-endpoint NUM   read response from there (optional)\n");
++	printf (" -d, --detach-only             detach the active driver, no further action\n");
++	printf (" -H, --huawei-mode             apply a special procedure\n");
++	printf (" -S, --sierra-mode             apply a special procedure\n");
++	printf (" -O, --sony-mode               apply a special procedure\n");
++	printf (" -G, --gct-mode                apply a special procedure\n");
++	printf (" -T, --kobil-mode              apply a special procedure\n");
++	printf (" -R, --reset-usb               reset the device after all other actions\n");
++	printf (" -Q, --quiet                   don't show progress or error messages\n");
++	printf (" -W, --verbose                 print all settings and debug output\n");
++	printf (" -D, --sysmode                 specific result and syslog message\n");
++	printf (" -s, --success NUM             check switching result after NUM secs\n");
++	printf (" -I, --no-inquire              do not get SCSI attributes (default on)\n\n");
++	printf (" -c, --config-file <filename>  load configuration from file\n\n");
++	printf (" -i, --interface NUM           select initial USB interface (default 0)\n");
++	printf (" -u, --configuration NUM       select USB configuration\n");
++	printf (" -a, --altsetting NUM          select alternative USB interface setting\n\n");
++}
+diff --git a/usbmodeswitch/usb_modeswitch.d/0421_060c b/usbmodeswitch/usb_modeswitch.d/0421_060c
+new file mode 100644
+index 0000000..59c682f
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0421_060c
+@@ -0,0 +1,12 @@
++########################################################
++# Nokia CS-10
++
++DefaultVendor= 0x0421
++DefaultProduct=0x060c
++
++TargetVendor=  0x0421
++TargetProduct= 0x060e
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0421_0610 b/usbmodeswitch/usb_modeswitch.d/0421_0610
+new file mode 100644
+index 0000000..408ee2d
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0421_0610
+@@ -0,0 +1,12 @@
++########################################################
++# Nokia CS-15
++
++DefaultVendor= 0x0421
++DefaultProduct=0x0610
++
++TargetVendor=  0x0421
++TargetProduct= 0x0612
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0421_0622 b/usbmodeswitch/usb_modeswitch.d/0421_0622
+new file mode 100644
+index 0000000..b3f743e
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0421_0622
+@@ -0,0 +1,13 @@
++#######################################################
++# Nokia CS-17
++
++DefaultVendor= 0x0421
++DefaultProduct=0x0622
++
++TargetVendor=  0x0421
++TargetProduct= 0x0623
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0421_0627 b/usbmodeswitch/usb_modeswitch.d/0421_0627
+new file mode 100644
+index 0000000..15df16c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0421_0627
+@@ -0,0 +1,13 @@
++#######################################################
++# Nokia CS-18
++
++DefaultVendor= 0x0421
++DefaultProduct=0x0627
++
++TargetVendor=  0x0421
++TargetProduct= 0x0612
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0471_1237 b/usbmodeswitch/usb_modeswitch.d/0471_1237
+new file mode 100644
+index 0000000..b81a941
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0471_1237
+@@ -0,0 +1,14 @@
++########################################################
++# Philips TalkTalk (NXP Semiconductors "Dragonfly")
++
++DefaultVendor= 0x0471
++DefaultProduct=0x1237
++
++TargetVendor=  0x0471
++TargetProductList="1206,1234"
++
++MessageContent="5553424312345678000000000000061b000000030000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0482_024d b/usbmodeswitch/usb_modeswitch.d/0482_024d
+new file mode 100644
+index 0000000..a1adc1e
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0482_024d
+@@ -0,0 +1,11 @@
++########################################################
++# Kyocera W06K CDMA modem
++
++DefaultVendor= 0x0482
++DefaultProduct=0x024d
++
++TargetClass=0x02
++
++Configuration=2
++
++CheckSuccess=20
+diff --git a/usbmodeswitch/usb_modeswitch.d/04cc_225a b/usbmodeswitch/usb_modeswitch.d/04cc_225a
+new file mode 100644
+index 0000000..eac2981
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/04cc_225a
+@@ -0,0 +1,2 @@
++########################################################
++# ST-Ericsson TD CMCC Modem
+diff --git a/usbmodeswitch/usb_modeswitch.d/04e8_689a b/usbmodeswitch/usb_modeswitch.d/04e8_689a
+new file mode 100644
+index 0000000..94231ad
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/04e8_689a
+@@ -0,0 +1,15 @@
++#######################################################
++# Samsung GT-B3730
++
++DefaultVendor= 0x04e8
++DefaultProduct=0x689a
++
++TargetVendor=  0x04e8
++TargetProduct= 0x6889
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++CheckSuccess=20
++
++#NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/04e8_f000 b/usbmodeswitch/usb_modeswitch.d/04e8_f000
+new file mode 100644
+index 0000000..c06f046
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/04e8_f000
+@@ -0,0 +1,12 @@
++########################################################
++# Samsung U209
++
++DefaultVendor= 0x04e8
++DefaultProduct=0xf000
++
++TargetVendor=  0x04e8
++TargetProduct= 0x6601
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000616000000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/057c_84ff b/usbmodeswitch/usb_modeswitch.d/057c_84ff
+new file mode 100644
+index 0000000..e288433
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/057c_84ff
+@@ -0,0 +1,15 @@
++########################################################
++# AVM Fritz!Wlan USB Stick N
++
++DefaultVendor= 0x057c
++DefaultProduct=0x84ff
++
++TargetVendor=  0x057c
++TargetProduct= 0x8401
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000ff0000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/05c6_1000 b/usbmodeswitch/usb_modeswitch.d/05c6_1000
+new file mode 100644
+index 0000000..f74be6c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/05c6_1000
+@@ -0,0 +1,13 @@
++########################################################
++# QualComm
++
++DefaultVendor= 0x05c6
++DefaultProduct=0x1000
++
++TargetVendor=  0x05c6
++TargetProduct= 0x6000
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
+\ No newline at end of file
+diff --git a/usbmodeswitch/usb_modeswitch.d/05c6_2000 b/usbmodeswitch/usb_modeswitch.d/05c6_2000
+new file mode 100644
+index 0000000..a3b2f98
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/05c6_2000
+@@ -0,0 +1,14 @@
++######################################################## 
++# HSDPA USB modem from dealextreme 
++
++DefaultVendor= 0x05c6 
++DefaultProduct=0x2000 
++
++TargetVendor=  0x05c6 
++TargetProduct= 0x0015    
++
++MessageContent="5553424368032c882400000080000612000000240000000000000000000000" 
++
++NeedResponse=1
++
++CheckSuccess=40 
+diff --git a/usbmodeswitch/usb_modeswitch.d/05c6_2001 b/usbmodeswitch/usb_modeswitch.d/05c6_2001
+new file mode 100644
+index 0000000..8e660ce
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/05c6_2001
+@@ -0,0 +1,14 @@
++######################################################## 
++# D-Link DWM-162-U5, Micromax MMX 300c
++
++DefaultVendor= 0x05c6
++DefaultProduct=0x2001
++
++TargetVendor=  0x1e0e
++TargetProductList="ce16,cefe"
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/05c6_6000 b/usbmodeswitch/usb_modeswitch.d/05c6_6000
+new file mode 100644
+index 0000000..f74be6c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/05c6_6000
+@@ -0,0 +1,13 @@
++########################################################
++# QualComm
++
++DefaultVendor= 0x05c6
++DefaultProduct=0x1000
++
++TargetVendor=  0x05c6
++TargetProduct= 0x6000
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
+\ No newline at end of file
+diff --git a/usbmodeswitch/usb_modeswitch.d/05c6_f000 b/usbmodeswitch/usb_modeswitch.d/05c6_f000
+new file mode 100644
+index 0000000..1cb294b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/05c6_f000
+@@ -0,0 +1,12 @@
++########################################################
++# Siptune LM-75 ("LinuxModem")
++
++DefaultVendor= 0x05c6
++DefaultProduct=0xf000
++
++TargetVendor=  0x05c6
++TargetProduct= 0x9000
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/05c7_1000 b/usbmodeswitch/usb_modeswitch.d/05c7_1000
+new file mode 100644
+index 0000000..1981879
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/05c7_1000
+@@ -0,0 +1,13 @@
++#######################################################
++# Qtronix EVDO 3G Modem (for TianYi)
++
++DefaultVendor= 0x05c7
++DefaultProduct=0x1000
++
++TargetVendor=  0x05c7
++TargetProduct= 0x6000
++
++MessageContent="5553424312345678c00000008000069f140000000000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/072f_100d b/usbmodeswitch/usb_modeswitch.d/072f_100d
+new file mode 100644
+index 0000000..f2fa527
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/072f_100d
+@@ -0,0 +1,15 @@
++########################################################
++# InfoCert Business Key (SmartCard/Reader emulation)
++
++DefaultVendor= 0x072f
++DefaultProduct=0x100d
++
++TargetVendor=  0x072f
++TargetProduct= 0x90cc
++
++CheckSuccess=20
++
++MessageContent="01b0000000000000000000000000000000000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/07d1_a800 b/usbmodeswitch/usb_modeswitch.d/07d1_a800
+new file mode 100644
+index 0000000..04a27dc
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/07d1_a800
+@@ -0,0 +1,13 @@
++######################################################## 
++# D-Link DWM-156 HSUPA 3.75G USB Modem 
++
++DefaultVendor= 0x07d1
++DefaultProduct=0xa800
++
++TargetVendor=  0x07d1
++TargetProduct= 0x3e02
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000" 
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0930_0d46 b/usbmodeswitch/usb_modeswitch.d/0930_0d46
+new file mode 100644
+index 0000000..32e1688
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0930_0d46
+@@ -0,0 +1,14 @@
++########################################################
++# Toshiba G450
++
++DefaultVendor= 0x0930
++DefaultProduct=0x0d46
++
++TargetVendor=  0x0930
++TargetProduct= 0x0d45
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0ace_2011 b/usbmodeswitch/usb_modeswitch.d/0ace_2011
+new file mode 100644
+index 0000000..3cdfcf7
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0ace_2011
+@@ -0,0 +1,12 @@
++########################################################
++# Zydas ZD1211RW WLAN USB, Sphairon HomeLink 1202 (Variant 1)
++
++DefaultVendor= 0x0ace
++DefaultProduct=0x2011
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0ace_20ff b/usbmodeswitch/usb_modeswitch.d/0ace_20ff
+new file mode 100644
+index 0000000..6153421
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0ace_20ff
+@@ -0,0 +1,12 @@
++########################################################
++# Zydas ZD1211RW WLAN USB, Sphairon HomeLink 1202 (Variant 2)
++
++DefaultVendor= 0x0ace
++DefaultProduct=0x20ff
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6711 b/usbmodeswitch/usb_modeswitch.d/0af0_6711
+new file mode 100644
+index 0000000..0e915ef
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6711
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6711
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6731 b/usbmodeswitch/usb_modeswitch.d/0af0_6731
+new file mode 100644
+index 0000000..252b4a1
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6731
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6731
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6751 b/usbmodeswitch/usb_modeswitch.d/0af0_6751
+new file mode 100644
+index 0000000..048094a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6751
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6751
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6771 b/usbmodeswitch/usb_modeswitch.d/0af0_6771
+new file mode 100644
+index 0000000..442e926
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6771
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6771
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6791 b/usbmodeswitch/usb_modeswitch.d/0af0_6791
+new file mode 100644
+index 0000000..298f53d
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6791
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6791
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6811 b/usbmodeswitch/usb_modeswitch.d/0af0_6811
+new file mode 100644
+index 0000000..a0e49ba
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6811
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6811
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6911 b/usbmodeswitch/usb_modeswitch.d/0af0_6911
+new file mode 100644
+index 0000000..d00f822
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6911
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6911
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6951 b/usbmodeswitch/usb_modeswitch.d/0af0_6951
+new file mode 100644
+index 0000000..90f1d32
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6951
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6951
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_6971 b/usbmodeswitch/usb_modeswitch.d/0af0_6971
+new file mode 100644
+index 0000000..856416a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_6971
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x6971
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7011 b/usbmodeswitch/usb_modeswitch.d/0af0_7011
+new file mode 100644
+index 0000000..f6492f9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7011
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7011
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7031 b/usbmodeswitch/usb_modeswitch.d/0af0_7031
+new file mode 100644
+index 0000000..0641d3a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7031
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7031
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7051 b/usbmodeswitch/usb_modeswitch.d/0af0_7051
+new file mode 100644
+index 0000000..0df8a33
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7051
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7051
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7071 b/usbmodeswitch/usb_modeswitch.d/0af0_7071
+new file mode 100644
+index 0000000..0fe4bcf
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7071
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7071
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7111 b/usbmodeswitch/usb_modeswitch.d/0af0_7111
+new file mode 100644
+index 0000000..a32c7b5
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7111
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7111
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7211 b/usbmodeswitch/usb_modeswitch.d/0af0_7211
+new file mode 100644
+index 0000000..ef5ceed
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7211
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7211
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7251 b/usbmodeswitch/usb_modeswitch.d/0af0_7251
+new file mode 100644
+index 0000000..2e9072b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7251
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7251
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7271 b/usbmodeswitch/usb_modeswitch.d/0af0_7271
+new file mode 100644
+index 0000000..a008dae
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7271
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7271
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7301 b/usbmodeswitch/usb_modeswitch.d/0af0_7301
+new file mode 100644
+index 0000000..40339de
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7301
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7301
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7311 b/usbmodeswitch/usb_modeswitch.d/0af0_7311
+new file mode 100644
+index 0000000..f2c1bd8
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7311
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7311
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7361 b/usbmodeswitch/usb_modeswitch.d/0af0_7361
+new file mode 100644
+index 0000000..e5b3822
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7361
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7361
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7381 b/usbmodeswitch/usb_modeswitch.d/0af0_7381
+new file mode 100644
+index 0000000..cd286c7
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7381
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7381
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7401 b/usbmodeswitch/usb_modeswitch.d/0af0_7401
+new file mode 100644
+index 0000000..9e6f192
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7401
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7401
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7501 b/usbmodeswitch/usb_modeswitch.d/0af0_7501
+new file mode 100644
+index 0000000..dd48d61
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7501
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7501
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7601 b/usbmodeswitch/usb_modeswitch.d/0af0_7601
+new file mode 100644
+index 0000000..4cb246f
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7601
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7601
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7701 b/usbmodeswitch/usb_modeswitch.d/0af0_7701
+new file mode 100644
+index 0000000..3caef81
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7701
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7701
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7801 b/usbmodeswitch/usb_modeswitch.d/0af0_7801
+new file mode 100644
+index 0000000..ebd3fd9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7801
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7801
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_7901 b/usbmodeswitch/usb_modeswitch.d/0af0_7901
+new file mode 100644
+index 0000000..1634919
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_7901
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x7901
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_8200 b/usbmodeswitch/usb_modeswitch.d/0af0_8200
+new file mode 100644
+index 0000000..aa42ff4
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_8200
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x8200
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_8201 b/usbmodeswitch/usb_modeswitch.d/0af0_8201
+new file mode 100644
+index 0000000..bbc33f1
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_8201
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x8201
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_8300 b/usbmodeswitch/usb_modeswitch.d/0af0_8300
+new file mode 100644
+index 0000000..b5819e7
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_8300
+@@ -0,0 +1,11 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x8300
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_8302 b/usbmodeswitch/usb_modeswitch.d/0af0_8302
+new file mode 100644
+index 0000000..9573bd4
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_8302
+@@ -0,0 +1,11 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x8302
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_8304 b/usbmodeswitch/usb_modeswitch.d/0af0_8304
+new file mode 100644
+index 0000000..ea3de77
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_8304
+@@ -0,0 +1,11 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x8304
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_8400 b/usbmodeswitch/usb_modeswitch.d/0af0_8400
+new file mode 100644
+index 0000000..eab8662
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_8400
+@@ -0,0 +1,11 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0x8400
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_c031 b/usbmodeswitch/usb_modeswitch.d/0af0_c031
+new file mode 100644
+index 0000000..fc6172f
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_c031
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xc031
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_c100 b/usbmodeswitch/usb_modeswitch.d/0af0_c100
+new file mode 100644
+index 0000000..8854f30
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_c100
+@@ -0,0 +1,11 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xc100
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d013 b/usbmodeswitch/usb_modeswitch.d/0af0_d013
+new file mode 100644
+index 0000000..0da431b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d013
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd013
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d031 b/usbmodeswitch/usb_modeswitch.d/0af0_d031
+new file mode 100644
+index 0000000..2fb7c10
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d031
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd031
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d033 b/usbmodeswitch/usb_modeswitch.d/0af0_d033
+new file mode 100644
+index 0000000..8eef8f1
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d033
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd033
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d035 b/usbmodeswitch/usb_modeswitch.d/0af0_d035
+new file mode 100644
+index 0000000..5d7b9ac
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d035
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd035
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d055 b/usbmodeswitch/usb_modeswitch.d/0af0_d055
+new file mode 100644
+index 0000000..4a34534
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d055
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd055
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d057 b/usbmodeswitch/usb_modeswitch.d/0af0_d057
+new file mode 100644
+index 0000000..e6a3155
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d057
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd057
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d058 b/usbmodeswitch/usb_modeswitch.d/0af0_d058
+new file mode 100644
+index 0000000..4f5bb10
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d058
+@@ -0,0 +1,11 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd058
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d155 b/usbmodeswitch/usb_modeswitch.d/0af0_d155
+new file mode 100644
+index 0000000..02358fe
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d155
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd155
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d157 b/usbmodeswitch/usb_modeswitch.d/0af0_d157
+new file mode 100644
+index 0000000..59c8fb9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d157
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd157
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d255 b/usbmodeswitch/usb_modeswitch.d/0af0_d255
+new file mode 100644
+index 0000000..f67dff4
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d255
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd255
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d257 b/usbmodeswitch/usb_modeswitch.d/0af0_d257
+new file mode 100644
+index 0000000..3ac8eb6
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d257
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd257
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0af0_d357 b/usbmodeswitch/usb_modeswitch.d/0af0_d357
+new file mode 100644
+index 0000000..ca3e9c1
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0af0_d357
+@@ -0,0 +1,14 @@
++#######################################################
++# Option HSO device
++
++DefaultVendor=  0x0af0
++DefaultProduct= 0xd357
++
++TargetClass=    0xff
++
++CheckSuccess=10
++
++MessageContent="55534243785634120100000080000601000000000000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0b3c_c700 b/usbmodeswitch/usb_modeswitch.d/0b3c_c700
+new file mode 100644
+index 0000000..4db1d49
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0b3c_c700
+@@ -0,0 +1,13 @@
++########################################################
++# Olivetti Olicard 100 and others
++
++DefaultVendor= 0x0b3c
++DefaultProduct=0xc700
++
++TargetVendor=  0x0b3c
++TargetProductList="c000,c001,c002"
++
++MessageContent="5553424312345678000000000000061b000000030000000000000000000000"
++NeedResponse=1
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0b3c_f000 b/usbmodeswitch/usb_modeswitch.d/0b3c_f000
+new file mode 100644
+index 0000000..43121cb
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0b3c_f000
+@@ -0,0 +1,13 @@
++########################################################
++# Olivetti Olicard 145
++
++DefaultVendor= 0x0b3c
++DefaultProduct=0xf000
++
++TargetVendor=  0x0b3c
++TargetProduct= 0xc003
++
++MessageContent="5553424312345678c000000080010606f50402527000000000000000000000"
++NeedResponse=1
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0cf3_20ff b/usbmodeswitch/usb_modeswitch.d/0cf3_20ff
+new file mode 100644
+index 0000000..34b0e16
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0cf3_20ff
+@@ -0,0 +1,14 @@
++########################################################
++# Atheros Wireless / Netgear WNDA3200
++
++DefaultVendor= 0x0cf3
++DefaultProduct=0x20ff
++
++TargetVendor=  0x0cf3
++TargetProduct= 0x7010
++
++CheckSuccess=10
++NoDriverLoading=1
++
++MessageContent="5553424329000000000000000000061b000000020000000000000000000000"
++NeedResponse=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/0d46_45a1 b/usbmodeswitch/usb_modeswitch.d/0d46_45a1
+new file mode 100644
+index 0000000..08e9db9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0d46_45a1
+@@ -0,0 +1,13 @@
++#######################################################
++# Kobil mIdentity 3G (1)
++
++DefaultVendor= 0x0d46
++DefaultProduct=0x45a1
++
++TargetVendor=  0x0d46
++TargetProduct= 0x45a9
++
++KobilMode=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0d46_45a5 b/usbmodeswitch/usb_modeswitch.d/0d46_45a5
+new file mode 100644
+index 0000000..1181a08
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0d46_45a5
+@@ -0,0 +1,13 @@
++#######################################################
++# Kobil mIdentity 3G (2)
++
++DefaultVendor= 0x0d46
++DefaultProduct=0x45a5
++
++TargetVendor=  0x0d46
++TargetProduct= 0x45ad
++
++KobilMode=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0e8d_7109 b/usbmodeswitch/usb_modeswitch.d/0e8d_7109
+new file mode 100644
+index 0000000..200c7bd
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0e8d_7109
+@@ -0,0 +1,15 @@
++########################################################
++# MediaTek Wimax USB Card
++
++DefaultVendor= 0x0e8d
++DefaultProduct=0x7109
++
++TargetVendor=  0x0e8d
++TargetProduct= 0x7118
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000"
++NoDriverLoading=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0fce_d0cf b/usbmodeswitch/usb_modeswitch.d/0fce_d0cf
+new file mode 100644
+index 0000000..a5f3bdb
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0fce_d0cf
+@@ -0,0 +1,12 @@
++########################################################
++# Sony Ericsson MD300
++
++DefaultVendor= 0x0fce
++DefaultProduct=0xd0cf
++
++TargetClass=0x02
++
++CheckSuccess=20
++
++DetachStorageOnly=1
++Configuration=3
+diff --git a/usbmodeswitch/usb_modeswitch.d/0fce_d0e1 b/usbmodeswitch/usb_modeswitch.d/0fce_d0e1
+new file mode 100644
+index 0000000..d9e08d0
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0fce_d0e1
+@@ -0,0 +1,12 @@
++########################################################
++# Sony Ericsson MD400
++
++DefaultVendor= 0x0fce
++DefaultProduct=0xd0e1
++
++TargetClass=0x02
++
++CheckSuccess=20
++
++SonyMode=1
++Configuration=2
+diff --git a/usbmodeswitch/usb_modeswitch.d/0fce_d103 b/usbmodeswitch/usb_modeswitch.d/0fce_d103
+new file mode 100644
+index 0000000..185a97a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0fce_d103
+@@ -0,0 +1,13 @@
++########################################################
++# Sony Ericsson MD400G
++
++DefaultVendor= 0x0fce
++DefaultProduct=0xd103
++
++TargetClass=0x02
++
++SonyMode=1
++Configuration=2
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/0fd1_1000 b/usbmodeswitch/usb_modeswitch.d/0fd1_1000
+new file mode 100644
+index 0000000..260ab1c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/0fd1_1000
+@@ -0,0 +1,12 @@
++#######################################################
++# GW D301 (Advinne AMC)
++
++DefaultVendor= 0x0fd1
++DefaultProduct=0x1000
++
++TargetClass=0xff
++
++Configuration=3
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1004_1000 b/usbmodeswitch/usb_modeswitch.d/1004_1000
+new file mode 100644
+index 0000000..9614caf
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1004_1000
+@@ -0,0 +1,11 @@
++########################################################
++# LG LDU-1900D EV-DO (Rev. A)
++
++DefaultVendor= 0x1004
++DefaultProduct=0x1000
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000aff554d53434847000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1004_607f b/usbmodeswitch/usb_modeswitch.d/1004_607f
+new file mode 100644
+index 0000000..a45c652
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1004_607f
+@@ -0,0 +1,13 @@
++########################################################
++# LG HDM-2100 (EVDO Rev.A USB modem)
++
++DefaultVendor= 0x1004
++DefaultProduct=0x607f
++
++TargetVendor=  0x1004
++TargetProductList="6000,6114"
++
++MessageContent="1201100102000040041014610000010200018006000100001200"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1004_613a b/usbmodeswitch/usb_modeswitch.d/1004_613a
+new file mode 100644
+index 0000000..37cb0da
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1004_613a
+@@ -0,0 +1,13 @@
++########################################################
++# LG L-05A
++
++DefaultVendor= 0x1004
++DefaultProduct=0x613a
++
++TargetVendor=  0x1004
++TargetProduct= 0x6124
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1004_613f b/usbmodeswitch/usb_modeswitch.d/1004_613f
+new file mode 100644
+index 0000000..8258557
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1004_613f
+@@ -0,0 +1,13 @@
++########################################################
++# LG LUU-2100TI (aka AT&T USBConnect Turbo)
++
++DefaultVendor= 0x1004
++DefaultProduct=0x613f
++
++TargetVendor=  0x1004
++TargetProduct= 0x6141
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1004_6190 b/usbmodeswitch/usb_modeswitch.d/1004_6190
+new file mode 100644
+index 0000000..6b9c345
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1004_6190
+@@ -0,0 +1,13 @@
++#######################################################
++# LG AD600
++
++DefaultVendor= 0x1004
++DefaultProduct=0x6190
++
++TargetVendor=  0x1004
++TargetProduct= 0x61a7
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1033_0035 b/usbmodeswitch/usb_modeswitch.d/1033_0035
+new file mode 100644
+index 0000000..9c50984
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1033_0035
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei E630
++
++DefaultVendor= 0x1033
++DefaultProduct=0x0035
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1003
++
++CheckSuccess=20
++
++HuaweiMode=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/106c_3b03 b/usbmodeswitch/usb_modeswitch.d/106c_3b03
+new file mode 100644
+index 0000000..81ee553
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/106c_3b03
+@@ -0,0 +1,12 @@
++########################################################
++# UTStarcom UM175 (distributor "Alltel")
++
++DefaultVendor= 0x106c
++DefaultProduct=0x3b03
++
++TargetVendor=  0x106c
++TargetProduct= 0x3715
++
++CheckSuccess=20
++
++MessageContent="555342431234567824000000800008ff024445564348470000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/106c_3b05 b/usbmodeswitch/usb_modeswitch.d/106c_3b05
+new file mode 100644
+index 0000000..e10e6ae
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/106c_3b05
+@@ -0,0 +1,13 @@
++#######################################################
++# Pantech / UTStarcom UMW190 (Verizon)
++
++DefaultVendor= 0x106c
++DefaultProduct=0x3b05
++
++TargetVendor=  0x106c
++TargetProduct= 0x3716
++
++MessageContent="555342431234567824000000800008ff020000000000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/106c_3b06 b/usbmodeswitch/usb_modeswitch.d/106c_3b06
+new file mode 100644
+index 0000000..cc4935e
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/106c_3b06
+@@ -0,0 +1,12 @@
++########################################################
++# UTStarcom UM185E (distributor "Alltel")
++
++DefaultVendor= 0x106c
++DefaultProduct=0x3b06
++
++TargetVendor=  0x106c
++TargetProduct= 0x3717
++
++CheckSuccess=20
++
++MessageContent="55534243b82e238c24000000800008ff020000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1076_7f40 b/usbmodeswitch/usb_modeswitch.d/1076_7f40
+new file mode 100644
+index 0000000..aed11d3
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1076_7f40
+@@ -0,0 +1,12 @@
++########################################################
++# Sagem F@ST 9520-35-GLR
++
++DefaultVendor= 0x1076
++DefaultProduct=0x7f40
++
++TargetVendor=  0x1076
++TargetProduct= 0x7f00
++
++CheckSuccess=20
++
++GCTMode=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/1199_0fff b/usbmodeswitch/usb_modeswitch.d/1199_0fff
+new file mode 100644
+index 0000000..08f987c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1199_0fff
+@@ -0,0 +1,14 @@
++#######################################################
++# Sierra devices (specific driver)
++
++DefaultVendor=  0x1199
++DefaultProduct= 0x0fff
++
++TargetVendor=   0x1199
++TargetProductList="0017,0018,0019,0020,0021,0022,0024,0026,0027,0028,0029,0112,0120,0218,0220,0224,6802,6803,6804,6805,6808,6809,6812,6813,6815,6816,6820,6821,6822,6832,6833,6834,6835,6838,6839,683a,683b,683c,683d,683e,6850,6851,6852,6853,6855,6856,6859,685a"
++
++SierraMode=1
++
++CheckSuccess=10
++
++NoDriverLoading=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/1266_1000 b/usbmodeswitch/usb_modeswitch.d/1266_1000
+new file mode 100644
+index 0000000..a2d9e94
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1266_1000
+@@ -0,0 +1,16 @@
++########################################################
++# Digicom 8E4455 (and all Pirelli devices - EXPERIMENTAL)
++
++DefaultVendor= 0x1266
++DefaultProduct=0x1000
++
++TargetVendor=  0x1266
++TargetProductList="1002,1003,1004,1005,1006,1007,1008,1009,100a,100b,100c,100d,100e,100f,1011,1012"
++
++NeedResponse=1
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
++MessageContent2="5553424387654321000000000000061b000000020000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1001 b/usbmodeswitch/usb_modeswitch.d/12d1_1001
+new file mode 100644
+index 0000000..fe629b8
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1001
+@@ -0,0 +1,11 @@
++########################################################
++# Huawei E169
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1001
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++HuaweiMode=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1003 b/usbmodeswitch/usb_modeswitch.d/12d1_1003
+new file mode 100644
+index 0000000..a0c17be
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1003
+@@ -0,0 +1,11 @@
++########################################################
++# Huawei E220, E230, E270, E870
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1003
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++HuaweiMode=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1009 b/usbmodeswitch/usb_modeswitch.d/12d1_1009
+new file mode 100644
+index 0000000..0906fb9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1009
+@@ -0,0 +1,13 @@
++######################################################## 
++# Huawei V725 Phone (aka Vodafone 725)
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1009
++
++TargetClass=0xff
++
++ 
++HuaweiMode=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_101e b/usbmodeswitch/usb_modeswitch.d/12d1_101e
+new file mode 100644
+index 0000000..726c070
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_101e
+@@ -0,0 +1,11 @@
++########################################################
++# Huawei U7510 / U7517
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x101e
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1031 b/usbmodeswitch/usb_modeswitch.d/12d1_1031
+new file mode 100644
+index 0000000..82d9bd9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1031
+@@ -0,0 +1,15 @@
++########################################################
++# Huawei U8110 / Joy, Vodafone 845 (Android smartphone)
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1031
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1035
++
++CheckSuccess=20 
++
++MessageContent="55534243123456780600000080010a11060000000000000000000000000000"
++
++# for Android SDK
++NoDriverLoading=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1414 b/usbmodeswitch/usb_modeswitch.d/12d1_1414
+new file mode 100644
+index 0000000..f4ff7f9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1414
+@@ -0,0 +1,11 @@
++########################################################
++# Huawei E180
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1414
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++HuaweiMode=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1446 b/usbmodeswitch/usb_modeswitch.d/12d1_1446
+new file mode 100644
+index 0000000..8916e3b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1446
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei E270+  (HSPA+ modem)
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1446
++
++TargetVendor=  0x12d1
++TargetProductList="1001,1406,140c,14ac"
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011060000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1449 b/usbmodeswitch/usb_modeswitch.d/12d1_1449
+new file mode 100644
+index 0000000..f4ca83b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1449
+@@ -0,0 +1,13 @@
++######################################################## 
++# Huawei E352
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1449
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1444
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_14ad b/usbmodeswitch/usb_modeswitch.d/12d1_14ad
+new file mode 100644
+index 0000000..488a861
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_14ad
+@@ -0,0 +1,12 @@
++########################################################
++# Vodafone (Huawei) K3806
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x14ad
++
++TargetVendor=  0x12d1
++TargetProduct= 0x14ae
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_14c1 b/usbmodeswitch/usb_modeswitch.d/12d1_14c1
+new file mode 100644
+index 0000000..f282069
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_14c1
+@@ -0,0 +1,12 @@
++########################################################
++# Vodafone (Huawei) K4605
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x14c1
++
++TargetVendor=  0x12d1
++TargetProduct= 0x14c6
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_14d1 b/usbmodeswitch/usb_modeswitch.d/12d1_14d1
+new file mode 100644
+index 0000000..cbebfc7
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_14d1
+@@ -0,0 +1,12 @@
++########################################################
++# Vodafone (Huawei) K3770
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x14d1
++
++TargetVendor=  0x12d1
++TargetProduct= 0x14c9
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_14fe b/usbmodeswitch/usb_modeswitch.d/12d1_14fe
+new file mode 100644
+index 0000000..5979c5a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_14fe
+@@ -0,0 +1,7 @@
++# T-Mobile NL (Huawei E352)
++DefaultVendor=0x12d1
++DefaultProduct=0x14fe
++TargetVendor=  0x12d1
++TargetProduct= 0x1506
++
++MessageContent="55534243000000000000000000000011060000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1505 b/usbmodeswitch/usb_modeswitch.d/12d1_1505
+new file mode 100644
+index 0000000..f9d7876
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1505
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei EC1261+  (HSPA+ modem)
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1505
++
++TargetVendor=  0x12d1
++TargetProductList=0x140c
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+\ No newline at end of file
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1520 b/usbmodeswitch/usb_modeswitch.d/12d1_1520
+new file mode 100644
+index 0000000..4666f0d
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1520
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei K3765
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1520
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1465
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1521 b/usbmodeswitch/usb_modeswitch.d/12d1_1521
+new file mode 100644
+index 0000000..5e312c9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1521
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei K4505
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1521
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1464
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1523 b/usbmodeswitch/usb_modeswitch.d/12d1_1523
+new file mode 100644
+index 0000000..edaac92
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1523
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei R201
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1523
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1491
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1526 b/usbmodeswitch/usb_modeswitch.d/12d1_1526
+new file mode 100644
+index 0000000..a2941ee
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1526
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei K3772
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1526
++
++TargetVendor=  0x12d1
++TargetProduct= 0x14cf
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1553 b/usbmodeswitch/usb_modeswitch.d/12d1_1553
+new file mode 100644
+index 0000000..bc79bc1
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1553
+@@ -0,0 +1,13 @@
++#######################################################
++# Huawei E1553
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1553
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1001
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1557 b/usbmodeswitch/usb_modeswitch.d/12d1_1557
+new file mode 100644
+index 0000000..75e48bf
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1557
+@@ -0,0 +1,12 @@
++########################################################
++# Huawei E173
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1557
++
++TargetVendor=  0x12d1
++TargetProduct= 0x14a5
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1c0b b/usbmodeswitch/usb_modeswitch.d/12d1_1c0b
+new file mode 100644
+index 0000000..07a9527
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1c0b
+@@ -0,0 +1,13 @@
++#######################################################
++# Huawei E173s
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1c0b
++
++TargetVendor=  0x12d1
++TargetProductList="1c05,1c08"
++
++MessageContent="55534243123456780000000000000011062000000100000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1da1 b/usbmodeswitch/usb_modeswitch.d/12d1_1da1
+new file mode 100644
+index 0000000..fcb2c5c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1da1
+@@ -0,0 +1,14 @@
++######################################################## 
++# Huawei ET8282 
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x1da1
++
++TargetClass=0xff
++
++DefaultVendor= 0x12d1
++TargetProduct= 0x1d09
++HuaweiMode=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_1f01 b/usbmodeswitch/usb_modeswitch.d/12d1_1f01
+new file mode 100644
+index 0000000..a83ad0a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_1f01
+@@ -0,0 +1,11 @@
++########################################################
++DefaultVendor= 0x12d1
++DefaultProduct=0x1f01
++
++TargetVendor=  0x12d1
++TargetProduct= 0x1001
++
++CheckSuccess=20
++
++#MessageContent="55534243123456780000000000000011060000000000000000000000000000"
++MessageContent="55534243123456780000000000000011062000000101000100000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/12d1_380b b/usbmodeswitch/usb_modeswitch.d/12d1_380b
+new file mode 100644
+index 0000000..741ed77
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/12d1_380b
+@@ -0,0 +1,14 @@
++#######################################################
++# Huawei BM358 WiMAX
++
++DefaultVendor= 0x12d1
++DefaultProduct=0x380b
++
++TargetClass=0x02
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000" 
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000" 
++NeedResponse=1 
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1410_5010 b/usbmodeswitch/usb_modeswitch.d/1410_5010
+new file mode 100644
+index 0000000..5d99f8f
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1410_5010
+@@ -0,0 +1,12 @@
++########################################################
++# Novatel Wireless devices
++
++DefaultVendor= 0x1410
++DefaultProduct=0x5010
++
++TargetVendor=  0x1410
++TargetProductList="4100,4400,7030"
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1410_5020 b/usbmodeswitch/usb_modeswitch.d/1410_5020
+new file mode 100644
+index 0000000..2d9018c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1410_5020
+@@ -0,0 +1,12 @@
++########################################################
++# Novatel MC990D
++
++DefaultVendor= 0x1410
++DefaultProduct=0x5020
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++Interface=      5
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1410_5030 b/usbmodeswitch/usb_modeswitch.d/1410_5030
+new file mode 100644
+index 0000000..f484f4b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1410_5030
+@@ -0,0 +1,12 @@
++########################################################
++# Novatel U760
++
++DefaultVendor= 0x1410
++DefaultProduct=0x5030
++
++TargetVendor=  0x1410
++TargetProduct= 0x6000
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1410_5031 b/usbmodeswitch/usb_modeswitch.d/1410_5031
+new file mode 100644
+index 0000000..006e180
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1410_5031
+@@ -0,0 +1,12 @@
++######################################################## 
++# Novatel MC760 3G
++
++DefaultVendor= 0x1410
++DefaultProduct=0x5031
++
++TargetVendor=  0x1410
++TargetProduct= 0x6002
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1410_5041 b/usbmodeswitch/usb_modeswitch.d/1410_5041
+new file mode 100644
+index 0000000..14e5e1a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1410_5041
+@@ -0,0 +1,12 @@
++######################################################## 
++# Novatel Generic MiFi 2352 / Vodafone MiFi 2352
++
++DefaultVendor= 0x1410
++DefaultProduct=0x5041
++
++TargetVendor=  0x1410
++TargetProductList="7001,7003"
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/148f_2578 b/usbmodeswitch/usb_modeswitch.d/148f_2578
+new file mode 100644
+index 0000000..fee87d4
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/148f_2578
+@@ -0,0 +1,15 @@
++########################################################
++# Motorola 802.11 bg WLAN (TER/GUSB3-E)
++
++DefaultVendor= 0x148f
++DefaultProduct=0x2578
++
++TargetVendor=  0x148f
++TargetProduct= 0x9021
++
++CheckSuccess=20
++
++MessageContent="55534243908ecd89000000000000061b000000020000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/15eb_0001 b/usbmodeswitch/usb_modeswitch.d/15eb_0001
+new file mode 100644
+index 0000000..9209ed2
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/15eb_0001
+@@ -0,0 +1,11 @@
++#Tenda EVDO
++#
++
++DefaultVendor=  0x15eb
++DefaultProduct=0x0001
++
++TargetVendor=  0x15eb
++TargetProduct=0x0001
++
++MessageContent="55534243123456780600000080010a11060000000000000000000000000000"
++NeedResponse=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/15eb_7153 b/usbmodeswitch/usb_modeswitch.d/15eb_7153
+new file mode 100644
+index 0000000..4e65d9f
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/15eb_7153
+@@ -0,0 +1,13 @@
++#Tenda EVDO
++#
++
++DefaultVendor=  0x15eb
++DefaultProduct=0x7153
++
++TargetVendor=  0x15eb
++TargetProduct=0x0001
++
++MessageContent="55534243B80E418A0600000080000611060000000000000000000000000000"
++NeedResponse=1
++EvdoMode=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/16d8_6281 b/usbmodeswitch/usb_modeswitch.d/16d8_6281
+new file mode 100644
+index 0000000..0c60a6e
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/16d8_6281
+@@ -0,0 +1,12 @@
++########################################################
++# C-motech CHU-628S
++
++DefaultVendor= 0x16d8
++DefaultProduct=0x6281
++
++TargetClass=0xff
++
++MessageContent="555342431234567824000000800008ff524445564348470000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/16d8_6803 b/usbmodeswitch/usb_modeswitch.d/16d8_6803
+new file mode 100644
+index 0000000..8679554
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/16d8_6803
+@@ -0,0 +1,11 @@
++########################################################
++# C-motech D-50 (aka "CDU-680")
++
++DefaultVendor= 0x16d8
++DefaultProduct=0x6803
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++MessageContent="555342431234567824000000800008ff524445564348470000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/16d8_6803__ b/usbmodeswitch/usb_modeswitch.d/16d8_6803__
+new file mode 100644
+index 0000000..cc0c26c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/16d8_6803__
+@@ -0,0 +1,12 @@
++########################################################
++# C-motech D-50 (aka "CDU-680")
++
++DefaultVendor= 0x16d8
++DefaultProduct=0x6803
++
++TargetVendor=  0x16d8
++TargetProduct= 0x680a
++
++CheckSuccess=20
++
++MessageContent="555342431234567824000000800008ff524445564348470000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/16d8_700a b/usbmodeswitch/usb_modeswitch.d/16d8_700a
+new file mode 100644
+index 0000000..b28152d
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/16d8_700a
+@@ -0,0 +1,11 @@
++########################################################
++# C-motech CHU-629S
++
++DefaultVendor= 0x16d8
++DefaultProduct=0x700a
++
++TargetClass=0xff
++
++CheckSuccess=20
++
++MessageContent="55534243123456782400000080000dfe524445564348473d4e444953000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/16d8_f000 b/usbmodeswitch/usb_modeswitch.d/16d8_f000
+new file mode 100644
+index 0000000..df7abde
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/16d8_f000
+@@ -0,0 +1,12 @@
++########################################################
++# C-motech CGU-628 (aka "Franklin Wireless CGU-628A" aka "4G Systems XS Stick W12")
++
++DefaultVendor= 0x16d8
++DefaultProduct=0xf000
++
++TargetVendor=  0x16d8
++TargetProduct= 0x6006
++
++CheckSuccess=20
++
++MessageContent="55534243d85dd88524000000800008ff524445564348470000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/198f_bccd b/usbmodeswitch/usb_modeswitch.d/198f_bccd
+new file mode 100644
+index 0000000..5f8fefe
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/198f_bccd
+@@ -0,0 +1,15 @@
++########################################################
++# Beceem BCSM250
++
++DefaultVendor= 0x198f
++DefaultProduct=0xbccd
++
++TargetVendor=  0x198f
++TargetProduct= 0x0220
++
++CheckSuccess=20
++
++MessageContent="55534243f0298d8124000000800006bc626563240000000000000000000000"
++
++NoDriverLoading=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0003 b/usbmodeswitch/usb_modeswitch.d/19d2_0003
+new file mode 100644
+index 0000000..d68e17a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0003
+@@ -0,0 +1,13 @@
++########################################################
++# ZTE MU351
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0003
++
++TargetClass=0xff
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0026 b/usbmodeswitch/usb_modeswitch.d/19d2_0026
+new file mode 100644
+index 0000000..78a919a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0026
+@@ -0,0 +1,15 @@
++########################################################
++# ZTE AC581
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0026
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0094
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0040 b/usbmodeswitch/usb_modeswitch.d/19d2_0040
+new file mode 100644
+index 0000000..15c4a92
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0040
+@@ -0,0 +1,13 @@
++########################################################
++# Vodafone (ZTE) K2525
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0040
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0022
++
++MessageContent="5553424312345678000000000000061b000000030000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0053 b/usbmodeswitch/usb_modeswitch.d/19d2_0053
+new file mode 100644
+index 0000000..64a31fe
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0053
+@@ -0,0 +1,16 @@
++########################################################
++# ZTE MF110 (Variant)
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0053
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0031
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0083 b/usbmodeswitch/usb_modeswitch.d/19d2_0083
+new file mode 100644
+index 0000000..d72c465
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0083
+@@ -0,0 +1,15 @@
++########################################################
++# ZTE MF110 (Variant)
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0083
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0124
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0101 b/usbmodeswitch/usb_modeswitch.d/19d2_0101
+new file mode 100644
+index 0000000..be4c98b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0101
+@@ -0,0 +1,15 @@
++########################################################
++# Vodafone (ZTE) K4505-Z
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0101
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0104
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0103 b/usbmodeswitch/usb_modeswitch.d/19d2_0103
+new file mode 100644
+index 0000000..eb75832
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0103
+@@ -0,0 +1,16 @@
++########################################################
++# ZTE MF112
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0103
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0031
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0110 b/usbmodeswitch/usb_modeswitch.d/19d2_0110
+new file mode 100644
+index 0000000..467a049
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0110
+@@ -0,0 +1,15 @@
++########################################################
++# ZTE MF637 (Variant for Orange France)
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0110
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0121
++
++ 
++MessageContent="5553424302000000000000000000061b000000020000000000000000000000" 
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0115 b/usbmodeswitch/usb_modeswitch.d/19d2_0115
+new file mode 100644
+index 0000000..9d05002
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0115
+@@ -0,0 +1,15 @@
++########################################################
++# ZTE MF651
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0115
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0116
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0120 b/usbmodeswitch/usb_modeswitch.d/19d2_0120
+new file mode 100644
+index 0000000..ee06279
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0120
+@@ -0,0 +1,14 @@
++########################################################
++# ZTE_T A355
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0120
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0079
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
+\ No newline at end of file
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0146 b/usbmodeswitch/usb_modeswitch.d/19d2_0146
+new file mode 100644
+index 0000000..9c86b68
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0146
+@@ -0,0 +1,12 @@
++########################################################
++# ZTE MF651
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0146
++
++MessageContent="5553424312345679000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0166 b/usbmodeswitch/usb_modeswitch.d/19d2_0166
+new file mode 100644
+index 0000000..778abe0
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0166
+@@ -0,0 +1,10 @@
++# ZTE MF820 4G LTE
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0166
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0167
++
++MessageContent="55534243123456782400000080000685000000240000000000000000000000"
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_0169 b/usbmodeswitch/usb_modeswitch.d/19d2_0169
+new file mode 100644
+index 0000000..6d4199b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_0169
+@@ -0,0 +1,11 @@
++# ZTE A371B
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x0169
++
++TargetVendor=  0x19d2
++TargetProduct= 0x0170
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_1001 b/usbmodeswitch/usb_modeswitch.d/19d2_1001
+new file mode 100644
+index 0000000..fb13a06
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_1001
+@@ -0,0 +1,20 @@
++########################################################
++# Vodafone (ZTE) K3805-Z
++#
++# Note:
++#      This device has multiple USB profiles. Depending upon how it is flipped
++#      from storage mode to modem mode determines its final PID and the packages
++#      shown on its ISO CD image.
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x1001
++
++TargetVendor=  0x19d2
++TargetProduct= 0x1003
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_1007 b/usbmodeswitch/usb_modeswitch.d/19d2_1007
+new file mode 100644
+index 0000000..3ef2180
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_1007
+@@ -0,0 +1,15 @@
++########################################################
++# Vodafone (ZTE) K3570-Z
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x1007
++
++TargetVendor=  0x19d2
++TargetProduct= 0x1008
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_1009 b/usbmodeswitch/usb_modeswitch.d/19d2_1009
+new file mode 100644
+index 0000000..bf70c65
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_1009
+@@ -0,0 +1,15 @@
++########################################################
++# Vodafone (ZTE) K3571-Z
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x1009
++
++TargetVendor=  0x19d2
++TargetProduct= 0x1010
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_1013 b/usbmodeswitch/usb_modeswitch.d/19d2_1013
+new file mode 100644
+index 0000000..d92a768
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_1013
+@@ -0,0 +1,20 @@
++########################################################
++# Vodafone (ZTE) K3806-Z
++#
++# Note:
++#      This device has multiple USB profiles. Depending upon how it is flipped
++#      from storage mode to modem mode determines its final PID and the packages
++#      shown on its ISO CD image.
++
++DefaultVendor= 0x19d2
++DefaultProduct=0x1013
++
++TargetVendor=  0x19d2
++TargetProduct= 0x1015
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_1175 b/usbmodeswitch/usb_modeswitch.d/19d2_1175
+new file mode 100644
+index 0000000..d010f70
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_1175
+@@ -0,0 +1,12 @@
++# Vodafone (ZTE) K3770-Z
++
++DefaultVendor=  0x19d2
++DefaultProduct=0x1175
++
++TargetVendor=  0x19d2
++TargetProduct= 0x1177
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++
++NeedResponse=1
++NoDriverLoading=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_1514 b/usbmodeswitch/usb_modeswitch.d/19d2_1514
+new file mode 100644
+index 0000000..586c882
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_1514
+@@ -0,0 +1,9 @@
++#ZTE 3G-200
++DefaultVendor=  0x19d2
++DefaultProduct= 0x1514
++
++TargetVendor=  0x19d2
++TargetProduct=0x1516
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_2000 b/usbmodeswitch/usb_modeswitch.d/19d2_2000
+new file mode 100644
+index 0000000..3980a57
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_2000
+@@ -0,0 +1,17 @@
++########################################################
++# ZTE devices
++
++DefaultVendor=  0x19d2
++DefaultProduct= 0x2000
++
++TargetVendor=   0x19d2
++TargetProductList="0001,0002,0015,0016,0017,0031,0037,0052,0055,0063,0064,0066,0091,0108,0117,0128,2002"
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000"
++MessageContent3="55534243123456702000000080000c85010101180101010101000000000000"
++
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_fff5 b/usbmodeswitch/usb_modeswitch.d/19d2_fff5
+new file mode 100644
+index 0000000..1c6d942
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_fff5
+@@ -0,0 +1,13 @@
++########################################################
++# ZTE "fff" devices 1
++
++DefaultVendor= 0x19d2
++DefaultProduct=0xfff5
++
++TargetVendor=  0x19d2
++TargetProductList="fff1,ffff"
++
++MessageContent="5553424312345678c00000008000069f030000000000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/19d2_fff6 b/usbmodeswitch/usb_modeswitch.d/19d2_fff6
+new file mode 100644
+index 0000000..aa8c8e9
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/19d2_fff6
+@@ -0,0 +1,13 @@
++########################################################
++# ZTE "fff" devices 2
++
++DefaultVendor= 0x19d2
++DefaultProduct=0xfff6
++
++TargetVendor=  0x19d2
++TargetProduct= 0xfff1
++
++MessageContent="5553424312345678c00000008000069f030000000000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1a8d_1000 b/usbmodeswitch/usb_modeswitch.d/1a8d_1000
+new file mode 100644
+index 0000000..f032d1b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1a8d_1000
+@@ -0,0 +1,16 @@
++########################################################
++# BandRich BandLuxe C100, C120, C170, C270
++
++DefaultVendor= 0x1a8d
++DefaultProduct=0x1000
++
++TargetVendor=  0x1a8d
++TargetProductList="1002,1009"
++
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000"
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000"
++ReleaseDelay=4000
++
++NeedResponse=1
++
++CheckSuccess=20
+diff --git a/usbmodeswitch/usb_modeswitch.d/1ab7_5700 b/usbmodeswitch/usb_modeswitch.d/1ab7_5700
+new file mode 100644
+index 0000000..8ad5a28
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1ab7_5700
+@@ -0,0 +1,12 @@
++########################################################
++# Hummer DTM5731 
++
++DefaultVendor= 0x1ab7
++DefaultProduct=0x5700
++
++TargetVendor=  0x1ab7
++TargetProduct= 0x5731
++
++CheckSuccess=20
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000" 
+diff --git a/usbmodeswitch/usb_modeswitch.d/1b7d_0700 b/usbmodeswitch/usb_modeswitch.d/1b7d_0700
+new file mode 100644
+index 0000000..907320b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1b7d_0700
+@@ -0,0 +1,12 @@
++########################################################
++# EpiValley SEC-7089 (featured by Alegro and Starcomms / iZAP)
++
++DefaultVendor= 0x1b7d
++DefaultProduct=0x0700
++
++TargetVendor=  0x1b7d
++TargetProduct= 0x0001
++
++CheckSuccess=20
++
++MessageContent="555342431234567824000000800008FF05B112AEE102000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1bbb_f000 b/usbmodeswitch/usb_modeswitch.d/1bbb_f000
+new file mode 100644
+index 0000000..fbced43
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1bbb_f000
+@@ -0,0 +1,12 @@
++########################################################
++# Alcatel X200/X200L/X060S
++
++DefaultVendor= 0x1bbb
++DefaultProduct=0xf000
++
++TargetVendor=  0x1bbb
++TargetProductList="0000,0017"
++
++CheckSuccess=20
++
++MessageContent="55534243123456788000000080000606f50402527000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1c9e_1001 b/usbmodeswitch/usb_modeswitch.d/1c9e_1001
+new file mode 100644
+index 0000000..fa4ac3a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1c9e_1001
+@@ -0,0 +1,12 @@
++########################################################
++# Alcatel One Touch X020
++
++DefaultVendor= 0x1c9e
++DefaultProduct=0x1001
++
++TargetVendor=  0x1c9e
++TargetProduct= 0x6061
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000606f50402527000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1c9e_6061 b/usbmodeswitch/usb_modeswitch.d/1c9e_6061
+new file mode 100644
+index 0000000..47a107a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1c9e_6061
+@@ -0,0 +1,13 @@
++######################################################## 
++# Vibe 3G Modem 
++
++DefaultVendor= 0x1c9e
++DefaultProduct=0x6061
++
++TargetClass=0xff
++
++ 
++MessageContent="55534243123456780000000000000606f50402527000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1c9e_9200 b/usbmodeswitch/usb_modeswitch.d/1c9e_9200
+new file mode 100644
+index 0000000..431828a
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1c9e_9200
+@@ -0,0 +1,12 @@
++######################################################## 
++# MyWave SW006 Sport Phone/Modem Combination
++
++DefaultVendor= 0x1c9e
++DefaultProduct=0x9200
++
++TargetVendor=  0x1c9e
++TargetProduct= 0x9202
++
++CheckSuccess=20
++
++MessageContent="55534243123456780000000000000606f50402527000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1c9e_9913 b/usbmodeswitch/usb_modeswitch.d/1c9e_9913
+new file mode 100644
+index 0000000..708191c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1c9e_9913
+@@ -0,0 +1,10 @@
++#longcheer WM66E
++
++DefaultVendor=  0x1c9e
++DefaultProduct=0x9913
++
++TargetVendor=0x1c9e
++TargetProduct=0x9915
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/1c9e_9e00 b/usbmodeswitch/usb_modeswitch.d/1c9e_9e00
+new file mode 100644
+index 0000000..7372814
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1c9e_9e00
+@@ -0,0 +1,12 @@
++########################################################
++# BSNL Capitel
++
++DefaultVendor= 0x1c9e
++DefaultProduct=0x9e00
++
++TargetClass=0xff
++
++MessageContent="55534243123456780000000000000606f50402527000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1c9e_f000 b/usbmodeswitch/usb_modeswitch.d/1c9e_f000
+new file mode 100644
+index 0000000..377795c
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1c9e_f000
+@@ -0,0 +1,12 @@
++######################################################## 
++# MobiData MBD-200HU and others
++
++DefaultVendor= 0x1c9e
++DefaultProduct=0xf000
++
++TargetVendor=  0x1c9e
++TargetProductList="9000,9603,9605,9607"
++
++CheckSuccess=20
++
++MessageContent="55534243123456788000000080000606f50402527000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1d09_1000 b/usbmodeswitch/usb_modeswitch.d/1d09_1000
+new file mode 100644
+index 0000000..e78abb1
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1d09_1000
+@@ -0,0 +1,13 @@
++########################################################
++# QualComm
++
++DefaultVendor= 0x1d09
++DefaultProduct=0x1000
++
++TargetVendor=  0x1d09
++TargetProduct= 0x1010
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
+diff --git a/usbmodeswitch/usb_modeswitch.d/1dd6_1000 b/usbmodeswitch/usb_modeswitch.d/1dd6_1000
+new file mode 100644
+index 0000000..c0c9346
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1dd6_1000
+@@ -0,0 +1,13 @@
++########################################################
++# Solomon S3Gm-660
++
++DefaultVendor= 0x1dd6
++DefaultProduct=0x1000
++
++TargetVendor=  0x1dd6
++TargetProduct= 0x1002
++
++CheckSuccess=20
++
++MessageContent="55534243123456781200000080000603000000020000000000000000000000"
++NeedResponse=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/1e0e_f000 b/usbmodeswitch/usb_modeswitch.d/1e0e_f000
+new file mode 100644
+index 0000000..65d4f90
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1e0e_f000
+@@ -0,0 +1,13 @@
++########################################################
++# Option iCON 210, PROLiNK PHS100, Hyundai MB-810, A-Link 3GU
++
++DefaultVendor= 0x1e0e
++DefaultProduct=0xf000
++
++TargetVendor=  0x1e0e
++TargetProductList="9200,9000"
++
++CheckSuccess=20
++
++MessageContent="555342431234567800000000000006bd000000020000000000000000000000"
++NeedResponse=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/1edf_6003 b/usbmodeswitch/usb_modeswitch.d/1edf_6003
+new file mode 100644
+index 0000000..fb6cf8b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1edf_6003
+@@ -0,0 +1,12 @@
++#######################################################
++# AirPlus MCD-800
++
++DefaultVendor= 0x1edf
++DefaultProduct=0x6003
++
++TargetClass=0xff
++
++Configuration=3
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1ee8_0009 b/usbmodeswitch/usb_modeswitch.d/1ee8_0009
+new file mode 100644
+index 0000000..2b14797
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1ee8_0009
+@@ -0,0 +1,14 @@
++########################################################
++# Onda MW833UP
++
++DefaultVendor= 0x1ee8
++DefaultProduct=0x0009
++
++TargetVendor=  0x1ee8
++TargetProduct= 0x000b
++
++MessageContent="555342431234567800000000000010ff000000000000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1ee8_0013 b/usbmodeswitch/usb_modeswitch.d/1ee8_0013
+new file mode 100644
+index 0000000..fc01f70
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1ee8_0013
+@@ -0,0 +1,13 @@
++########################################################
++# Onda MW833UP
++
++DefaultVendor= 0x1ee8
++DefaultProduct=0x0013
++
++TargetVendor=  0x1ee8
++TargetProduct= 0x0012
++
++CheckSuccess=20
++
++MessageContent="555342431234567800000000000010ff000000000000000000000000000000"
++NeedResponse=1
+diff --git a/usbmodeswitch/usb_modeswitch.d/1ee8_0040 b/usbmodeswitch/usb_modeswitch.d/1ee8_0040
+new file mode 100644
+index 0000000..683edb2
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1ee8_0040
+@@ -0,0 +1,14 @@
++########################################################
++# Onda MW836UP-K
++
++DefaultVendor= 0x1ee8
++DefaultProduct=0x0040
++
++TargetVendor=  0x1ee8
++TargetProduct= 0x003e
++
++MessageContent="555342431234567800000000000010ff000000000000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1f28_0021 b/usbmodeswitch/usb_modeswitch.d/1f28_0021
+new file mode 100644
+index 0000000..dcf5343
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1f28_0021
+@@ -0,0 +1,12 @@
++########################################################
++# Cricket A600
++
++DefaultVendor= 0x1f28
++DefaultProduct=0x0021
++
++TargetVendor=  0x1f28
++TargetProduct= 0x0020
++
++CheckSuccess=20
++
++MessageContent="555342431234567824000000800108df200000000000000000000000000000"
+diff --git a/usbmodeswitch/usb_modeswitch.d/1fac_0032 b/usbmodeswitch/usb_modeswitch.d/1fac_0032
+new file mode 100644
+index 0000000..f5fbd24
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1fac_0032
+@@ -0,0 +1,13 @@
++########################################################
++# Franklin Wireless U210 (Variant)
++
++DefaultVendor= 0x1fac
++DefaultProduct=0x0032
++
++TargetClass=0xff
++
++ 
++Configuration=2
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/1fac_0130 b/usbmodeswitch/usb_modeswitch.d/1fac_0130
+new file mode 100644
+index 0000000..1c28c0e
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/1fac_0130
+@@ -0,0 +1,13 @@
++########################################################
++# Franklin Wireless U210
++
++DefaultVendor= 0x1fac
++DefaultProduct=0x0130
++
++TargetVendor=  0x1fac
++TargetProduct= 0x0131
++
++MessageContent="555342431234567824000000800108df200000000000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/2001_a80b b/usbmodeswitch/usb_modeswitch.d/2001_a80b
+new file mode 100644
+index 0000000..c5677db
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/2001_a80b
+@@ -0,0 +1,13 @@
++######################################################## 
++# D-Link DWM-156 HSUPA 3.75G USB Modem 
++
++DefaultVendor= 0x2001
++DefaultProduct=0xa80b
++
++TargetVendor=  0x2001
++TargetProduct= 0x7d00
++
++MessageContent="555342431234567800000000000003f0010100000000000000000000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/201e_2009 b/usbmodeswitch/usb_modeswitch.d/201e_2009
+new file mode 100644
+index 0000000..e3e59da
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/201e_2009
+@@ -0,0 +1,15 @@
++####################################################### 
++# Haier CE 100 
++
++DefaultVendor= 0x201e
++DefaultProduct=0x2009
++
++TargetClass=0xff
++
++ 
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000" 
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000" 
++NeedResponse=1 
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/20a6_f00e b/usbmodeswitch/usb_modeswitch.d/20a6_f00e
+new file mode 100644
+index 0000000..7d37c04
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/20a6_f00e
+@@ -0,0 +1,18 @@
++####################################################### 
++# Haier CE 100 
++
++DefaultVendor= 0x20a6
++DefaultProduct=0xf00e
++
++TargetVendor=0x20a6
++TargetProduct=0x1105
++
++#TargetClass=0xff
++
++ 
++MessageContent="5553424312345678000000000000061e000000000000000000000000000000" 
++MessageContent2="5553424312345679000000000000061b000000020000000000000000000000" 
++NeedResponse=1 
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/21f5_1000 b/usbmodeswitch/usb_modeswitch.d/21f5_1000
+new file mode 100644
+index 0000000..921e240
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/21f5_1000
+@@ -0,0 +1,13 @@
++########################################################
++# QualComm
++
++DefaultVendor= 0x21f5
++DefaultProduct=0x1000
++
++TargetVendor=  0x21f5
++TargetProduct= 0x2008
++
++MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
++NeedResponse=1
++
++CheckSuccess=20
+\ No newline at end of file
+diff --git a/usbmodeswitch/usb_modeswitch.d/230d_0001 b/usbmodeswitch/usb_modeswitch.d/230d_0001
+new file mode 100644
+index 0000000..04f603b
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/230d_0001
+@@ -0,0 +1,12 @@
++#######################################################
++# Linktop LW272/LW273 (BSNL Teracom)
++
++DefaultVendor= 0x230d
++DefaultProduct=0x0001
++
++TargetClass=0xff
++
++Configuration=3
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/230d_000d b/usbmodeswitch/usb_modeswitch.d/230d_000d
+new file mode 100644
+index 0000000..7f85112
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/230d_000d
+@@ -0,0 +1,12 @@
++#######################################################
++# LINKTOP 3G
++
++DefaultVendor= 0x230d
++DefaultProduct=0x000d
++
++TargetClass=0xff
++
++Configuration=3
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.d/8888_6500 b/usbmodeswitch/usb_modeswitch.d/8888_6500
+new file mode 100644
+index 0000000..09eaa98
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.d/8888_6500
+@@ -0,0 +1,13 @@
++######################################################## 
++# Exiss Mobile E-190 series (made by C-motech)
++
++DefaultVendor= 0x8888
++DefaultProduct=0x6500
++
++TargetVendor=  0x16d8
++TargetProduct= 0x6533
++
++MessageContent="5553424398e2c4812400000080000bff524445564348473d43440000000000"
++
++CheckSuccess=20
++
+diff --git a/usbmodeswitch/usb_modeswitch.h b/usbmodeswitch/usb_modeswitch.h
+new file mode 100644
+index 0000000..01230bf
+--- /dev/null
++++ b/usbmodeswitch/usb_modeswitch.h
+@@ -0,0 +1,103 @@
++/*
++  This file is part of usb_modeswitch, a mode switching tool for controlling
++  flip flop (multiple device) USB gear
++
++  Version 1.1.7, 2011/02/27
++  Copyright (C) 2007 - 2011  Josua Dietze
++
++  Config file parsing stuff borrowed from Guillaume Dargaud
++  (http://www.gdargaud.net/Hack/SourceCode.html)
++
++  This program is free software; you can redistribute it and/or modify
++  it under the terms of the GNU General Public License as published by
++  the Free Software Foundation; either version 2 of the License, or
++  (at your option) any later version.
++
++  This program is distributed in the hope that it will be useful,
++  but WITHOUT ANY WARRANTY; without even the implied warranty of
++  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++  GNU General Public License for more details:
++
++  http://www.gnu.org/licenses/gpl.txt
++
++*/
++
++
++#include <stdlib.h>
++#include <usb.h>
++
++void readConfigFile(const char *configFilename);
++void printConfig();
++int switchSendMessage();
++int switchConfiguration();
++int switchAltSetting();
++void switchHuaweiMode();
++void switchSierraMode();
++void switchGCTMode();
++int switchKobilMode();
++int switchSonyMode();
++int detachDriver();
++int checkSuccess();
++int sendMessage(char* message, int count);
++int write_bulk(int endpoint, char *message, int length);
++int read_bulk(int endpoint, char *buffer, int length);
++void release_usb_device(int dummy);
++struct usb_device* search_devices( int *numFound, int vendor, int product, char* productList,
++	int targetClass, int configuration, int mode);
++int find_first_bulk_output_endpoint(struct usb_device *dev);
++int find_first_bulk_input_endpoint(struct usb_device *dev);
++int get_current_configuration(struct usb_dev_handle* devh);
++int get_interface0_class(struct usb_device *dev, int devconfig);
++char* ReadParseParam(const char* FileName, char *VariableName);
++int hex2num(char c);
++int hex2byte(const char *hex);
++int hexstr2bin(const char *hex, char *buffer, int len);
++void printVersion();
++void printHelp();
++int readArguments(int argc, char **argv);
++void deviceDescription();
++int deviceInquire();
++void resetUSB();
++void release_usb_device(int dummy);
++
++// Boolean
++#define  and     &&
++#define  or      ||
++#define  not     !
++
++// Bitwise
++#define  bitand  &
++#define  bitor   |
++#define  compl   ~
++#define  xor     ^
++
++// Equals
++#define  and_eq  &=
++#define  not_eq  !=
++#define  or_eq   |=
++#define  xor_eq  ^=
++
++extern char* ReadParseParam(const char* FileName, char *VariableName);
++
++extern char *TempPP;
++
++#define ParseParamString(ParamFileName, Str) \
++	if ((TempPP=ReadParseParam((ParamFileName), #Str))!=NULL) \
++		strcpy(Str, TempPP); else Str[0]='\0'
++		
++#define ParseParamInt(ParamFileName, Int) \
++	if ((TempPP=ReadParseParam((ParamFileName), #Int))!=NULL) \
++		Int=atoi(TempPP)
++
++#define ParseParamHex(ParamFileName, Int) \
++	if ((TempPP=ReadParseParam((ParamFileName), #Int))!=NULL) \
++		Int=strtol(TempPP, NULL, 16)
++
++#define ParseParamFloat(ParamFileName, Flt) \
++	if ((TempPP=ReadParseParam((ParamFileName), #Flt))!=NULL) \
++		Flt=atof(TempPP)
++
++#define ParseParamBool(ParamFileName, B) \
++	if ((TempPP=ReadParseParam((ParamFileName), #B))!=NULL) \
++		B=(toupper(TempPP[0])=='Y' || toupper(TempPP[0])=='T'|| TempPP[0]=='1'); else B=0
++
+-- 
+1.9.1
+

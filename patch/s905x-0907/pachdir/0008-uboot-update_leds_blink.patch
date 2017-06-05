@@ -1,0 +1,57 @@
+diff --git a/drivers/usb/gadget/v2_burning/v2_common/optimus_progress.c b/drivers/usb/gadget/v2_burning/v2_common/optimus_progress.c
+index 3080fc3..65f8dd2 100644
+--- a/drivers/usb/gadget/v2_burning/v2_common/optimus_progress.c
++++ b/drivers/usb/gadget/v2_burning/v2_common/optimus_progress.c
+@@ -10,6 +10,11 @@
+  *
+  */
+ #include "../v2_burning_i.h"
++#include <asm/gpio.h>
++
++unsigned int gpio;
++int flag = 0;
++int flag1 = 1;
+ 
+ #define OPTIMUS_PROMPT_SIZE_MIN     (4U<<20)//mininal size to prompt burning progress step
+ 
+@@ -62,6 +67,31 @@ int optimus_update_progress(const unsigned thisBurnSz)
+ {
+     _progressInfo.unReportSzInByte += thisBurnSz;
+ 
++    if (flag == 0)
++    {
++        gpio_lookup_name("GPIOAO_9", NULL, NULL, &gpio);
++        gpio_request(gpio, "led_gpio");
++    }
++
++    if ((flag % 10) == 0)
++    {
++        if (flag1 == 1)
++        {
++            gpio_direction_output(gpio, 1);
++            flag1 = 2;
++        }
++        else
++        {
++            gpio_direction_output(gpio, 0);
++            flag1 = 1;
++        }
++        flag = 1;
++    }
++	else
++    {
++        flag++;
++    }
++
+     if (_progressInfo.bytesToUpdateStep > _progressInfo.unReportSzInByte) {
+         return 0;
+     }
+@@ -77,6 +107,8 @@ int optimus_update_progress(const unsigned thisBurnSz)
+ 
+     printf("Downloading %%%d\r", _progressInfo.currentStep);
+     if (_progressInfo.currentStep == _progressInfo.endStep) {
++        printf("***** end up *****");
++        gpio_direction_output(gpio, 0);
+         printf("\n");
+     }
+ 

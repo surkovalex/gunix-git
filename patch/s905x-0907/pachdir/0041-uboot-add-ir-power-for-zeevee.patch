@@ -1,0 +1,44 @@
+From 87825819f3fa3d7092f0efd098b44be747c41c9e Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 27 Dec 2016 17:55:20 +0800
+Subject: [PATCH] add ir power for zeevee
+
+---
+ arch/arm/cpu/armv8/gxl/firmware/scp_task/scp_remote.c | 1 +
+ board/amlogic/configs/gxm_q200_v1.h                   | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/cpu/armv8/gxl/firmware/scp_task/scp_remote.c b/arch/arm/cpu/armv8/gxl/firmware/scp_task/scp_remote.c
+index c89db92..ac2ecf1 100644
+--- a/arch/arm/cpu/armv8/gxl/firmware/scp_task/scp_remote.c
++++ b/arch/arm/cpu/armv8/gxl/firmware/scp_task/scp_remote.c
+@@ -228,6 +228,7 @@ static unsigned int kk[] = {
+ 	CONFIG_IR_REMOTE_POWER_UP_KEY_VAL2,
+ 	CONFIG_IR_REMOTE_POWER_UP_KEY_VAL3,
+ 	CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4,
++	CONFIG_IR_REMOTE_POWER_UP_KEY_VAL6,
+ };
+ 
+ static int init_remote(void)
+diff --git a/board/amlogic/configs/gxm_q200_v1.h b/board/amlogic/configs/gxm_q200_v1.h
+index 6f9bfad..a13941a 100644
+--- a/board/amlogic/configs/gxm_q200_v1.h
++++ b/board/amlogic/configs/gxm_q200_v1.h
+@@ -62,12 +62,13 @@
+ //Enable ir remote wake up for bl30
+ //#define CONFIG_IR_REMOTE
+ //#define CONFIG_AML_IRDETECT_EARLY
+-#define CONFIG_IR_REMOTE_POWER_UP_KEY_CNT 4
++#define CONFIG_IR_REMOTE_POWER_UP_KEY_CNT 5
+ #define CONFIG_IR_REMOTE_USE_PROTOCOL 0         // 0:nec  1:duokan  2:Toshiba 3:rca 4:rcmm
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL1 0XE51AFB04 //amlogic tv ir --- power
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL2 0XBB44FB04 //amlogic tv ir --- ch+
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL3 0xF20DFE01 //amlogic tv ir --- ch-
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4 0xF50AF708	// sdmc remote ir --- power
++#define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL6 0xFE01FE01	// ZEEVEE ir --- power
+ 
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL5 0x3ac5bd02
+ /* args/envs */
+-- 
+1.9.1
+

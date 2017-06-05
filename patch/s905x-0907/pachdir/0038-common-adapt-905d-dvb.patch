@@ -1,0 +1,100 @@
+From 7695e45518bd15569048c3aa66b165097be1e9ae Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 27 Dec 2016 16:28:49 +0800
+Subject: [PATCH] adapt 905d dvb
+
+---
+ arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts | 24 ++++++++++++++++++++++++
+ arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts | 24 ++++++++++++++++++++++++
+ arch/arm64/boot/dts/amlogic/mesongxl.dtsi   |  5 +++++
+ 3 files changed, 53 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+index 401f859..99bcc3a 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+@@ -150,6 +150,30 @@
+ 		   demo_res = <&gpio  GPIODV_12  GPIO_ACTIVE_HIGH>;
+ 		   tuner_lnb = <&gpio  GPIODV_15  GPIO_ACTIVE_HIGH>;
+ 	};
++	dvb {
++		compatible = "amlogic, dvb";
++		dev_name = "dvb";
++		//"parallel","serial","disable"
++		ts0 = "parallel";
++		ts0_control = <0>;
++		ts0_invert = <0>;
++		pinctrl-names = "p_ts0";
++		pinctrl-0 = <&dvb_p_ts0_pins>;
++		resets = <&clock GCLK_IDX_DEMUX
++				&clock GCLK_IDX_ASYNC_FIFO
++				&clock GCLK_IDX_AHB_ARB0
++				&clock GCLK_IDX_HIU_PARSER_TOP>;
++		reset-names = "demux", "asyncfifo", "ahbarb0", "uparsertop";
++	};
++	dvbfe {
++		compatible = "amlogic, dvbfe";
++		dev_name = "dvbfe";
++		dtv_demod0 = "Mxl241";
++		dtv_demod0_i2c_adap_id = <4>;
++		fe0_dtv_demod = <0>;
++		fe0_ts = <0>;
++		fe0_dev = <0>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+index 5154a3e..56faa11 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+@@ -150,6 +150,30 @@
+ 		   demo_res = <&gpio  GPIODV_12  GPIO_ACTIVE_HIGH>;
+ 		   tuner_lnb = <&gpio  GPIODV_15  GPIO_ACTIVE_HIGH>;
+ 	};
++	dvb {
++		compatible = "amlogic, dvb";
++		dev_name = "dvb";
++		//"parallel","serial","disable"
++		ts0 = "parallel";
++		ts0_control = <0>;
++		ts0_invert = <0>;
++		pinctrl-names = "p_ts0";
++		pinctrl-0 = <&dvb_p_ts0_pins>;
++		resets = <&clock GCLK_IDX_DEMUX
++				&clock GCLK_IDX_ASYNC_FIFO
++				&clock GCLK_IDX_AHB_ARB0
++				&clock GCLK_IDX_HIU_PARSER_TOP>;
++		reset-names = "demux", "asyncfifo", "ahbarb0", "uparsertop";
++	};
++	dvbfe {
++		compatible = "amlogic, dvbfe";
++		dev_name = "dvbfe";
++		dtv_demod0 = "Mxl241";
++		dtv_demod0_i2c_adap_id = <4>;
++		fe0_dtv_demod = <0>;
++		fe0_ts = <0>;
++		fe0_dev = <0>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+diff --git a/arch/arm64/boot/dts/amlogic/mesongxl.dtsi b/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
+index 5482d57..32aa2cd 100644
+--- a/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
++++ b/arch/arm64/boot/dts/amlogic/mesongxl.dtsi
+@@ -513,6 +513,11 @@
+ 			amlogic,pullup=<1>;
+ 			amlogic,pullupen=<1>;
+ 		};
++		dvb_p_ts0_pins: dvb_p_ts0_pins {
++			amlogic,setmask = <2 0x1f>;
++			amlogic,clrmask = <3 0x787 2 0xff000400>;
++			amlogic,pins = "GPIODV_0","GPIODV_1","GPIODV_2", "GPIODV_3","GPIODV_4","GPIODV_5","GPIODV_6","GPIODV_7","GPIODV_8","GPIODV_9","GPIODV_10";
++		};
+ 	};
+ 	cpu_version{
+ 		reg=<0x0 0xc8100220 0x0 0x4>;
+-- 
+1.9.1
+

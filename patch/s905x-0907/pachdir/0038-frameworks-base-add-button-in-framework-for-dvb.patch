@@ -1,0 +1,243 @@
+From cdc1858c5947b3461e561e8d40a8e65b518101b2 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Wed, 23 Nov 2016 19:33:16 +0800
+Subject: [PATCH] add button in framework for dvb
+
+---
+ core/java/android/view/KeyEvent.java               | 103 ++++++++++++++++++++-
+ core/res/res/values/attrs.xml                      |  32 +++++++
+ data/etc/platform.xml                              |  31 +++++++
+ .../android/server/policy/PhoneWindowManager.java  |   4 +-
+ 4 files changed, 165 insertions(+), 5 deletions(-)
+
+diff --git a/core/java/android/view/KeyEvent.java b/core/java/android/view/KeyEvent.java
+index 952fed4..1050808 100644
+--- a/core/java/android/view/KeyEvent.java
++++ b/core/java/android/view/KeyEvent.java
+@@ -788,9 +788,74 @@ public class KeyEvent extends InputEvent implements Parcelable {
+      * @hide */
+     public static final int KEYCODE_SOFT_SLEEP = 276;
+ 
+-    private static final int LAST_KEYCODE = KEYCODE_SOFT_SLEEP;
+-
+-    public static final int KEYCODE_NETFLIX = 1001;
++    //private static final int LAST_KEYCODE = KEYCODE_SOFT_SLEEP;
++
++    //public static final int KEYCODE_NETFLIX = 1001;
++	
++	//sdmc dvb key
++	public static final int KEYCODE_DVB_TV_RADIO = 1001;
++	
++	public static final int KEYCODE_DVB_RECALL = 1002;
++	
++	public static final int KEYCODE_DVB_FAV = 1003;
++	
++	public static final int KEYCODE_DVB_SUBT = 1004;
++	
++	public static final int KEYCODE_DVB_TEXT = 1005;
++	
++	public static final int KEYCODE_DVB_AUDIO = 1006;
++	
++	public static final int KEYCODE_DVB_VRADIO = 1007;
++	
++	public static final int KEYCODE_DVB_AD = 1008;
++	
++	public static final int KEYCODE_DVB_SAT = 1009;
++	
++	public static final int KEYCODE_DVB_TIMER = 1010;
++	
++	public static final int KEYCODE_DVB_RESERVE_0  = 1080;
++	
++	public static final int KEYCODE_DVB_RESERVE_1  = 1081;
++	
++	public static final int KEYCODE_DVB_RESERVE_2  = 1082;
++	
++	public static final int KEYCODE_DVB_RESERVE_3  = 1083;
++	
++	public static final int KEYCODE_DVB_RESERVE_4  = 1084;
++	
++	public static final int KEYCODE_DVB_RESERVE_5  = 1085;
++	
++	public static final int KEYCODE_DVB_RESERVE_6  = 1086;
++	
++	public static final int KEYCODE_DVB_RESERVE_7  = 1087;
++	
++	public static final int KEYCODE_DVB_RESERVE_8  = 1088;
++	
++	public static final int KEYCODE_DVB_RESERVE_9  = 1089;
++	
++	public static final int KEYCODE_DVB_RESERVE_10 = 1090;
++	
++	public static final int KEYCODE_DVB_RESERVE_11 = 1091;
++	
++	public static final int KEYCODE_DVB_RESERVE_12 = 1092;
++	
++	public static final int KEYCODE_DVB_RESERVE_13 = 1093;
++	
++	public static final int KEYCODE_DVB_RESERVE_14 = 1094;
++	
++	public static final int KEYCODE_DVB_RESERVE_15 = 1095;
++	
++	public static final int KEYCODE_DVB_RESERVE_16 = 1096;
++	
++	public static final int KEYCODE_DVB_RESERVE_17 = 1097;
++	
++	public static final int KEYCODE_DVB_RESERVE_18 = 1098;
++	
++	public static final int KEYCODE_DVB_RESERVE_19 = 1099;
++	
++	public static final int KEYCODE_DVB_RESERVE_20 = 1100;
++	
++	private static final int LAST_KEYCODE = KEYCODE_DVB_RESERVE_20;
+ 
+     // NOTE: If you add a new keycode here you must also add it to:
+     //  isSystem()
+@@ -1835,6 +1900,38 @@ public class KeyEvent extends InputEvent implements Parcelable {
+             case KeyEvent.KEYCODE_BRIGHTNESS_DOWN:
+             case KeyEvent.KEYCODE_BRIGHTNESS_UP:
+             case KeyEvent.KEYCODE_MEDIA_AUDIO_TRACK:
++			case KeyEvent.KEYCODE_DVB_TV_RADIO:
++			case KeyEvent.KEYCODE_DVB_RECALL:
++			case KeyEvent.KEYCODE_DVB_FAV:
++			case KeyEvent.KEYCODE_DVB_SUBT:
++			case KeyEvent.KEYCODE_DVB_TEXT:
++			case KeyEvent.KEYCODE_DVB_AUDIO:
++			case KeyEvent.KEYCODE_DVB_VRADIO:
++			case KeyEvent.KEYCODE_DVB_AD:
++			case KeyEvent.KEYCODE_DVB_SAT:
++			case KeyEvent.KEYCODE_DVB_TIMER:
++			case KeyEvent.KEYCODE_DVB_RESERVE_0:
++			case KeyEvent.KEYCODE_DVB_RESERVE_1:
++			case KeyEvent.KEYCODE_DVB_RESERVE_2:
++			case KeyEvent.KEYCODE_DVB_RESERVE_3:
++			case KeyEvent.KEYCODE_DVB_RESERVE_4:
++			case KeyEvent.KEYCODE_DVB_RESERVE_5:
++			case KeyEvent.KEYCODE_DVB_RESERVE_6:
++			case KeyEvent.KEYCODE_DVB_RESERVE_7:
++			case KeyEvent.KEYCODE_DVB_RESERVE_8:
++			case KeyEvent.KEYCODE_DVB_RESERVE_9:
++			case KeyEvent.KEYCODE_DVB_RESERVE_10:
++			case KeyEvent.KEYCODE_DVB_RESERVE_11:
++			case KeyEvent.KEYCODE_DVB_RESERVE_12:
++			case KeyEvent.KEYCODE_DVB_RESERVE_13:
++			case KeyEvent.KEYCODE_DVB_RESERVE_14:
++			case KeyEvent.KEYCODE_DVB_RESERVE_15:
++			case KeyEvent.KEYCODE_DVB_RESERVE_16:
++			case KeyEvent.KEYCODE_DVB_RESERVE_17:
++			case KeyEvent.KEYCODE_DVB_RESERVE_18:
++			case KeyEvent.KEYCODE_DVB_RESERVE_19:
++			case KeyEvent.KEYCODE_DVB_RESERVE_20:
++			
+                 return true;
+         }
+ 
+diff --git a/core/res/res/values/attrs.xml b/core/res/res/values/attrs.xml
+index 2828d21..ae6ddc4 100644
+--- a/core/res/res/values/attrs.xml
++++ b/core/res/res/values/attrs.xml
+@@ -1815,6 +1815,38 @@ i
+         <enum name="KEYCODE_MEDIA_STEP_FORWARD" value="274" />
+         <enum name="KEYCODE_MEDIA_STEP_BACKWARD" value="275" />
+         <enum name="KEYCODE_SOFT_SLEEP" value="276" />
++		
++		<enum name="KEYCODE_DVB_TV_RADIO" value="1001" />
++		<enum name="KEYCODE_DVB_RECALL" value="1002" />
++		<enum name="KEYCODE_DVB_FAV" value="1003" />
++		<enum name="KEYCODE_DVB_SUBT" value="1004" />
++		<enum name="KEYCODE_DVB_TEXT" value="1005" />
++		<enum name="KEYCODE_DVB_AUDIO" value="1006" />
++		<enum name="KEYCODE_DVB_VRADIO" value="1007" />
++		<enum name="KEYCODE_DVB_AD" value="1008" />
++		<enum name="KEYCODE_DVB_SAT" value="1009" />
++		<enum name="KEYCODE_DVB_TIMER" value="1010" />
++		<enum name="KEYCODE_DVB_RESERVE_0" value="1080" />
++		<enum name="KEYCODE_DVB_RESERVE_1" value="1081" />
++		<enum name="KEYCODE_DVB_RESERVE_2" value="1082" />
++		<enum name="KEYCODE_DVB_RESERVE_3" value="1083" />
++		<enum name="KEYCODE_DVB_RESERVE_4" value="1084" />
++		<enum name="KEYCODE_DVB_RESERVE_5" value="1085" />
++		<enum name="KEYCODE_DVB_RESERVE_6" value="1086" />
++		<enum name="KEYCODE_DVB_RESERVE_7" value="1087" />
++		<enum name="KEYCODE_DVB_RESERVE_8" value="1088" />
++		<enum name="KEYCODE_DVB_RESERVE_9" value="1089" />
++		<enum name="KEYCODE_DVB_RESERVE_10" value="1090" />
++		<enum name="KEYCODE_DVB_RESERVE_11" value="1091" />
++		<enum name="KEYCODE_DVB_RESERVE_12" value="1092" />
++		<enum name="KEYCODE_DVB_RESERVE_13" value="1093" />
++		<enum name="KEYCODE_DVB_RESERVE_14" value="1094" />
++		<enum name="KEYCODE_DVB_RESERVE_15" value="1095" />
++		<enum name="KEYCODE_DVB_RESERVE_16" value="1096" />
++		<enum name="KEYCODE_DVB_RESERVE_17" value="1097" />
++		<enum name="KEYCODE_DVB_RESERVE_18" value="1098" />
++		<enum name="KEYCODE_DVB_RESERVE_19" value="1099" />
++		<enum name="KEYCODE_DVB_RESERVE_20" value="1100" />
+     </attr>
+ 
+     <!-- ***************************************************************** -->
+diff --git a/data/etc/platform.xml b/data/etc/platform.xml
+index 350310c..43fada7 100644
+--- a/data/etc/platform.xml
++++ b/data/etc/platform.xml
+@@ -62,6 +62,37 @@
+         <group gid="media_rw" />
+         <group gid="sdcard_rw" />
+     </permission>
++	
++    <permission name="android.permission.READ_MEDIA_STORAGE" >
++        <group gid="media_rw" />
++        <group gid="sdcard_r" />
++    </permission>
++	
++    <permission name="android.permission.ACCESS_ALL_MEDIA_STORAGE" >
++         <group gid="sdcard_r" />
++         <group gid="sdcard_rw" />
++         <group gid="media_rw" />
++         <group gid="sdcard_all" />
++    </permission>
++	
++	
++	<permission name="android.permission.READ_EXTERNAL_STORAGE" >
++         <group gid="sdcard_r" />
++         <group gid="media_rw" />
++     </permission>
++ 
++     <permission name="android.permission.WRITE_EXTERNAL_STORAGE" >
++         <group gid="sdcard_r" />
++         <group gid="media_rw" />
++         <group gid="sdcard_rw" />
++     </permission>
++ 
++     <permission name="android.permission.ACCESS_ALL_EXTERNAL_STORAGE" >
++         <group gid="sdcard_r" />
++         <group gid="sdcard_rw" />
++         <group gid="media_rw" />
++         <group gid="sdcard_all" />
++     </permission>
+ 
+     <permission name="android.permission.ACCESS_MTP" >
+         <group gid="mtp" />
+diff --git a/services/core/java/com/android/server/policy/PhoneWindowManager.java b/services/core/java/com/android/server/policy/PhoneWindowManager.java
+index 3766df3..195da04 100644
+--- a/services/core/java/com/android/server/policy/PhoneWindowManager.java
++++ b/services/core/java/com/android/server/policy/PhoneWindowManager.java
+@@ -5191,7 +5191,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+                 }
+             }
+ 
+-            case KeyEvent.KEYCODE_NETFLIX: {
++            /*case KeyEvent.KEYCODE_NETFLIX: {
+                 result &= ~ACTION_PASS_TO_USER;
+                 //when the key do not interactive with user, so we think it's a wakeup key
+                 if (!interactive)
+@@ -5208,7 +5208,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+                     }
+                 }
+                 break;
+-            }
++            }*/
+         }
+ 
+         if (useHapticFeedback) {
+-- 
+1.9.1
+

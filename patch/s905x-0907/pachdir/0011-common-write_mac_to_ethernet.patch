@@ -1,0 +1,179 @@
+diff --git a/drivers/i2c/i2c-dev.c b/drivers/i2c/i2c-dev.c
+index 80b47e8..cb2e75d 100644
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -58,7 +58,7 @@ struct i2c_dev {
+ static LIST_HEAD(i2c_dev_list);
+ static DEFINE_SPINLOCK(i2c_dev_list_lock);
+ 
+-static struct i2c_dev *i2c_dev_get_by_minor(unsigned index)
++struct i2c_dev *i2c_dev_get_by_minor(unsigned index)
+ {
+ 	struct i2c_dev *i2c_dev;
+ 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+index d203455..92ca2f7 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
+@@ -130,6 +130,7 @@ struct stmmac_priv *stmmac_dvr_probe(struct device *device,
+ 				     void __iomem *addr);
+ void stmmac_disable_eee_mode(struct stmmac_priv *priv);
+ bool stmmac_eee_init(struct stmmac_priv *priv);
++extern struct i2c_dev *i2c_dev_get_by_minor(unsigned index);
+ 
+ #ifdef CONFIG_STMMAC_PLATFORM
+ #ifdef CONFIG_DWMAC_MESON
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 269412d..76277c6 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -3569,7 +3569,8 @@ static void __exit stmmac_exit(void)
+ 	stmmac_unregister_pci();
+ }
+ 
+-module_init(stmmac_init);
++/* module_init(stmmac_init); */
++late_initcall(stmmac_init);
+ module_exit(stmmac_exit);
+ 
+ #ifndef MODULE
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+index 8e22a5a..745e345 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+@@ -337,6 +337,121 @@ static int stmmac_probe_config_dt(struct platform_device *pdev,
+ }
+ #endif				/* CONFIG_OF */
+ 
++
++/* add for get mac from eeprom in DM2016, start */
++#include <linux/i2c.h>
++#include <linux/i2c-dev.h>
++
++/* denfine the mac read function */
++#ifndef OBTAIN_MAC_E2PROM
++#define OBTAIN_MAC_E2PROM       1
++#endif
++
++#ifdef OBTAIN_MAC_E2PROM
++#define EEPROM_I2C_ADDR         0x50	/* 0xa0 >> 1 */
++#define EEPROM_REG_ADDR         0x04
++#define MAC_ADDR_LENGHT         0x06
++
++/* it's invalid obtain mac from DM2016 */
++#define MAC_INVALID             -1
++#endif
++
++struct i2c_dev {
++	struct list_head list;
++	struct i2c_adapter *adap;
++	struct device *dev;
++};
++
++/* read MAC from eeprom in DM2016 */
++static int mac_i2c_read_bytes(u8 devaddr, u8 *regaddr, u8 *macvalue, u8 len)
++{
++	int ret = -1;
++	struct i2c_dev *i2c_devices = i2c_dev_get_by_minor(2);
++	struct i2c_adapter *adapter;
++	struct i2c_msg msgs[] = {
++		{
++			.flags = !I2C_M_RD,
++			.addr = devaddr,
++			.len = 1,
++			.buf = regaddr,
++		},
++		{
++			.flags = I2C_M_RD,
++			.addr = devaddr,
++			.len = len,
++			.buf = macvalue,
++		}
++	};
++
++	if (i2c_devices == NULL) {
++		pr_err("i2c_dev_get_by_minor error !!!\n");
++		return -1;
++	}
++
++	adapter = i2c_get_adapter(i2c_devices->adap->nr);
++	pr_err("adapter name: %s\n", adapter->name);
++	ret = i2c_transfer(adapter, msgs, 2);
++
++#if 1
++	if (ret < 0) {
++		pr_err("ERROR:read i2c failed!\n");
++		return ret;
++	} else {
++		pr_err("SUCCESS: read i2c successfully!\n");
++		return 0;
++	}
++#endif
++
++	return ret;
++}
++
++static inline int local_is_zero_ether_addr(const u8 *addr)
++{
++	return !(addr[0] | addr[1] | addr[2] | addr[3] | addr[4] | addr[5]);
++}
++
++static int local_is_multicast_ether_addr(const u8 *addr)
++{
++	return (addr[0] != 0xff) && (0x01 & addr[0]);
++}
++
++static inline int local_is_valid_ether_addr(const u8 *addr)
++{
++	return !local_is_multicast_ether_addr(addr)	&&
++		!local_is_zero_ether_addr(addr);
++}
++
++static int set_mac_addr(void)
++{
++	int i = 0, ret = 0;
++	u8 mac[MAC_ADDR_LENGHT];
++	u8 regaddress = EEPROM_REG_ADDR;
++	memset(mac, 0, sizeof(mac));
++
++	ret = mac_i2c_read_bytes(EEPROM_I2C_ADDR, &regaddress,
++			mac, MAC_ADDR_LENGHT);
++	if (ret < 0) {
++		pr_err("obtain mac failure.use default mac.\n");
++	} else {
++		pr_err("obtain mac success from DM2016, MAC = ");
++		for (i = 0; i < MAC_ADDR_LENGHT; i++) {
++			pr_err("%x", mac[i]);
++			if (i < (MAC_ADDR_LENGHT - 1))
++				pr_err(":");
++		}
++	}
++	pr_err("\n");
++	if (!local_is_valid_ether_addr(mac)) {
++		pr_err("Bad Mac addr,use default!!\n");
++		return MAC_INVALID;
++	}
++	memcpy(DEFMAC, mac, sizeof(mac));
++
++	return ret;
++}
++/* add for get mac from eeprom in DM2016, end */
++
++
+ /**
+  * stmmac_pltfr_probe
+  * @pdev: platform device pointer
+@@ -371,6 +486,13 @@ static int stmmac_pltfr_probe(struct platform_device *pdev)
+ 			pr_err("%s: ERROR: no memory", __func__);
+ 			return -ENOMEM;
+ 		}
++		/* add for get mac from eeprom in DM2016, start */
++#ifdef OBTAIN_MAC_E2PROM
++		set_mac_addr();
++		g_mac_addr_setup++;
++		pr_err("config mac addr\n");
++#endif
++		/* add for get mac from eeprom in DM2016. end */
+ 
+ 		ret = stmmac_probe_config_dt(pdev, plat_dat, &mac);
+ 		if (ret) {

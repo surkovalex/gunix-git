@@ -1,0 +1,107 @@
+From 65d3290cfd54f2bb30eabff2c7ea165c24280cf5 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Mon, 26 Dec 2016 17:17:27 +0800
+Subject: [PATCH] update_leds_blink
+
+---
+ arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts | 4 ++--
+ arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts | 4 ++--
+ arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts | 4 ++--
+ arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts | 4 ++--
+ arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts | 4 ++--
+ arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts | 4 ++--
+ 6 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+index 6c21d5d..7c6772d 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+@@ -130,8 +130,8 @@
+ 	sysled {
+ 		compatible = "amlogic, sysled";
+ 		dev_name = "sysled";
+-		status = "okay";
+-		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
+ 	fd650s {
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+index 72b0a7b..9036d39 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+@@ -131,8 +131,8 @@
+ 	sysled {
+ 		compatible = "amlogic, sysled";
+ 		dev_name = "sysled";
+-		status = "okay";
+-		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
+ 	fd650s {
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+index 04c69db..a0d1b92 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+@@ -130,8 +130,8 @@
+ 	sysled {
+ 		compatible = "amlogic, sysled";
+ 		dev_name = "sysled";
+-		status = "okay";
+-		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
+ 	fd650s {
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+index 4aa9b24..a7c886d 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+@@ -130,8 +130,8 @@
+ 	sysled {
+ 		compatible = "amlogic, sysled";
+ 		dev_name = "sysled";
+-		status = "okay";
+-		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
+ 	fd650s {
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+index b8318bc..d4fc748 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+@@ -131,8 +131,8 @@
+ 	sysled {
+ 		compatible = "amlogic, sysled";
+ 		dev_name = "sysled";
+-		status = "okay";
+-		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
+ 	fd650s {
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+index dd50ce8..b5bcca1 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+@@ -131,8 +131,8 @@
+ 	sysled {
+ 		compatible = "amlogic, sysled";
+ 		dev_name = "sysled";
+-		status = "okay";
+-		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
++		status = "disabled";
++		led_gpio = <&gpio GPIOAO_9 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
+ 	fd650s {
+-- 
+1.9.1
+

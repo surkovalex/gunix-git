@@ -1,0 +1,45 @@
+diff --git a/recovery.cpp b/recovery.cpp
+index 905b9b0..082d21b 100644
+--- a/recovery.cpp
++++ b/recovery.cpp
+@@ -101,10 +101,6 @@ static const char *CACHE_ROOT = "/cache";
+ static const char *SDCARD_ROOT = "/sdcard";
+ static const char *UDISK_ROOT = "/udisk";
+ static const char *UDISK_COMMAND_FILE = "/udisk/factory_update_param.aml";
+-//add  by Gavin.Lei for the needing of back to factory 20150610 begin
+-static const char *GHOST_ROOT = "/ghost";
+-static const char *GHOST_COMMAND_FILE = "/ghost/factory_update_param.aml";
+-//add  by Gavin.Lei for the needing of back to factory 20150610 end
+ static const char *SDCARD_COMMAND_FILE = "/sdcard/factory_update_param.aml";
+ static const char *TEMPORARY_LOG_FILE = "/tmp/recovery.log";
+ static const char *TEMPORARY_INSTALL_FILE = "/tmp/last_install";
+@@ -364,29 +360,7 @@ get_args(int *argc, char ***argv) {
+             LOGI("Got arguments from %s\n", UDISK_COMMAND_FILE);
+         }
+     }
+-//add  by Gavin.Lei for the needing of back to factory 20150610 begin
+-    // --- if that doesn't work, try the ghost
+-    if (*argc <= 1) {
+-        FILE *fp = fopen_path(GHOST_COMMAND_FILE, "r");
+-        if (fp != NULL) {
+-            char *argv0 = (*argv)[0];
+-            *argv = (char **) malloc(sizeof(char *) * MAX_ARGS);
+-            (*argv)[0] = argv0;  // use the same program name
+-
+-            char buf[MAX_ARG_LENGTH];
+-            for (*argc = 1; *argc < MAX_ARGS; ) {
+-                if (!fgets(buf, sizeof(buf), fp)) break;
+-			temp_args = strtok(buf, "\r\n");
+-			if(temp_args == NULL)  continue;
+-	       		(*argv)[*argc]  = strdup(temp_args);   // Strip newline.      
+-                		++*argc;
+-            }
+ 
+-            check_and_fclose(fp, GHOST_COMMAND_FILE);
+-            LOGI("Got arguments from %s\n", GHOST_COMMAND_FILE);
+-        }
+-    }
+-//add  by Gavin.Lei for the needing of back to factory 20150610 end
+     // --- if no argument, then force show_text
+     if (*argc <= 1) {
+         char *argv0 = (*argv)[0];

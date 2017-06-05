@@ -1,0 +1,78 @@
+From bdbd687921cd70c4470591ac443b69e52d42908b Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Sat, 24 Dec 2016 15:40:26 +0800
+Subject: [PATCH] adapter 1g 2g ddr
+
+---
+ board/amlogic/configs/gxm_q200_v1.h     |  3 ++-
+ board/amlogic/gxm_q200_v1/gxm_q200_v1.c | 33 +++++++++++++++++++++++++++++++++
+ 2 files changed, 35 insertions(+), 1 deletion(-)
+
+diff --git a/board/amlogic/configs/gxm_q200_v1.h b/board/amlogic/configs/gxm_q200_v1.h
+index c796a9c..3a0737a 100644
+--- a/board/amlogic/configs/gxm_q200_v1.h
++++ b/board/amlogic/configs/gxm_q200_v1.h
+@@ -252,7 +252,7 @@
+  *    CONFIG_DDR0_16BIT        : DDR0 16bit mode
+  *    CONFIG_DDR0_16BIT_2      : DDR0 16bit mode, 2ranks
+  *    CONFIG_DDR_CHL_AUTO      : auto detect RANK0 / RANK0+1 */
+-#define CONFIG_DDR_CHANNEL_SET			CONFIG_DDR0_RANK01
++#define CONFIG_DDR_CHANNEL_SET			CONFIG_DDR_CHL_AUTO
+ /* ddr functions */
+ #define CONFIG_DDR_FULL_TEST			0 //0:disable, 1:enable. ddr full test
+ #define CONFIG_CMD_DDR_D2PLL			0 //0:disable, 1:enable. d2pll cmd
+@@ -388,6 +388,7 @@
+ #define CONFIG_CMD_CPU_TEMP 1
+ #define CONFIG_CMD_SARADC	1
+ #define CONFIG_SYS_MEM_TOP_HIDE 0x08000000 //hide 128MB for kernel reserve
++#define CONFIG_MULTI_DTB	1
+ 
+ /* debug mode defines */
+ //#define CONFIG_DEBUG_MODE           1
+diff --git a/board/amlogic/gxm_q200_v1/gxm_q200_v1.c b/board/amlogic/gxm_q200_v1/gxm_q200_v1.c
+index ca68f64..9aab832 100644
+--- a/board/amlogic/gxm_q200_v1/gxm_q200_v1.c
++++ b/board/amlogic/gxm_q200_v1/gxm_q200_v1.c
+@@ -453,6 +453,39 @@ phys_size_t get_effective_memsize(void)
+ #endif
+ }
+ 
++#ifdef CONFIG_MULTI_DTB
++int checkhw(char * name)
++{
++	unsigned int ddr_size=0;
++	char loc_name[64] = {0};
++	int i;
++	for (i=0; i<CONFIG_NR_DRAM_BANKS; i++) {
++		ddr_size += gd->bd->bi_dram[i].size;
++	}
++#if defined(CONFIG_SYS_MEM_TOP_HIDE)
++	ddr_size += CONFIG_SYS_MEM_TOP_HIDE;
++#endif
++	switch (ddr_size) {
++		case 0x80000000:
++			strcpy(loc_name, "gxl_p230_2g\0");
++			break;
++		case 0x40000000:
++			strcpy(loc_name, "gxl_p230_1g\0");
++			break;
++		case 0x2000000:
++			strcpy(loc_name, "gxl_p230_512m\0");
++			break;
++		default:
++			//printf("DDR size: 0x%x, multi-dt doesn't support\n", ddr_size);
++			strcpy(loc_name, "gxl_p230_unsupport");
++			break;
++	}
++	strcpy(name, loc_name);
++	setenv("aml_dt", loc_name);
++	return 0;
++}
++#endif
++
+ const char * const _env_args_reserve_[] =
+ {
+ 	"aml_dt",
+-- 
+1.9.1
+

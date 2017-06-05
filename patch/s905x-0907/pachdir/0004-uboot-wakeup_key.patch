@@ -1,0 +1,53 @@
+From e97f96424df86a323e24887c37224c9a25fa276f Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Sat, 24 Dec 2016 14:00:00 +0800
+Subject: [PATCH] wakeup key
+
+---
+ board/amlogic/configs/gxl_p212_v1.h | 2 +-
+ board/amlogic/configs/gxm_q200_v1.h | 2 +-
+ board/amlogic/configs/gxm_q201_v1.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/board/amlogic/configs/gxl_p212_v1.h b/board/amlogic/configs/gxl_p212_v1.h
+index 004f2f9..3d2bff9 100644
+--- a/board/amlogic/configs/gxl_p212_v1.h
++++ b/board/amlogic/configs/gxl_p212_v1.h
+@@ -64,7 +64,7 @@
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL1 0XE51AFB04 //amlogic tv ir --- power
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL2 0XBB44FB04 //amlogic tv ir --- ch+
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL3 0xF20DFE01 //amlogic tv ir --- ch-
+-#define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4 0xBA45BD02
++#define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4 0xF50AF708	// sdmc remote ir --- power
+ 
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL5 0x3ac5bd02
+ /* args/envs */
+diff --git a/board/amlogic/configs/gxm_q200_v1.h b/board/amlogic/configs/gxm_q200_v1.h
+index ef40315..62a9c46 100644
+--- a/board/amlogic/configs/gxm_q200_v1.h
++++ b/board/amlogic/configs/gxm_q200_v1.h
+@@ -67,7 +67,7 @@
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL1 0XE51AFB04 //amlogic tv ir --- power
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL2 0XBB44FB04 //amlogic tv ir --- ch+
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL3 0xF20DFE01 //amlogic tv ir --- ch-
+-#define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4 0xBA45BD02
++#define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4 0xF50AF708	// sdmc remote ir --- power
+ 
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL5 0x3ac5bd02
+ /* args/envs */
+diff --git a/board/amlogic/configs/gxm_q201_v1.h b/board/amlogic/configs/gxm_q201_v1.h
+index 7fd117f..6ccd4d2 100644
+--- a/board/amlogic/configs/gxm_q201_v1.h
++++ b/board/amlogic/configs/gxm_q201_v1.h
+@@ -67,7 +67,7 @@
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL1 0XE51AFB04 //amlogic tv ir --- power
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL2 0XBB44FB04 //amlogic tv ir --- ch+
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL3 0xF20DFE01 //amlogic tv ir --- ch-
+-#define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4 0xBA45BD02
++#define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL4 0xF50AF708 // sdmc remote ir --- power
+ 
+ #define CONFIG_IR_REMOTE_POWER_UP_KEY_VAL5 0x3ac5bd02
+ /* args/envs */
+-- 
+1.9.1
+

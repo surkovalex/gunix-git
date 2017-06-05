@@ -1,0 +1,73 @@
+From a6250131563771574999a3e5d27109053138012a Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Mon, 12 Dec 2016 09:37:10 +0800
+Subject: [PATCH] googleplay forbid install
+
+---
+ .../android/server/pm/PackageManagerService.java   | 29 +++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
+
+diff --git a/services/core/java/com/android/server/pm/PackageManagerService.java b/services/core/java/com/android/server/pm/PackageManagerService.java
+index c1d091b..280d391 100755
+--- a/services/core/java/com/android/server/pm/PackageManagerService.java
++++ b/services/core/java/com/android/server/pm/PackageManagerService.java
+@@ -10155,6 +10155,7 @@ public class PackageManagerService extends IPackageManager.Stub {
+ 
+     private void processPendingInstall(final InstallArgs args, final int currentStatus) {
+         // Queue up an async operation since the package installation may take a little while.
++		Slog.e(TAG, "processPendingInstall~~~");
+         mHandler.post(new Runnable() {
+             public void run() {
+                 mHandler.removeCallbacks(this);
+@@ -10170,6 +10171,14 @@ public class PackageManagerService extends IPackageManager.Stub {
+                         installPackageLI(args, res);
+                     }
+                     args.doPostInstall(res.returnCode, res.uid);
++					
++					//add by sky
++					Slog.e(TAG, "google:mGmsInstallTag = " + mGmsInstallTag);
++					if(mGmsInstallTag) { 
++						mGmsInstallTag = false;
++						return;
++					}
++					//add by sky over
+                 }
+ 
+                 // A restore should be performed at this point if (a) the install
+@@ -12221,7 +12230,8 @@ public class PackageManagerService extends IPackageManager.Stub {
+         }
+     }
+ 
+-    private void installPackageLI(InstallArgs args, PackageInstalledInfo res) {
++    private boolean mGmsInstallTag = false;//add by sky
++	private void installPackageLI(InstallArgs args, PackageInstalledInfo res) {
+         final int installFlags = args.installFlags;
+         final String installerPackageName = args.installerPackageName;
+         final String volumeUuid = args.volumeUuid;
+@@ -12259,6 +12269,23 @@ public class PackageManagerService extends IPackageManager.Stub {
+         pkg.cpuAbiOverride = args.abiOverride;
+ 
+         String pkgName = res.name = pkg.packageName;
++		
++		//add by sky
++		if (pkgName.equals("com.android.vending")||pkgName.equals("com.google.android.gms")) {
++          //  res.setError(INSTALL_FAILED_PACKAGE_CHANGED, "installPackageLI");
++			Slog.e(TAG, "google:pkgName = " + pkgName);
++			mGmsInstallTag = true;
++			try{
++				args.observer.onPackageInstalled(res.name, res.returnCode,null,null);
++			} catch (RemoteException e) {
++                Slog.i(TAG, "google:Observer no longer exists.");
++            }
++			
++			SystemProperties.set("persist.sys.googleplay.install","1");
++			return;
++        }
++		//add by sky over
++
+         if ((pkg.applicationInfo.flags&ApplicationInfo.FLAG_TEST_ONLY) != 0) {
+             if ((installFlags & PackageManager.INSTALL_ALLOW_TEST) == 0) {
+                 res.setError(INSTALL_FAILED_TEST_ONLY, "installPackageLI");
+-- 
+1.9.1
+

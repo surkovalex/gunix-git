@@ -1,0 +1,24 @@
+From bdcf6f3505031084a8f06f5b743340ea73bc6914 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Mon, 9 Jan 2017 14:56:04 +0800
+Subject: [PATCH] del kernel builder info
+
+---
+ src/com/android/settings/DeviceInfoSettings.java | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/com/android/settings/DeviceInfoSettings.java b/src/com/android/settings/DeviceInfoSettings.java
+index bf45d21..7e33c16 100644
+--- a/src/com/android/settings/DeviceInfoSettings.java
++++ b/src/com/android/settings/DeviceInfoSettings.java
+@@ -410,7 +410,6 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment implements In
+             return "Unavailable";
+         }
+         return m.group(1) + "\n" +                 // 3.0.31-g6fb96c9
+-            m.group(2) + " " + m.group(3) + "\n" + // x@y.com #1
+             m.group(4);                            // Thu Jun 28 11:02:39 PDT 2012
+     }
+ 
+-- 
+1.9.1
+

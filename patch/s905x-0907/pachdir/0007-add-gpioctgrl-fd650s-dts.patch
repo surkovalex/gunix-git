@@ -1,0 +1,173 @@
+From 10606febaa59794ceb5af25fab90b4556cddc4a3 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Wed, 18 Jan 2017 14:33:36 +0800
+Subject: [PATCH] add gpioctgrl fd650s dts
+
+---
+ arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts | 15 +++++++++++++++
+ arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts | 15 +++++++++++++++
+ arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts | 16 ++++++++++++++++
+ arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts | 16 ++++++++++++++++
+ arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts | 14 ++++++++++++++
+ arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts | 14 ++++++++++++++
+ 6 files changed, 90 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+index 7260c84..05d3713 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+@@ -134,6 +134,21 @@
+ 		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	fd650s {
++		   compatible = "sdmc, fd650s";
++		   dev_name = "fd650s";
++		   status = "disabled";
++		   scl_gpio = <&gpio  GPIODV_16  GPIO_ACTIVE_HIGH>;
++		   sda_gpio = <&gpio  GPIODV_17  GPIO_ACTIVE_HIGH>;
++	};
++	gpioctrl {
++		   compatible = "sdmc, gpioctrl";
++		   dev_name = "gpioctrl";
++		   status = "okay";
++		   sys_led = <&gpio  GPIODV_24  GPIO_ACTIVE_HIGH>;
++		   net_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_LOW>;
++		   shut_volume= <&gpio GPIOH_5  GPIO_ACTIVE_HIGH>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+index 196eeeb..ec83512 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+@@ -135,6 +135,21 @@
+ 		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	fd650s {
++		   compatible = "sdmc, fd650s";
++		   dev_name = "fd650s";
++		   status = "disabled";
++		   scl_gpio = <&gpio  GPIODV_16  GPIO_ACTIVE_HIGH>;
++		   sda_gpio = <&gpio  GPIODV_17  GPIO_ACTIVE_HIGH>;
++	};
++	gpioctrl {
++		   compatible = "sdmc, gpioctrl";
++		   dev_name = "gpioctrl";
++		   status = "okay";
++		   sys_led = <&gpio  GPIODV_24  GPIO_ACTIVE_HIGH>;
++		   net_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_LOW>;
++		   shut_volume= <&gpio GPIOH_5  GPIO_ACTIVE_HIGH>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+index 71b1f7f..04c69db 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+@@ -134,6 +134,22 @@
+ 		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	fd650s {
++		   compatible = "sdmc, fd650s";
++		   dev_name = "fd650s";
++		   status = "okay";
++		   scl_gpio = <&gpio  GPIODV_16  GPIO_ACTIVE_HIGH>;
++		   sda_gpio = <&gpio  GPIODV_17  GPIO_ACTIVE_HIGH>;
++	};
++	gpioctrl {
++		   compatible = "sdmc, gpioctrl";
++		   dev_name = "gpioctrl";
++		   status = "okay";
++		   sys_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_HIGH>;
++		   net_led = <&gpio  GPIODV_25  GPIO_ACTIVE_HIGH>;
++		   demo_res = <&gpio  GPIODV_12  GPIO_ACTIVE_HIGH>;
++		   tuner_lnb = <&gpio  GPIODV_15  GPIO_ACTIVE_HIGH>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+index 0b7ce9e5..4aa9b24 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+@@ -134,6 +134,22 @@
+ 		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	fd650s {
++		   compatible = "sdmc, fd650s";
++		   dev_name = "fd650s";
++		   status = "okay";
++		   scl_gpio = <&gpio  GPIODV_16  GPIO_ACTIVE_HIGH>;
++		   sda_gpio = <&gpio  GPIODV_17  GPIO_ACTIVE_HIGH>;
++	};
++	gpioctrl {
++		   compatible = "sdmc, gpioctrl";
++		   dev_name = "gpioctrl";
++		   status = "okay";
++		   sys_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_HIGH>;
++		   net_led = <&gpio  GPIODV_25  GPIO_ACTIVE_HIGH>;
++		   demo_res = <&gpio  GPIODV_12  GPIO_ACTIVE_HIGH>;
++		   tuner_lnb = <&gpio  GPIODV_15  GPIO_ACTIVE_HIGH>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+index d303297..b8318bc 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+@@ -135,6 +135,20 @@
+ 		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	fd650s {
++		   compatible = "sdmc, fd650s";
++		   dev_name = "fd650s";
++		   status = "disabled";
++		   scl_gpio = <&gpio  GPIODV_16  GPIO_ACTIVE_HIGH>;
++		   sda_gpio = <&gpio  GPIODV_17  GPIO_ACTIVE_HIGH>;
++	};
++	gpioctrl {
++		   compatible = "sdmc, gpioctrl";
++		   dev_name = "gpioctrl";
++		   status = "okay";
++		   sys_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_HIGH>;
++		   net_led = <&gpio  GPIODV_25  GPIO_ACTIVE_HIGH>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+index 3140484..dd50ce8 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+@@ -135,6 +135,20 @@
+ 		led_gpio = <&gpio GPIODV_24 GPIO_ACTIVE_HIGH>;
+ 		led_active_low = <1>;
+ 	};
++	fd650s {
++		   compatible = "sdmc, fd650s";
++		   dev_name = "fd650s";
++		   status = "disabled";
++		   scl_gpio = <&gpio  GPIODV_16  GPIO_ACTIVE_HIGH>;
++		   sda_gpio = <&gpio  GPIODV_17  GPIO_ACTIVE_HIGH>;
++	};
++	gpioctrl {
++		   compatible = "sdmc, gpioctrl";
++		   dev_name = "gpioctrl";
++		   status = "okay";
++		   sys_led = <&gpio_ao  GPIOAO_9  GPIO_ACTIVE_HIGH>;
++		   net_led = <&gpio  GPIODV_25  GPIO_ACTIVE_HIGH>;
++	};
+ 
+ 	meson-vout {
+ 		compatible = "amlogic, meson-vout";
+-- 
+1.9.1
+

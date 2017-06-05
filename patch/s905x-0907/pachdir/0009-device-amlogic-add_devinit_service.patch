@@ -1,0 +1,50 @@
+From 6aacf6c3655fb750780574ca9e89174e5dbf8d35 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Mon, 26 Dec 2016 17:25:24 +0800
+Subject: [PATCH] add devinit svc service
+
+---
+ p212/init.amlogic.board.rc | 4 ++++
+ p230/init.amlogic.board.rc | 4 ++++
+ q201/init.amlogic.board.rc | 4 ++++
+ 3 files changed, 12 insertions(+)
+
+diff --git a/p212/init.amlogic.board.rc b/p212/init.amlogic.board.rc
+index 97e6cc7..072ce3f 100644
+--- a/p212/init.amlogic.board.rc
++++ b/p212/init.amlogic.board.rc
+@@ -78,3 +78,7 @@ service tee_supplicant /system/bin/tee-supplicant
+ 		oneshot
+ 		seclabel u:r:tee:s0
+ 
++service devinit_svc /system/bin/device_init.sh
++    class core
++    oneshot
++
+diff --git a/p230/init.amlogic.board.rc b/p230/init.amlogic.board.rc
+index f9a0793..397a6a4 100644
+--- a/p230/init.amlogic.board.rc
++++ b/p230/init.amlogic.board.rc
+@@ -80,3 +80,7 @@ service tee_supplicant /system/bin/tee-supplicant
+ 		oneshot
+ 		seclabel u:r:tee:s0
+ 
++service devinit_svc /system/bin/device_init.sh
++    class core
++    oneshot
++
+diff --git a/q201/init.amlogic.board.rc b/q201/init.amlogic.board.rc
+index 29d68cd..fec6168 100644
+--- a/q201/init.amlogic.board.rc
++++ b/q201/init.amlogic.board.rc
+@@ -80,3 +80,7 @@ service tee_supplicant /system/bin/tee-supplicant
+ 		oneshot
+ 		seclabel u:r:tee:s0
+ 
++service devinit_svc /system/bin/device_init.sh
++    class core
++    oneshot
++
+-- 
+1.9.1
+

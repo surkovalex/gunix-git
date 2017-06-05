@@ -1,0 +1,178 @@
+diff --git a/core/Makefile b/core/Makefile
+index ee16417..9c573aa 100755
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -22,7 +22,7 @@ endif
+ # src:dest pair is the first one to match the same dest"
+ #$(1): the src:dest pair
+ define check-product-copy-files
+-$(if $(filter %.apk, $(call word-colon, 2, $(1))),$(warning \
++$(if $(filter %.apk, $(call word-colon, 2, $(1))),$(error \
+     Prebuilt apk found in PRODUCT_COPY_FILES: $(1), use BUILD_PREBUILT instead!))
+ endef
+ # filter out the duplicate <source file>:<dest file> pairs.
+diff --git a/core/main.mk b/core/main.mk
+index 5b6e1e9..a6f829a 100644
+--- a/core/main.mk
++++ b/core/main.mk
+@@ -316,6 +316,7 @@ tags_to_install :=
+ ifneq (,$(user_variant))
+   # Target is secure in user builds.
+   ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=1
++  ADDITIONAL_DEFAULT_PROPERTIES += security.perf_harden=1
+ 
+   ifeq ($(user_variant),userdebug)
+     # Pick up some extra useful tools
+diff --git a/core/version_defaults.mk b/core/version_defaults.mk
+index e0c68cf..f59cef5 100755
+--- a/core/version_defaults.mk
++++ b/core/version_defaults.mk
+@@ -103,7 +103,7 @@ ifeq "" "$(PLATFORM_SECURITY_PATCH)"
+   # Can be an arbitrary string, but must be a single word.
+   #
+   # If there is no $PLATFORM_SECURITY_PATCH set, keep it empty.
+-  PLATFORM_SECURITY_PATCH := 2016-06-01
++  PLATFORM_SECURITY_PATCH := 2016-08-01
+ endif
+ 
+ ifeq "" "$(PLATFORM_BASE_OS)"
+diff --git a/target/product/core_base.mk b/target/product/core_base.mk
+index c26e11b..03d33e1 100644
+--- a/target/product/core_base.mk
++++ b/target/product/core_base.mk
+@@ -20,51 +20,10 @@ PRODUCT_PROPERTY_OVERRIDES := \
+     ro.config.notification_sound=OnTheHunt.ogg \
+     ro.config.alarm_alert=Alarm_Classic.ogg
+ 
+-ifeq ($(strip $(MEGAFON_NO_ORIGINAL)),true)
+-PRODUCT_PACKAGES += \
+-    ContactsProvider \
+-    DefaultContainerService \
+-    UserDictionaryProvider \
+-    atrace \
+-    libandroidfw \
+-    libaudiopreprocessing \
+-    libaudioutils \
+-    libfilterpack_imageproc \
+-    libgabi++ \
+-    libmdnssd \
+-    libnfc_ndef \
+-    libpowermanager \
+-    libspeexresampler \
+-    libstagefright_soft_aacdec \
+-    libstagefright_soft_aacenc \
+-    libstagefright_soft_amrdec \
+-    libstagefright_soft_amrnbenc \
+-    libstagefright_soft_amrwbenc \
+-    libstagefright_soft_avcdec \
+-    libstagefright_soft_avcenc \
+-    libstagefright_soft_flacenc \
+-    libstagefright_soft_g711dec \
+-    libstagefright_soft_gsmdec \
+-    libstagefright_soft_hevcdec \
+-    libstagefright_soft_mp3dec \
+-    libstagefright_soft_mpeg2dec \
+-    libstagefright_soft_mpeg4dec \
+-    libstagefright_soft_mpeg4enc \
+-    libstagefright_soft_opusdec \
+-    libstagefright_soft_rawdec \
+-    libstagefright_soft_vorbisdec \
+-    libstagefright_soft_vpxdec \
+-    libstagefright_soft_vpxenc \
+-    libvariablespeed \
+-    libwebrtc_audio_preprocessing \
+-    mdnsd \
+-    requestsync \
+-    wifi-service
+-
+-else	
+ PRODUCT_PACKAGES += \
+     ContactsProvider \
+     DefaultContainerService \
++    Home \
+     TelephonyProvider \
+     UserDictionaryProvider \
+     atrace \
+@@ -102,5 +61,5 @@ PRODUCT_PACKAGES += \
+     mdnsd \
+     requestsync \
+     wifi-service
+-endif
++
+ $(call inherit-product, $(SRC_TARGET_DIR)/product/core_minimal.mk)
+diff --git a/target/product/core_minimal.mk b/target/product/core_minimal.mk
+index c1e4f11..27c10af 100644
+--- a/target/product/core_minimal.mk
++++ b/target/product/core_minimal.mk
+@@ -21,62 +21,7 @@
+ PRODUCT_BRAND := generic
+ PRODUCT_DEVICE := generic
+ PRODUCT_NAME := core
+-ifeq ($(strip $(MEGAFON_NO_ORIGINAL)),true)
+-PRODUCT_PACKAGES += \
+-    BackupRestoreConfirmation \
+-    DownloadProvider \
+-    MediaProvider \
+-    PackageInstaller \
+-    SettingsProvider \
+-    Shell \
+-    StatementService \
+-    bcc \
+-    bu \
+-    com.android.future.usb.accessory \
+-    com.android.location.provider \
+-    com.android.location.provider.xml \
+-    com.android.media.remotedisplay \
+-    com.android.media.remotedisplay.xml \
+-    com.android.mediadrm.signer \
+-    com.android.mediadrm.signer.xml \
+-    drmserver \
+-    ethernet-service \
+-    framework-res \
+-    idmap \
+-    installd \
+-    ims-common \
+-    ip \
+-    ip-up-vpn \
+-    ip6tables \
+-    iptables \
+-    gatekeeperd \
+-    keystore \
+-    keystore.default \
+-    ld.mc \
+-    libbcc \
+-    libOpenMAXAL \
+-    libOpenSLES \
+-    libdownmix \
+-    libdrmframework \
+-    libdrmframework_jni \
+-    libfilterfw \
+-    libkeystore \
+-    libgatekeeper \
+-    libsqlite_jni \
+-    libwilhelm \
+-    logd \
+-    make_ext4fs \
+-    e2fsck \
+-    resize2fs \
+-    screencap \
+-    sensorservice \
+-    telephony-common \
+-    uiautomator \
+-    uncrypt \
+-    voip-common \
+-    webview \
+-    wifi-service
+-else
++
+ PRODUCT_PACKAGES += \
+     BackupRestoreConfirmation \
+     DownloadProvider \
+@@ -132,7 +77,6 @@ PRODUCT_PACKAGES += \
+     voip-common \
+     webview \
+     wifi-service
+-endif
+ 
+ PRODUCT_COPY_FILES += \
+     frameworks/native/data/etc/android.software.webview.xml:system/etc/permissions/android.software.webview.xml

@@ -1,0 +1,34 @@
+From 9c332090b996bee41360bea4c3edc24255355e1a Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 25 Oct 2016 15:51:31 +0800
+Subject: [PATCH] adapt 4G
+
+---
+ rild/rild.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/rild/rild.c b/rild/rild.c
+index c63da38..16b6d29 100644
+--- a/rild/rild.c
++++ b/rild/rild.c
+@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
+     }
+ 
+     /* special override when in the emulator */
+-#if 1
++#if 0
+     {
+         static char*  arg_overrides[5];
+         static char   arg_device[32];
+@@ -297,7 +297,7 @@ int main(int argc, char **argv) {
+     }
+ OpenLib:
+ #endif
+-    switchUser();
++    //switchUser();
+ 
+     dlHandle = dlopen(rilLibPath, RTLD_NOW);
+ 
+-- 
+1.9.1
+

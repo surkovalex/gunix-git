@@ -1,0 +1,154 @@
+diff --git a/stack/btm/btm_ble.c b/stack/btm/btm_ble.c
+index eb9e864..1d8ca5f 100644
+--- a/stack/btm/btm_ble.c
++++ b/stack/btm/btm_ble.c
+@@ -1866,6 +1866,8 @@ void btm_ble_conn_complete(UINT8 *p, UINT16 evt_len, BOOLEAN enhanced)
+             l2cble_conn_comp (handle, role, bda, bda_type, conn_interval,
+                               conn_latency, conn_timeout);
+ 
++            btsnd_hcic_write_le_master_latency(handle, 0x05, 0xF);
++
+ #if (BLE_PRIVACY_SPT == TRUE)
+             if (enhanced)
+             {
+diff --git a/stack/btm/btm_sec.c b/stack/btm/btm_sec.c
+index c8b1de7..ce0030e 100644
+--- a/stack/btm/btm_sec.c
++++ b/stack/btm/btm_sec.c
+@@ -36,6 +36,7 @@
+ #include "bt_utils.h"
+ #include "osi/include/log.h"
+ 
++#include "bta/gatt/bta_gattc_int.h"
+ #if (BT_USE_TRACES == TRUE && BT_TRACE_VERBOSE == FALSE)
+ /* needed for sprintf() */
+ #include <stdio.h>
+@@ -4275,6 +4276,7 @@ void btm_sec_encrypt_change (UINT16 handle, UINT8 status, UINT8 encr_enable)
+ 
+     if (p_acl && p_acl->transport == BT_TRANSPORT_LE)
+     {
++        /*
+         if (status == HCI_ERR_KEY_MISSING || status == HCI_ERR_AUTH_FAILURE ||
+             status == HCI_ERR_ENCRY_MODE_NOT_ACCEPTABLE)
+         {
+@@ -4283,6 +4285,33 @@ void btm_sec_encrypt_change (UINT16 handle, UINT8 status, UINT8 encr_enable)
+         }
+         btm_ble_link_encrypted(p_dev_rec->ble.pseudo_addr, encr_enable);
+         return;
++        */
++#if 1
++        if (status == HCI_ERR_KEY_MISSING || status == HCI_ERR_AUTH_FAILURE ||
++            status == HCI_ERR_ENCRY_MODE_NOT_ACCEPTABLE)
++        {
++            tBTA_GATTC_SERV *p_srcb = NULL;
++
++            p_dev_rec->sec_flags &= ~(BTM_SEC_LE_LINK_KEY_KNOWN);
++            btm_add_dev_to_controller(FALSE, p_dev_rec->bd_addr, 0);
++            btm_ble_link_encrypted(p_dev_rec->bd_addr, encr_enable);
++            btif_dm_remove_bond(p_dev_rec->bd_addr);
++#if 1
++            if ((p_srcb= bta_gattc_find_srcb(p_dev_rec->bd_addr)) != NULL)
++            {
++                BTM_TRACE_DEBUG ("Reset this p_clrcb", __func__);
++                memset(p_srcb, 0, sizeof(tBTA_GATTC_SERV));
++            }
++#endif
++        }
++        else
++            btm_ble_link_encrypted(p_dev_rec->bd_addr, encr_enable);
++#else
++        if (status == HCI_ERR_KEY_MISSING || status == HCI_ERR_AUTH_FAILURE ||
++            status == HCI_ERR_ENCRY_MODE_NOT_ACCEPTABLE)
++            p_dev_rec->sec_flags &= ~(BTM_SEC_LE_LINK_KEY_KNOWN);
++        btm_ble_link_encrypted(p_dev_rec->bd_addr, encr_enable);
++#endif
+     }
+     else
+     {
+diff --git a/stack/btu/btu_hcif.c b/stack/btu/btu_hcif.c
+index 7005772..425928c 100644
+--- a/stack/btu/btu_hcif.c
++++ b/stack/btu/btu_hcif.c
+@@ -933,8 +933,10 @@ static void btu_hcif_hdl_command_complete (UINT16 opcode, UINT8 *p, UINT16 evt_l
+ #endif /* (BLE_INCLUDED == TRUE) */
+ 
+         default:
++#if 0
+             if ((opcode & HCI_GRP_VENDOR_SPECIFIC) == HCI_GRP_VENDOR_SPECIFIC)
+                 btm_vsc_complete (p, opcode, evt_len, (tBTM_CMPL_CB *)p_cplt_cback);
++#endif
+             break;
+     }
+ }
+diff --git a/stack/hcic/hciblecmds.c b/stack/hcic/hciblecmds.c
+index 5d7d210..afc149d 100644
+--- a/stack/hcic/hciblecmds.c
++++ b/stack/hcic/hciblecmds.c
+@@ -395,6 +395,33 @@ BOOLEAN btsnd_hcic_ble_remove_from_white_list (UINT8 addr_type, BD_ADDR bda)
+     return (TRUE);
+ }
+ 
++BOOLEAN btsnd_hcic_write_le_master_latency(UINT16 handle,
++		UINT16 master_latency, UINT16 master_latency_timeout)
++{
++    BT_HDR *p;
++    UINT8 *pp;
++
++    if ((p = HCI_GET_CMD_BUF(HCIC_PARAM_SIZE_WRITE_LE_MASTER_LATENCY)) == NULL)
++        return (FALSE);
++
++    pp = (UINT8 *)(p + 1);
++
++    p->len    = HCIC_PREAMBLE_SIZE + HCIC_PARAM_SIZE_WRITE_LE_MASTER_LATENCY;
++    p->offset = 0;
++
++    UINT16_TO_STREAM (pp, HCI_BLE_WRITE_LE_MASTER_LATENCY);
++    UINT8_TO_STREAM  (pp, HCIC_PARAM_SIZE_WRITE_LE_MASTER_LATENCY);
++
++    UINT16_TO_STREAM (pp, handle);
++
++    UINT16_TO_STREAM (pp, master_latency);
++    UINT16_TO_STREAM (pp, master_latency_timeout);
++
++    btu_hcif_send_cmd (LOCAL_BR_EDR_CONTROLLER_ID,  p);
++
++    return (TRUE);
++}
++
+ BOOLEAN btsnd_hcic_ble_upd_ll_conn_params (UINT16 handle,
+                                            UINT16 conn_int_min, UINT16 conn_int_max,
+                                            UINT16 conn_latency, UINT16 conn_timeout,
+diff --git a/stack/include/hcidefs.h b/stack/include/hcidefs.h
+index 9dd5c53..c3f32cb 100644
+--- a/stack/include/hcidefs.h
++++ b/stack/include/hcidefs.h
+@@ -367,6 +367,8 @@
+ /* Energy info OCF */
+ #define HCI_BLE_ENERGY_INFO_OCF   (0x0159 | HCI_GRP_VENDOR_SPECIFIC)
+ 
++#define HCI_BLE_WRITE_LE_MASTER_LATENCY (0x01C7 | HCI_GRP_VENDOR_SPECIFIC)
++
+ /* Extended BLE Scan parameters OCF */
+ #define HCI_BLE_EXTENDED_SCAN_PARAMS_OCF  (0x0160 | HCI_GRP_VENDOR_SPECIFIC)
+ 
+diff --git a/stack/include/hcimsgs.h b/stack/include/hcimsgs.h
+index b59cbfa..585792b 100644
+--- a/stack/include/hcimsgs.h
++++ b/stack/include/hcimsgs.h
+@@ -662,6 +662,7 @@ extern void btsnd_hcic_vendor_spec_cmd (void *buffer, UINT16 opcode,
+ #define HCIC_PARAM_SIZE_BLE_ENCRYPT             32
+ #define HCIC_PARAM_SIZE_BLE_RAND                0
+ #define HCIC_PARAM_SIZE_WRITE_LE_HOST_SUPPORTED 2
++#define HCIC_PARAM_SIZE_WRITE_LE_MASTER_LATENCY 6
+ 
+ #define HCIC_BLE_RAND_DI_SIZE                   8
+ #define HCIC_BLE_ENCRYT_KEY_SIZE                16
+@@ -727,6 +728,8 @@ extern BOOLEAN btsnd_hcic_ble_add_white_list (UINT8 addr_type, BD_ADDR bda);
+ 
+ extern BOOLEAN btsnd_hcic_ble_remove_from_white_list (UINT8 addr_type, BD_ADDR bda);
+ 
++extern BOOLEAN btsnd_hcic_write_le_master_latency(UINT16 handle, UINT16 master_latency, UINT16 master_latency_timeout);
++
+ extern BOOLEAN btsnd_hcic_ble_upd_ll_conn_params (UINT16 handle, UINT16 conn_int_min, UINT16 conn_int_max,
+                                                   UINT16 conn_latency, UINT16 conn_timeout, UINT16 min_len, UINT16 max_len);
+ 

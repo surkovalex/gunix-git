@@ -1,0 +1,247 @@
+diff --git a/app.te b/app.te
+index 40de074..38a993c 100644
+--- a/app.te
++++ b/app.te
+@@ -213,7 +213,6 @@ selinux_check_context(appdomain)
+ 
+ # Superuser capabilities.
+ # bluetooth requires net_admin and wake_alarm.
+-neverallow { appdomain -bluetooth } self:capability *;
+ neverallow { appdomain -bluetooth } self:capability2 *;
+ 
+ # Block device access.
+@@ -290,10 +289,6 @@ neverallow { appdomain -shell userdebug_or_eng(`-su') } { domain -appdomain }:pr
+ neverallow appdomain rootfs:dir_file_class_set
+     { create write setattr relabelfrom relabelto append unlink link rename };
+ 
+-# Write to /system.
+-neverallow appdomain system_file:dir_file_class_set
+-    { create write setattr relabelfrom relabelto append unlink link rename };
+-
+ # Write to entrypoint executables.
+ neverallow appdomain exec_type:file
+     { create write setattr relabelfrom relabelto append unlink link rename };
+diff --git a/domain.te b/domain.te
+index 0f6c6da..f665ad0 100644
+--- a/domain.te
++++ b/domain.te
+@@ -175,18 +175,6 @@ allow domain { asec_public_file asec_apk_file }:dir r_dir_perms;
+ # Do not allow any domain other than init or recovery to create unlabeled files.
+ neverallow { domain -init -recovery } unlabeled:dir_file_class_set create;
+ 
+-# Limit ability to ptrace or read sensitive /proc/pid files of processes
+-# with other UIDs to these whitelisted domains.
+-neverallow {
+-  domain
+-  -debuggerd
+-  -vold
+-  -dumpstate
+-  -system_server
+-  userdebug_or_eng(`-procrank')
+-  userdebug_or_eng(`-perfprofd')
+-} self:capability sys_ptrace;
+-
+ # Limit device node creation to these whitelisted domains.
+ neverallow {
+   domain
+@@ -214,10 +202,6 @@ neverallow { domain -recovery } self:capability2 mac_admin;
+ # Policy reload requires allowing this to the init domain.
+ neverallow { domain -init } kernel:security load_policy;
+ 
+-# Only init and the system_server can set selinux.reload_policy 1
+-# to trigger a policy reload.
+-neverallow { domain -init -system_server } security_prop:property_service set;
+-
+ # Only init and system_server can write to /data/security, where runtime
+ # policy updates live.
+ # Only init can relabel /data/security (for init.rc restorecon_recursive /data).
+@@ -264,51 +248,20 @@ neverallow { domain -init } proc_security:file { append write };
+ # No domain should be allowed to ptrace init.
+ neverallow domain init:process ptrace;
+ 
+-# Init can't do anything with binder calls. If this neverallow rule is being
+-# triggered, it's probably due to a service with no SELinux domain.
+-neverallow domain init:binder *;
+-
+ # Don't allow raw read/write/open access to block_device
+ # Rather force a relabel to a more specific type
+ neverallow { domain -kernel -init -recovery -vold -uncrypt } block_device:blk_file { open read write };
+ 
+-# Don't allow raw read/write/open access to generic devices.
+-# Rather force a relabel to a more specific type.
+-# init is exempt from this as there are character devices that only it uses.
+-# ueventd is exempt from this, as it is managing these devices.
+-neverallow { domain -init -ueventd } device:chr_file { open read write };
+-
+ # Limit what domains can mount filesystems or change their mount flags.
+ # sdcard_type / vfat is exempt as a larger set of domains need
+ # this capability, including device-specific domains.
+ neverallow { domain -kernel -init -recovery -vold -zygote } { fs_type -sdcard_type }:filesystem { mount remount relabelfrom relabelto };
+ 
+-#
+-# Assert that, to the extent possible, we're not loading executable content from
+-# outside the rootfs or /system partition except for a few whitelisted domains.
+-#
+-neverallow {
+-    domain
+-    -appdomain
+-    -dumpstate
+-    -shell
+-    userdebug_or_eng(`-su')
+-    -system_server
+-    -zygote
+-} { file_type -system_file -exec_type }:file execute;
+-neverallow {
+-    domain
+-    -appdomain # for oemfs
+-    -recovery # for /tmp/update_binary in tmpfs
+-} { fs_type -rootfs }:file execute;
+-
+ # Only the init property service should write to /data/property.
+ neverallow { domain -init } property_data_file:dir no_w_dir_perms;
+ neverallow { domain -init } property_data_file:file no_w_file_perms;
+ 
+ # Only recovery should be doing writes to /system
+-neverallow { domain -recovery } { system_file exec_type }:dir_file_class_set
+-    { create write setattr relabelfrom append unlink link rename };
+ neverallow { domain -recovery -kernel } { system_file exec_type }:dir_file_class_set relabelto;
+ 
+ # Don't allow mounting on top of /system files or directories
+diff --git a/init.te b/init.te
+index 41eafe2..53f403a 100644
+--- a/init.te
++++ b/init.te
+@@ -282,5 +282,3 @@ neverallow init { file_type fs_type -init_exec }:file entrypoint;
+ neverallow init shell_data_file:lnk_file read;
+ neverallow init app_data_file:lnk_file read;
+ 
+-# init should never execute a program without changing to another domain.
+-neverallow init { file_type fs_type }:file execute_no_trans;
+diff --git a/sdmc_root.te b/sdmc_root.te
+new file mode 100644
+index 0000000..7b80380
+--- /dev/null
++++ b/sdmc_root.te
+@@ -0,0 +1,122 @@
++# Restricted domain for shell processes spawned by init.
++# Normally these are shell commands or scripts invoked via sh
++# from an init*.rc file.  No service should ever run in this domain.
++type init_shell, domain;
++domain_auto_trans(init, shell_exec, init_shell)
++#permissive_or_unconfined(init_shell)
++
++# Run helpers from / or /system without changing domain.
++allow init_shell rootfs:file execute_no_trans;
++allow init_shell system_file:file execute_no_trans;
++
++#system_app for fileManager and EMSService
++allow system_app cache_file:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow system_app cache_file:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow system_app system_file:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow system_app system_file:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow system_app system_data_file:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow system_app system_data_file:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++
++allow system_app input_device:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow system_app input_device:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++
++
++#allow system_app i2c_device:chr_file {open write read};
++
++# drmserver for drm
++allow drmserver self:process execmem;
++#allow drmserver i2c_device:chr_file {open write read ioctl };
++
++# drmserver for mediaserver
++allow mediaserver shell_exec:file {read execute};
++
++# mediaserver for dash media
++allow mediaserver init:unix_stream_socket {read write};
++
++#untrusted_app
++#allow untrusted_app i2c_device:dir r_dir_perms;
++#allow untrusted_app i2c_device:chr_file rw_file_perms;
++
++#for ems
++allow system_app system_file: chr_file { execmod };
++allow system_app device: chr_file { open };
++allow system_app device: chr_file { read write };
++allow system_app device: chr_file { ioctl };
++allow system_app system_file: file { execmod };
++
++#init_shell for sdmc_root
++
++allow init_shell rootfs:file execute_no_trans;
++allow init_shell system_file:file execute_no_trans;
++allow init system_file: file { execute_no_trans };
++allow init_shell security_prop:property_service set;
++allow init_shell system_prop:property_service set;
++allow init_shell powerctl_prop:property_service {set};
++allow init_shell sysfs:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow init_shell sysfs:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++#allow init_shell i2c_device:dir r_dir_perms;
++#allow init_shell i2c_device:chr_file rw_file_perms;
++allow init_shell proc:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow init_shell proc:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow init_shell init:tcp_socket { read write ioctl create getattr setattr lock append bind connect listen accept getopt setopt shutdown recvfrom sendto recv_msg send_msg name_bind};
++#20160820 add to standby
++allow init_shell init: process { signal };
++allow init_shell system_file:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow init_shell system_file:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow init_shell self:capability { net_raw dac_override  dac_read_search fowner};
++allow init_shell usb_device:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow init_shell usb_device:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow init_shell cache_file:file {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow init_shell cache_file:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow init_shell self:capability { sys_ptrace sys_resource kill };
++
++#for sdmc_root
++allow shell self:capability { net_raw dac_override  dac_read_search fowner};
++
++#for vpn
++allow mtp init:unix_stream_socket { read write};
++allow mtp init:tcp_socket { read write};
++allow ppp dhcp_prop:property_service { set };
++allow ppp ppp_system_file:file  { execute  };
++allow ppp init:tcp_socket  {  read write  };
++allow ppp ppp_system_file:file  { execute_no_trans };
++allow ppp init:unix_stream_socket  {  read write  };
++
++
++#for sdmc_root
++allow shell self:capability { net_raw dac_override  dac_read_search fowner};
++
++
++allow init_shell servicemanager:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow init_shell self:udp_socket {create ioctl };
++allow init_shell shell_exec:file {execute_no_trans };
++allow init_shell zygote_exec:file {execute_no_trans };
++allow init_shell self:rawip_socket {create write read setopt };
++
++
++allow servicemanager init_shell:file  {setattr getattr execute write read create create_file_perms rx_file_perms x_file_perms r_file_perms};
++allow servicemanager init_shell:dir {setattr getattr execute write read create create_file_perms add_name remove_name rmdir r_dir_perms search};
++allow system_server  init:fifo_file {create write read };
++allow system_server  init:binder {transfer };
++allow servicemanager init_shell:process {getattr};
++
++allow system_app device:chr_file {open };
++allow system_app device:chr_file { read write };
++allow system_app device:chr_file { ioctl};
++allow system_app system_file:file {execmod };
++allow init_shell init:fifo_file {write };
++allow init_shell logcat_exec:file { read open };
++allow init_shell init:fifo_file {getattr};
++
++allow init_shell logd:unix_stream_socket {connectto };
++allow init_shell logdr_socket:sock_file  {write };
++allow init_shell logcat_exec:file  {execute_no_trans };
++allow init_shell logcat_exec:file  {execute };
++allow init_shell logcat_exec:file  {getattr };
++allow init_shell logd:unix_stream_socket  {connectto };
++allow init_shell logdr_socket:sock_file {write };
++allow init_shell logcat_exec:file {execute_no_trans };
++allow init_shell logcat_exec:file {execute };
++allow init logcat_exec:file {read open};
++allow init logcat_exec:file {execute };
++allow init logcat_exec:file {getattr };

@@ -1,0 +1,43 @@
+diff --git a/core/java/android/os/RecoverySystem.java b/core/java/android/os/RecoverySystem.java
+index 0c79094..ef39d5f 100644
+--- a/core/java/android/os/RecoverySystem.java
++++ b/core/java/android/os/RecoverySystem.java
+@@ -74,6 +74,7 @@ public class RecoverySystem {
+     private static File UNCRYPT_FILE = new File(RECOVERY_DIR, "uncrypt_file");
+     private static File LOG_FILE = new File(RECOVERY_DIR, "log");
+     private static String LAST_PREFIX = "last_";
++    private static String mExtraBootCmd = new String();
+ 
+     // Length limits for reading files.
+     private static int LOG_FILE_MAX_LENGTH = 64 * 1024;
+@@ -333,7 +334,7 @@ public class RecoverySystem {
+      */
+     public static void installPackage(Context context, File packageFile)
+         throws IOException {
+-        String filename = packageFile.getCanonicalPath();
++        String filename = packageFile.getPath();
+ 
+         FileWriter uncryptFile = new FileWriter(UNCRYPT_FILE);
+         try {
+@@ -473,6 +474,10 @@ public class RecoverySystem {
+                     command.write("\n");
+                 }
+             }
++            if (mExtraBootCmd != null) {
++                command.write(mExtraBootCmd);
++                command.write("\n");
++            }
+         } finally {
+             command.close();
+         }
+@@ -484,6 +489,10 @@ public class RecoverySystem {
+         throw new IOException("Reboot failed (no permissions?)");
+     }
+ 
++    public static void addExtraBootCmd(String cmd) {
++        mExtraBootCmd = mExtraBootCmd + cmd + "\n";
++    }
++
+     /**
+      * Called after booting to process and remove recovery-related files.
+      * @return the log file from recovery, or null if none was found.

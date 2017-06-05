@@ -1,0 +1,310 @@
+From ff81f83d03ea45fb2e4e070e5d64b7a21f07ad0a Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 27 Dec 2016 15:24:29 +0800
+Subject: [PATCH] support cec
+
+---
+ arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts    |   1 +
+ arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts    |   1 +
+ arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts    |   1 +
+ arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts    |   1 +
+ arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts    |   1 +
+ arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts    |   1 +
+ drivers/amlogic/cec/hdmi_ao_cec.c              | 133 +++++++++++++++++++++++++
+ drivers/amlogic/input/remote/remote_main.c     |   3 +
+ include/linux/amlogic/hdmi_tx/hdmi_tx_cec_20.h |   1 +
+ 9 files changed, 143 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+index f95019d..8405331 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+@@ -731,6 +731,7 @@
+ 		product_desc = "GXBB Mbox"; /* Max Chars: 16    */
+ 		cec_osd_string = "MBox"; /* Max Chars: 14    */
+ 		port_num = <1>;
++		send_key_to_tv;
+ 		arc_port_mask = <0x0>;
+ 		interrupts = <0 199 1>;
+ 		interrupt-names = "hdmi_aocec";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+index f561f6b..03854a7 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+@@ -732,6 +732,7 @@
+ 		product_desc = "GXBB Mbox"; /* Max Chars: 16    */
+ 		cec_osd_string = "MBox"; /* Max Chars: 14    */
+ 		port_num = <1>;
++		send_key_to_tv;
+ 		arc_port_mask = <0x0>;
+ 		interrupts = <0 199 1>;
+ 		interrupt-names = "hdmi_aocec";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+index 201384b..a735da4 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+@@ -756,6 +756,7 @@
+ 		product_desc = "GXBB Mbox"; /* Max Chars: 16    */
+ 		cec_osd_string = "MBox"; /* Max Chars: 14    */
+ 		port_num = <1>;
++		send_key_to_tv;
+ 		arc_port_mask = <0x0>;
+ 		interrupts = <0 199 1>;
+ 		interrupt-names = "hdmi_aocec";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+index dc0942f..b4cc616 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+@@ -756,6 +756,7 @@
+ 		product_desc = "GXBB Mbox"; /* Max Chars: 16    */
+ 		cec_osd_string = "MBox"; /* Max Chars: 14    */
+ 		port_num = <1>;
++		send_key_to_tv;
+ 		arc_port_mask = <0x0>;
+ 		interrupts = <0 199 1>;
+ 		interrupt-names = "hdmi_aocec";
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+index d3a98f6..0ae8cc9 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+@@ -746,6 +746,7 @@
+ 		product_desc = "GXBB Mbox"; /* Max Chars: 16    */
+ 		cec_osd_string = "MBox"; /* Max Chars: 14    */
+ 		port_num = <1>;
++		send_key_to_tv;
+ 		arc_port_mask = <0x0>;
+ 		interrupts = <0 199 1>;
+ 		interrupt-names = "hdmi_aocec";
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+index 9b45adb..9ed68da 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+@@ -746,6 +746,7 @@
+ 		product_desc = "GXBB Mbox"; /* Max Chars: 16    */
+ 		cec_osd_string = "MBox"; /* Max Chars: 14    */
+ 		port_num = <1>;
++		send_key_to_tv;
+ 		arc_port_mask = <0x0>;
+ 		interrupts = <0 199 1>;
+ 		interrupt-names = "hdmi_aocec";
+diff --git a/drivers/amlogic/cec/hdmi_ao_cec.c b/drivers/amlogic/cec/hdmi_ao_cec.c
+index 79632e0..c588424 100644
+--- a/drivers/amlogic/cec/hdmi_ao_cec.c
++++ b/drivers/amlogic/cec/hdmi_ao_cec.c
+@@ -129,6 +129,36 @@ static unsigned int  new_msg;
+ static bool wake_ok = 1;
+ static bool ee_cec;
+ bool cec_msg_dbg_en = 0;
++struct cec_key_work {
++	struct work_struct work;
++	int key_code;
++	int type;
++};
++struct cec_key_work key_work;
++static bool enable_key_send;
++
++__u16 cec_key_map[128] = {
++	KEY_SELECT, KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, 0 , 0 , 0 ,/* 0x00 */
++	0 , KEY_HOMEPAGE , KEY_MENU, 0, 0, KEY_BACK, 0, 0,
++	0 , 0, 0, 0, 0, 0, 0, 0, /* 0x10 */
++	0 , 0, 0, 0, 0, 0, 0, 0,
++	KEY_0 , KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7,
++	KEY_8 , KEY_9, KEY_DOT, 0, 0, 0, 0, 0,
++	0 , 0, 0, 0, 0, 0, 0, 0,/* 0x30 */
++	0 , 0, 0, 0, 0, 0, 0, 0,
++
++	KEY_POWER , KEY_VOLUMEUP, KEY_VOLUMEDOWN, KEY_MUTE,
++	KEY_PLAYPAUSE, KEY_STOP, KEY_PLAYPAUSE, KEY_RECORD, /* 0x40 */
++	KEY_REWIND, KEY_FASTFORWARD, KEY_EJECTCD, KEY_NEXTSONG,
++	KEY_PREVIOUSSONG, 0, 0, 0,
++	0 , 0, 0, 0, 0, 0, 0, 0, /* 0x50 */
++	0 , 0, 0, 0, 0, 0, 0, 0,
++	KEY_PLAYCD, KEY_PLAYPAUSE, KEY_RECORD, KEY_PAUSECD,
++	KEY_STOPCD, KEY_MUTE, 0, KEY_TUNER,/* 0x60 */
++	0 , KEY_MEDIA, 0, 0, KEY_POWER, KEY_POWER, 0, 0,
++	0 , KEY_BLUE, KEY_RED, KEY_GREEN, KEY_YELLOW, 0, 0, 0,/* 0x70 */
++	0 , 0, 0, 0, 0, 0, 0, 0x2fd,
++};
+ 
+ #define CEC_ERR(format, args...)				\
+ 	{if (cec_dev->dbg_dev)					\
+@@ -1040,6 +1070,71 @@ void cec_set_stream_path(unsigned char *msg)
+ 	}
+ }
+ 
++static void cec_user_control(int key_code, int press)
++{
++	unsigned char msg[3];
++	unsigned char index = cec_dev->cec_info.log_addr;
++
++	msg[0] = ((index & 0xf) << 4) | CEC_TV_ADDR;
++	if (press) {
++		msg[1] = CEC_OC_USER_CONTROL_PRESSED;
++		msg[2] = key_code;
++		cec_ll_tx(msg, 3);
++	} else {
++		msg[1] = CEC_OC_USER_CONTROL_RELEASED;
++		cec_ll_tx(msg, 2);
++	}
++
++}
++
++int cec_key_send(int remote_key_code, int type)
++{
++	int cec_key_code = -1;
++	int i;
++
++	if (!enable_key_send)
++		return -EINVAL;
++
++	/* only support volume +- key */
++#if 0
++	if (remote_key_code != KEY_VOLUMEUP &&
++			remote_key_code != KEY_VOLUMEDOWN) {
++		CEC_INFO("unsupported key:%d\n", remote_key_code);
++		return -EINVAL;
++	}
++#endif
++
++	if ((remote_key_code != KEY_PAGEDOWN) &&
++			(remote_key_code != KEY_PAGEUP)) {
++		CEC_INFO("unsupported key: %d\n", remote_key_code);
++	    return -EINVAL;
++	}
++	if (remote_key_code == KEY_PAGEDOWN)
++		remote_key_code = KEY_VOLUMEDOWN;
++	if (remote_key_code == KEY_PAGEUP)
++		remote_key_code = KEY_VOLUMEUP;
++
++	/* found cec key code */
++	for (i = 0; i < ARRAY_SIZE(cec_key_map); i++) {
++		if (cec_key_map[i] == remote_key_code) {
++			cec_key_code = i;
++			break;
++		}
++	}
++	if (cec_key_code == -1) {
++		CEC_INFO("can't find key:%d\n", remote_key_code);
++		return -1;
++	}
++
++	key_work.key_code = cec_key_code;
++	key_work.type = type;
++
++	CEC_INFO("find key:%d, cec_key:%d\n", remote_key_code, cec_key_code);
++
++	queue_work(cec_dev->cec_thread, &key_work.work);
++	return 0;
++}
++
+ void cec_report_power_status(int dest, int status)
+ {
+ 	unsigned char index = cec_dev->cec_info.log_addr;
+@@ -1170,6 +1265,17 @@ static void cec_task(struct work_struct *work)
+ 		queue_delayed_work(cec_dev->cec_thread, dwork, CEC_FRAME_DELAY);
+ }
+ 
++static void cec_key_work_fun(struct work_struct *work)
++{
++	struct cec_key_work *key_wk;
++
++	key_wk = container_of(work, struct cec_key_work, work);
++
++	if (key_wk) {
++		cec_user_control(key_wk->key_code, key_wk->type);
++	}
++}
++
+ static irqreturn_t cec_isr_handler(int irq, void *dev_instance)
+ {
+ 	unsigned int intr_stat = 0;
+@@ -1441,6 +1547,24 @@ static ssize_t fun_cfg_show(struct class *cla,
+ 	return sprintf(buf, "0x%x\n", reg & 0xff);
+ }
+ 
++static ssize_t send_key_show(struct class *cla,
++	struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%x\n", enable_key_send);
++}
++
++static ssize_t send_key_store(struct class *cla, struct class_attribute *attr,
++	const char *buf, size_t count)
++{
++	int en;
++
++	if (sscanf(buf, "%d", &en) != 1)
++		return -EINVAL;
++
++	enable_key_send = en ? 1 : 0;
++	return count;
++}
++
+ static struct class_attribute aocec_class_attr[] = {
+ 	__ATTR_WO(cmd),
+ 	__ATTR_RO(port_num),
+@@ -1456,6 +1580,7 @@ static struct class_attribute aocec_class_attr[] = {
+ 	__ATTR(device_type, 0664, device_type_show, device_type_store),
+ 	__ATTR(dbg_en, 0664, dbg_en_show, dbg_en_store),
+ 	__ATTR(fun_cfg, 0664, fun_cfg_show, fun_cfg_store),
++	__ATTR(send_key, 0664, send_key_show, send_key_store),
+ 	__ATTR_NULL
+ };
+ 
+@@ -1898,6 +2023,7 @@ static int aml_cec_probe(struct platform_device *pdev)
+ 		return -EFAULT;
+ 	}
+ 	INIT_DELAYED_WORK(&cec_dev->cec_work, cec_task);
++	INIT_WORK(&key_work.work, cec_key_work_fun);
+ 	cec_dev->cec_info.remote_cec_dev = input_allocate_device();
+ 	if (!cec_dev->cec_info.remote_cec_dev)
+ 		CEC_INFO("No enough memory\n");
+@@ -1927,6 +2053,13 @@ static int aml_cec_probe(struct platform_device *pdev)
+ 		ee_cec = 0;
+ 	CEC_INFO("using EE cec:%d\n", ee_cec);
+ 
++	/* if enable send key to tv */
++	if (of_property_read_bool(node, "send_key_to_tv"))
++		enable_key_send = 1;
++	else
++		enable_key_send = 0;
++	CEC_INFO("enable_key_send: %d\n", enable_key_send);
++
+ 	/* pinmux set */
+ 	if (of_get_property(node, "pinctrl-names", NULL)) {
+ 		r = of_property_read_string(node,
+diff --git a/drivers/amlogic/input/remote/remote_main.c b/drivers/amlogic/input/remote/remote_main.c
+index 88f909d..8e0469e 100644
+--- a/drivers/amlogic/input/remote/remote_main.c
++++ b/drivers/amlogic/input/remote/remote_main.c
+@@ -41,6 +41,7 @@
+ #include <linux/amlogic/cpu_version.h>
+ #include <linux/amlogic/pm.h>
+ #include <linux/of_address.h>
++#include <linux/amlogic/hdmi_tx/hdmi_tx_cec_20.h>
+ #undef NEW_BOARD_LEARNING_MODE
+ #define IR_CONTROL_DECODER_MODE     (3<<7)
+ #define IR_CONTROL_SKIP_HEADER      (1<<7)
+@@ -274,6 +275,8 @@ void remote_send_key(struct input_dev *dev, unsigned int scancode,
+ 					key_map[gp_remote->map_num][scancode],
+ 					type);
+ 			input_sync(dev);
++			cec_key_send(key_map[gp_remote->map_num][scancode],
++					type);
+ 		}
+ 
+ 		switch (type) {
+diff --git a/include/linux/amlogic/hdmi_tx/hdmi_tx_cec_20.h b/include/linux/amlogic/hdmi_tx/hdmi_tx_cec_20.h
+index f5b0fcd..3031c2a 100644
+--- a/include/linux/amlogic/hdmi_tx/hdmi_tx_cec_20.h
++++ b/include/linux/amlogic/hdmi_tx/hdmi_tx_cec_20.h
+@@ -345,5 +345,6 @@ extern bool cec_msg_dbg_en;
+ extern struct cec_global_info_t cec_info;
+ extern void cec_rx_buf_clear(void);
+ extern int get_cec_tx_fail(void);
++extern int cec_key_send(int remote_key_code, int type);
+ #endif
+ 
+-- 
+1.9.1
+

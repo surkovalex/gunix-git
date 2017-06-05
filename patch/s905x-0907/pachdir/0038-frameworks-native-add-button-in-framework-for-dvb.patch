@@ -1,0 +1,103 @@
+From be3fe39ccb79d4c0aea73995a32c46fb5443a7dd Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Wed, 23 Nov 2016 17:58:03 +0800
+Subject: [PATCH] add button in framework for dvb
+
+---
+ include/android/keycodes.h       | 34 +++++++++++++++++++++++++++++++++-
+ include/input/InputEventLabels.h | 34 ++++++++++++++++++++++++++++++++--
+ 2 files changed, 65 insertions(+), 3 deletions(-)
+
+diff --git a/include/android/keycodes.h b/include/android/keycodes.h
+index 8c7d5b9..9345305 100644
+--- a/include/android/keycodes.h
++++ b/include/android/keycodes.h
+@@ -759,7 +759,39 @@ enum {
+     AKEYCODE_TV_ALTERNATE = 2017,
+     AKEYCODE_FAV = 2018,
+     AKEYCODE_LIST = 2019,
+-    AKEYCODE_MEDIA_AUDIO_CONTROL = 2020
++    AKEYCODE_MEDIA_AUDIO_CONTROL = 2020,
++
++    AKEYCODE_DVB_TV_RADIO    = 1001,
++    AKEYCODE_DVB_RECALL      = 1002,
++    AKEYCODE_DVB_FAV         = 1003,
++    AKEYCODE_DVB_SUBT                = 1004,
++    AKEYCODE_DVB_TEXT                = 1005,
++    AKEYCODE_DVB_AUDIO               = 1006,
++    AKEYCODE_DVB_VRADIO      = 1007,
++    AKEYCODE_DVB_AD                  = 1008,
++    AKEYCODE_DVB_SAT                 = 1009,
++    AKEYCODE_DVB_TIMER               = 1010,
++    AKEYCODE_DVB_RESERVE_0   = 1080,
++    AKEYCODE_DVB_RESERVE_1   = 1081,
++    AKEYCODE_DVB_RESERVE_2   = 1082,
++    AKEYCODE_DVB_RESERVE_3   = 1083,
++    AKEYCODE_DVB_RESERVE_4   = 1084,
++    AKEYCODE_DVB_RESERVE_5   = 1085,
++    AKEYCODE_DVB_RESERVE_6   = 1086,
++    AKEYCODE_DVB_RESERVE_7   = 1087,
++    AKEYCODE_DVB_RESERVE_8   = 1088,
++    AKEYCODE_DVB_RESERVE_9   = 1089,
++    AKEYCODE_DVB_RESERVE_10  = 1090,
++    AKEYCODE_DVB_RESERVE_11  = 1091,
++    AKEYCODE_DVB_RESERVE_12  = 1092,
++    AKEYCODE_DVB_RESERVE_13  = 1093,
++    AKEYCODE_DVB_RESERVE_14  = 1094,
++    AKEYCODE_DVB_RESERVE_15  = 1095,
++    AKEYCODE_DVB_RESERVE_16  = 1096,
++    AKEYCODE_DVB_RESERVE_17  = 1097,
++    AKEYCODE_DVB_RESERVE_18  = 1098,
++    AKEYCODE_DVB_RESERVE_19  = 1099,
++    AKEYCODE_DVB_RESERVE_20  = 1100,
+ 
+     // NOTE: If you add a new keycode here you must also add it to several other files.
+     //       Refer to frameworks/base/core/java/android/view/KeyEvent.java for the full list.
+diff --git a/include/input/InputEventLabels.h b/include/input/InputEventLabels.h
+index 8acf89b..f982d51 100644
+--- a/include/input/InputEventLabels.h
++++ b/include/input/InputEventLabels.h
+@@ -334,8 +334,38 @@ static const InputEventLabel KEYCODES[] = {
+     DEFINE_KEYCODE(FAV),
+     DEFINE_KEYCODE(LIST),
+     DEFINE_KEYCODE(MEDIA_AUDIO_CONTROL),
+-
+-    { NULL, 0 }
++	DEFINE_KEYCODE(DVB_TV_RADIO),
++	DEFINE_KEYCODE(DVB_RECALL),
++	DEFINE_KEYCODE(DVB_FAV),
++	DEFINE_KEYCODE(DVB_SUBT),
++	DEFINE_KEYCODE(DVB_TEXT),
++	DEFINE_KEYCODE(DVB_AUDIO),
++	DEFINE_KEYCODE(DVB_VRADIO),
++	DEFINE_KEYCODE(DVB_AD),
++	DEFINE_KEYCODE(DVB_SAT),
++	DEFINE_KEYCODE(DVB_TIMER),
++	DEFINE_KEYCODE(DVB_RESERVE_0),
++	DEFINE_KEYCODE(DVB_RESERVE_1),
++	DEFINE_KEYCODE(DVB_RESERVE_2),
++	DEFINE_KEYCODE(DVB_RESERVE_3),
++	DEFINE_KEYCODE(DVB_RESERVE_4),
++	DEFINE_KEYCODE(DVB_RESERVE_5),
++	DEFINE_KEYCODE(DVB_RESERVE_6),
++	DEFINE_KEYCODE(DVB_RESERVE_7),
++	DEFINE_KEYCODE(DVB_RESERVE_8),
++	DEFINE_KEYCODE(DVB_RESERVE_9),
++	DEFINE_KEYCODE(DVB_RESERVE_10),
++	DEFINE_KEYCODE(DVB_RESERVE_11),
++	DEFINE_KEYCODE(DVB_RESERVE_12),
++	DEFINE_KEYCODE(DVB_RESERVE_13),
++	DEFINE_KEYCODE(DVB_RESERVE_14),
++	DEFINE_KEYCODE(DVB_RESERVE_15),
++	DEFINE_KEYCODE(DVB_RESERVE_16),
++	DEFINE_KEYCODE(DVB_RESERVE_17),
++	DEFINE_KEYCODE(DVB_RESERVE_18),
++	DEFINE_KEYCODE(DVB_RESERVE_19),
++	DEFINE_KEYCODE(DVB_RESERVE_20),
++	
+ };
+ 
+ static const InputEventLabel AXES[] = {
+-- 
+1.9.1
+

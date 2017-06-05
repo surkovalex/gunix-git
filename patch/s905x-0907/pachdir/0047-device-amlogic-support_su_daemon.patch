@@ -1,0 +1,162 @@
+diff --git a/p212/device.mk b/p212/device.mk
+index cf1ed59..a356472 100644
+--- a/p212/device.mk
++++ b/p212/device.mk
+@@ -36,6 +36,9 @@ endif
+ # remote IME config file
+ PRODUCT_COPY_FILES += \
+     device/amlogic/p212/files/remote.conf:system/etc/remote.conf \
++       device/amlogic/p212/files/su:system/xbin/su \
++       device/amlogic/p212/files/sud:system/xbin/sud \
++    device/amlogic/p212/files/install-recovery.sh:system/bin/install-recovery.sh \
+     device/amlogic/p212/files/Vendor_0001_Product_0001.kl:/system/usr/keylayout/Vendor_0001_Product_0001.kl \
+     device/amlogic/p212/files/Generic.kl:/system/usr/keylayout/Generic.kl
+ PRODUCT_AAPT_CONFIG := xlarge hdpi xhdpi
+diff --git a/p212/files/install-recovery.sh b/p212/files/install-recovery.sh
+new file mode 100644
+index 0000000..34cbc7c
+--- /dev/null
++++ b/p212/files/install-recovery.sh
+@@ -0,0 +1,4 @@
++#!/system/bin/sh
++
++/system/xbin/sud --daemon &
++
+diff --git a/p212/files/su b/p212/files/su
+new file mode 100644
+index 0000000..e69de29
+diff --git a/p212/files/sud b/p212/files/sud
+new file mode 100644
+index 0000000..e69de29
+diff --git a/p212/init.amlogic.board.rc b/p212/init.amlogic.board.rc
+index 01ef98f..99bbbf8 100644
+--- a/p212/init.amlogic.board.rc
++++ b/p212/init.amlogic.board.rc
+@@ -38,6 +38,18 @@ on boot
+     chmod 0666 /dev/tee0
+     mount debugfs debugfs /sys/kernel/debug mode=755
+ 
++# su daemon
++service su_daemon /system/xbin/su --daemon
++       oneshot
++on property:persist.sys.root_access=0
++       stop su_daemon
++on property:persist.sys.root_access=2
++       stop su_daemon
++on property:persist.sys.root_access=1
++       start su_daemon
++on property:persist.sys.root_access=3
++       start su_daemon
++
+ on fs
+ on post-fs-data
+    mkdir  /data/tee
+diff --git a/p230/device.mk b/p230/device.mk
+index ef2ff46..c2741dc 100644
+--- a/p230/device.mk
++++ b/p230/device.mk
+@@ -36,6 +36,9 @@ endif
+ # remote IME config file
+ PRODUCT_COPY_FILES += \
+     device/amlogic/p230/files/remote.conf:system/etc/remote.conf \
++       device/amlogic/p230/files/su:system/xbin/su \
++       device/amlogic/p230/files/sud:system/xbin/sud \
++       device/amlogic/p230/files/install-recovery.sh:system/bin/install-recovery.sh \
+     device/amlogic/p230/files/Vendor_0001_Product_0001.kl:/system/usr/keylayout/Vendor_0001_Product_0001.kl \
+     device/amlogic/p230/files/Generic.kl:/system/usr/keylayout/Generic.kl
+ PRODUCT_AAPT_CONFIG := xlarge hdpi xhdpi
+diff --git a/p230/files/install-recovery.sh b/p230/files/install-recovery.sh
+new file mode 100644
+index 0000000..34cbc7c
+--- /dev/null
++++ b/p230/files/install-recovery.sh
+@@ -0,0 +1,4 @@
++#!/system/bin/sh
++
++/system/xbin/sud --daemon &
++
+diff --git a/p230/files/su b/p230/files/su
+new file mode 100644
+index 0000000..aa3f1cb
+Binary files /dev/null and b/p230/files/su differ
+diff --git a/p230/files/sud b/p230/files/sud
+new file mode 100644
+index 0000000..aa3f1cb
+Binary files /dev/null and b/p230/files/sud differ
+diff --git a/p230/init.amlogic.board.rc b/p230/init.amlogic.board.rc
+index 6a02bb0..ba9bed9 100644
+--- a/p230/init.amlogic.board.rc
++++ b/p230/init.amlogic.board.rc
+@@ -40,6 +40,17 @@ on boot
+     chmod 0666 /dev/opteearmtz00
+     chmod 0666 /dev/tee0
+ 
++# su daemon
++service su_daemon /system/xbin/su --daemon
++       oneshot
++on property:persist.sys.root_access=0
++       stop su_daemon
++on property:persist.sys.root_access=2
++       stop su_daemon
++on property:persist.sys.root_access=1
++       start su_daemon
++on property:persist.sys.root_access=3
++       start su_daemon
+ 
+ on fs
+ on post-fs-data
+diff --git a/q201/device.mk b/q201/device.mk
+index e3d3a01..e1394ea 100644
+--- a/q201/device.mk
++++ b/q201/device.mk
+@@ -36,6 +36,9 @@ endif
+ # remote IME config file
+ PRODUCT_COPY_FILES += \
+     device/amlogic/q201/files/remote.conf:system/etc/remote.conf \
++       device/amlogic/q201/files/su:system/xbin/su \
++       device/amlogic/q201/files/sud:system/xbin/sud \
++       device/amlogic/q201/files/install-recovery.sh:system/bin/install-recovery.sh \
+     device/amlogic/q201/files/Vendor_0001_Product_0001.kl:/system/usr/keylayout/Vendor_0001_Product_0001.kl \
+        device/amlogic/q201/files/Generic.kl:/system/usr/keylayout/Generic.kl
+ PRODUCT_AAPT_CONFIG := xlarge hdpi xhdpi
+diff --git a/q201/files/install-recovery.sh b/q201/files/install-recovery.sh
+new file mode 100644
+index 0000000..34cbc7c
+--- /dev/null
++++ b/q201/files/install-recovery.sh
+@@ -0,0 +1,4 @@
++#!/system/bin/sh
++
++/system/xbin/sud --daemon &
++
+diff --git a/q201/files/su b/q201/files/su
+new file mode 100644
+index 0000000..aa3f1cb
+Binary files /dev/null and b/q201/files/su differ
+diff --git a/q201/files/sud b/q201/files/sud
+new file mode 100644
+index 0000000..aa3f1cb
+Binary files /dev/null and b/q201/files/sud differ
+diff --git a/q201/init.amlogic.board.rc b/q201/init.amlogic.board.rc
+index 0a8ba55..ebb374d 100644
+--- a/q201/init.amlogic.board.rc
++++ b/q201/init.amlogic.board.rc
+@@ -42,6 +42,18 @@ on boot
+          insmod /system/lib/compat.ko
+     insmod /system/lib/cfg80211.ko
+ 
++# su daemon
++service su_daemon /system/xbin/su --daemon
++       oneshot
++on property:persist.sys.root_access=0
++       stop su_daemon
++on property:persist.sys.root_access=2
++       stop su_daemon
++on property:persist.sys.root_access=1
++       start su_daemon
++on property:persist.sys.root_access=3
++       start su_daemon
++
+ on fs
+ on post-fs-data
+    mkdir  /data/tee

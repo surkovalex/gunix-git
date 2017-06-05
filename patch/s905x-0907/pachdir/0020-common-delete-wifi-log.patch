@@ -1,0 +1,48 @@
+From 596eed743bc20eec3196f486f6555cdd498553cf Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Wed, 14 Dec 2016 12:57:24 +0800
+Subject: [PATCH] delete wifi log
+
+---
+ drivers/staging/rtl8188eu/core/rtw_pwrctrl.c | 4 ++--
+ drivers/staging/rtl8188eu/hal/usb_halinit.c  | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/staging/rtl8188eu/core/rtw_pwrctrl.c b/drivers/staging/rtl8188eu/core/rtw_pwrctrl.c
+index b5db22c..e9e2d08 100644
+--- a/drivers/staging/rtl8188eu/core/rtw_pwrctrl.c
++++ b/drivers/staging/rtl8188eu/core/rtw_pwrctrl.c
+@@ -51,7 +51,7 @@ void ips_enter(struct adapter *padapter)
+ 	DBG_88E("==>ips_enter cnts:%d\n", pwrpriv->ips_enter_cnts);
+ 	if (rf_off == pwrpriv->change_rfpwrstate) {
+ 		pwrpriv->bpower_saving = true;
+-		DBG_88E_LEVEL(_drv_info_, "nolinked power save enter\n");
++		/*DBG_88E_LEVEL(_drv_info_, "nolinked power save enter\n");*/
+ 
+ 		if (pwrpriv->ips_mode == IPS_LEVEL_2)
+ 			pwrpriv->bkeepfwalive = true;
+@@ -85,7 +85,7 @@ int ips_leave(struct adapter *padapter)
+ 		if (result == _SUCCESS) {
+ 			pwrpriv->rf_pwrstate = rf_on;
+ 		}
+-		DBG_88E_LEVEL(_drv_info_, "nolinked power save leave\n");
++		/*DBG_88E_LEVEL(_drv_info_, "nolinked power save leave\n");*/
+ 
+ 		if ((_WEP40_ == psecuritypriv->dot11PrivacyAlgrthm) || (_WEP104_ == psecuritypriv->dot11PrivacyAlgrthm)) {
+ 			DBG_88E("==>%s, channel(%d), processing(%x)\n", __func__, padapter->mlmeextpriv.cur_channel, pwrpriv->bips_processing);
+diff --git a/drivers/staging/rtl8188eu/hal/usb_halinit.c b/drivers/staging/rtl8188eu/hal/usb_halinit.c
+index b24ad49..aed1842 100644
+--- a/drivers/staging/rtl8188eu/hal/usb_halinit.c
++++ b/drivers/staging/rtl8188eu/hal/usb_halinit.c
+@@ -816,7 +816,7 @@ _func_enter_;
+ 	HAL_INIT_PROFILE_TAG(HAL_INIT_STAGES_EFUSE_PATCH);
+ 	status = rtl8188e_iol_efuse_patch(Adapter);
+ 	if (status == _FAIL) {
+-		DBG_88E("%s  rtl8188e_iol_efuse_patch failed\n", __func__);
++		/*DBG_88E("%s  rtl8188e_iol_efuse_patch failed\n", __func__);*/
+ 		goto exit;
+ 	}
+ 
+-- 
+1.9.1
+

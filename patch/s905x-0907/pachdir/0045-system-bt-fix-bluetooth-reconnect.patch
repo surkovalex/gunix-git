@@ -1,0 +1,200 @@
+commit c32b01c8505d1c0bfdb5ac09e67f32985b4d0b75
+Author: young_yang <young_yang@sdmctech.com>
+Date:   Thu Jan 12 12:40:35 2017 +0800
+
+    fix ble reconnect
+
+diff --git a/bta/hh/bta_hh_act.c b/bta/hh/bta_hh_act.c
+index fdcc998..9939bde 100644
+--- a/bta/hh/bta_hh_act.c
++++ b/bta/hh/bta_hh_act.c
+@@ -555,6 +555,8 @@ void bta_hh_open_cmpl_act(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
+     tBTA_HH_CONN        conn ;
+     UINT8   dev_handle = p_data ? (UINT8)p_data->hid_cback.hdr.layer_specific : \
+                         p_cb->hid_handle;
++	//dean
++	APPL_TRACE_DEBUG("dean:bta_hh_open_cmpl_act->dev_handle:%d. p_cb->mode:%d",dev_handle,p_cb->mode);
+ 
+     memset((void *)&conn, 0, sizeof (tBTA_HH_CONN));
+     conn.handle = dev_handle;
+diff --git a/bta/hh/bta_hh_le.c b/bta/hh/bta_hh_le.c
+index 48b0610..beb19bf 100644
+--- a/bta/hh/bta_hh_le.c
++++ b/bta/hh/bta_hh_le.c
+@@ -18,6 +18,7 @@
+ 
+ #include "bta_api.h"
+ #include "bta_hh_int.h"
++#include <unistd.h>
+ 
+ #if (defined BTA_HH_LE_INCLUDED && BTA_HH_LE_INCLUDED == TRUE)
+ 
+@@ -34,6 +35,7 @@
+ #define LOG_TAG "bt_bta_hh"
+ #include "osi/include/log.h"
+ 
++extern BOOLEAN keymissig_flag;
+ #ifndef BTA_HH_LE_RECONN
+ #define BTA_HH_LE_RECONN    TRUE
+ #endif
+@@ -653,7 +655,8 @@ void bta_hh_le_read_rpt_ref_descr(tBTA_HH_DEV_CB *p_dev_cb, tBTA_HH_LE_RPT *p_rp
+         if(!p_rpt->in_use)
+             break;
+ 
+-        if (p_rpt->rpt_type == BTA_HH_RPTT_INPUT)
++
++	 if ((p_rpt->rpt_type == BTA_HH_RPTT_INPUT)||(p_rpt->rpt_type == BTA_HH_RPTT_OUTPUT))
+         {
+             /* is battery report */
+             if (p_rpt->uuid == GATT_UUID_BATTERY_LEVEL)
+@@ -2464,12 +2467,26 @@ void bta_hh_gatt_close(tBTA_HH_DEV_CB *p_cb, tBTA_HH_DATA *p_data)
+     }
+     else
+     {
+-#if (BTA_HH_LE_RECONN == TRUE)
+-    if (p_data->le_close.reason == BTA_GATT_CONN_TIMEOUT)
+-    {
+-        bta_hh_le_add_dev_bg_conn(p_cb, FALSE);
+-    }
+-#endif
++	#if (BTA_HH_LE_RECONN == TRUE)
++	 if (p_data->le_close.reason == BTA_GATT_CONN_TIMEOUT)
++    	{
++   	 APPL_TRACE_DEBUG("dean bta_hh_gatt_close-> sleep 1s and add_dev_bg_conn ");
++   	 sleep(1);
++	  bta_hh_le_add_dev_bg_conn(p_cb, FALSE);
++	  APPL_TRACE_DEBUG("dean:=========");
++    	}
++    	else if(keymissig_flag ==FALSE && p_data->le_close.reason != BTA_GATT_CONN_TERMINATE_PEER_USER )
++    	{
++    		APPL_TRACE_DEBUG("dean keymissig_flag ==FALSE and add_dev_bg_conn  ");
++	 	 bta_hh_le_add_dev_bg_conn(p_cb, FALSE);
++    	}
++   	else if(keymissig_flag ==TRUE)
++   	{
++   		APPL_TRACE_DEBUG("dean keymissig_flag ==TRUE ");
++	 	keymissig_flag =FALSE;
++    	}
++   
++	#endif
+     }
+ 
+     return;
+diff --git a/btif/src/btif_gatt_client.c b/btif/src/btif_gatt_client.c
+index f70f2bb..e854a75 100644
+--- a/btif/src/btif_gatt_client.c
++++ b/btif/src/btif_gatt_client.c
+@@ -630,7 +630,8 @@ static void btif_gattc_upstreams_evt(uint16_t event, char* p_param)
+                                 BT_EIR_SHORTENED_LOCAL_NAME_TYPE, &remote_name_len);
+             }
+ 
+-            if ((p_btif_cb->addr_type != BLE_ADDR_RANDOM) || (p_eir_remote_name))
++        //dean    if ((p_btif_cb->addr_type != BLE_ADDR_RANDOM) || (p_eir_remote_name))
++	     if ((p_btif_cb->addr_type != BLE_ADDR_RANDOM) && (p_eir_remote_name))
+             {
+                if (!btif_gattc_find_bdaddr(p_btif_cb->bd_addr.address))
+                {
+diff --git a/include/bt_target.h b/include/bt_target.h
+index 966183a..b15e192 100644
+--- a/include/bt_target.h
++++ b/include/bt_target.h
+@@ -661,7 +661,8 @@
+ 
+ /* Whether link wants to be the master or the slave. */
+ #ifndef L2CAP_DESIRED_LINK_ROLE
+-#define L2CAP_DESIRED_LINK_ROLE     HCI_ROLE_SLAVE
++//#define L2CAP_DESIRED_LINK_ROLE     HCI_ROLE_SLAVE
++#define L2CAP_DESIRED_LINK_ROLE     HCI_ROLE_MASTER //dean
+ #endif
+ 
+ /* Include Non-Flushable Packet Boundary Flag feature of Lisbon */
+@@ -782,7 +783,7 @@
+  * Enables or disables support for local privacy (ex. address rotation)
+  */
+ #ifndef BLE_LOCAL_PRIVACY_ENABLED
+-#define BLE_LOCAL_PRIVACY_ENABLED         TRUE
++#define BLE_LOCAL_PRIVACY_ENABLED        FALSE //dean TRUE
+ #endif
+ 
+ /*
+diff --git a/stack/btm/btm_sec.c b/stack/btm/btm_sec.c
+index ce0030e..2cfaf1e 100644
+--- a/stack/btm/btm_sec.c
++++ b/stack/btm/btm_sec.c
+@@ -37,6 +37,9 @@
+ #include "osi/include/log.h"
+ 
+ #include "bta/gatt/bta_gattc_int.h"
++
++#include <hardware/bluetooth.h>
++
+ #if (BT_USE_TRACES == TRUE && BT_TRACE_VERBOSE == FALSE)
+ /* needed for sprintf() */
+ #include <stdio.h>
+@@ -52,7 +55,7 @@
+ BOOLEAN (APPL_AUTH_WRITE_EXCEPTION)(BD_ADDR bd_addr);
+ #endif
+ 
+-
++BOOLEAN keymissig_flag = FALSE;
+ /********************************************************************************
+ **              L O C A L    F U N C T I O N     P R O T O T Y P E S            *
+ *********************************************************************************/
+@@ -4291,9 +4294,9 @@ void btm_sec_encrypt_change (UINT16 handle, UINT8 status, UINT8 encr_enable)
+             status == HCI_ERR_ENCRY_MODE_NOT_ACCEPTABLE)
+         {
+             tBTA_GATTC_SERV *p_srcb = NULL;
+-
++            keymissig_flag = TRUE;
+             p_dev_rec->sec_flags &= ~(BTM_SEC_LE_LINK_KEY_KNOWN);
+-            btm_add_dev_to_controller(FALSE, p_dev_rec->bd_addr, 0);
++            btm_add_dev_to_controller(FALSE, p_dev_rec->bd_addr);
+             btm_ble_link_encrypted(p_dev_rec->bd_addr, encr_enable);
+             btif_dm_remove_bond(p_dev_rec->bd_addr);
+ #if 1
+@@ -4305,13 +4308,17 @@ void btm_sec_encrypt_change (UINT16 handle, UINT8 status, UINT8 encr_enable)
+ #endif
+         }
+         else
++	{
++	     keymissig_flag = FALSE;
+             btm_ble_link_encrypted(p_dev_rec->bd_addr, encr_enable);
++	}
+ #else
+         if (status == HCI_ERR_KEY_MISSING || status == HCI_ERR_AUTH_FAILURE ||
+             status == HCI_ERR_ENCRY_MODE_NOT_ACCEPTABLE)
+             p_dev_rec->sec_flags &= ~(BTM_SEC_LE_LINK_KEY_KNOWN);
+         btm_ble_link_encrypted(p_dev_rec->bd_addr, encr_enable);
+ #endif
++	return;
+     }
+     else
+     {
+diff --git a/stack/include/btm_ble_api.h b/stack/include/btm_ble_api.h
+index 0a91d5f..dde119f 100644
+--- a/stack/include/btm_ble_api.h
++++ b/stack/include/btm_ble_api.h
+@@ -163,12 +163,12 @@ typedef UINT8   tBTM_BLE_SFP;
+ 
+ /* default connection interval min */
+ #ifndef BTM_BLE_CONN_INT_MIN_DEF
+-#define BTM_BLE_CONN_INT_MIN_DEF     24      /* recommended min: 30ms  = 24 * 1.25 */
++#define BTM_BLE_CONN_INT_MIN_DEF    6// 24 //dean 24      /* recommended min: 30ms  = 24 * 1.25 */
+ #endif
+ 
+ /* default connectino interval max */
+ #ifndef BTM_BLE_CONN_INT_MAX_DEF
+-#define BTM_BLE_CONN_INT_MAX_DEF     40      /* recommended max: 50 ms = 56 * 1.25 */
++#define BTM_BLE_CONN_INT_MAX_DEF    6// 60 //dean 40      /* recommended max: 50 ms = 56 * 1.25 */
+ #endif
+ 
+ /* default slave latency */
+@@ -178,7 +178,7 @@ typedef UINT8   tBTM_BLE_SFP;
+ 
+ /* default supervision timeout */
+ #ifndef BTM_BLE_CONN_TIMEOUT_DEF
+-#define BTM_BLE_CONN_TIMEOUT_DEF    2000
++#define BTM_BLE_CONN_TIMEOUT_DEF    500
+ #endif
+ 
+ /* minimum acceptable connection interval */

@@ -1,0 +1,13 @@
+diff --git a/init/property_service.cpp b/init/property_service.cpp
+index 5a96d36..ac1cf82 100644
+--- a/init/property_service.cpp
++++ b/init/property_service.cpp
+@@ -333,6 +333,8 @@ static void handle_property_set_fd()
+             }
+         } else {
+             if (check_perms(msg.name, source_ctx)) {
++                if ((strncmp((char *)msg.name, "ubootenv.var.ethaddr", 20) == 0))
++                    return;
+                 init_property_set((char*) msg.name, (char*) msg.value);
+             } else {
+                 ERROR("sys_prop: permission denied uid:%d  name:%s\n",

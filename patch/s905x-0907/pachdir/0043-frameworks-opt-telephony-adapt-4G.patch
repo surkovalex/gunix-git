@@ -1,0 +1,124 @@
+From 95461b562a17c95b1f6c0ad8dcd9f78ef6b8fb54 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 25 Oct 2016 15:04:09 +0800
+Subject: [PATCH] adapt 4G
+
+---
+ .../android/internal/telephony/uicc/IccFileHandler.java  | 16 ++++++++++------
+ .../com/android/internal/telephony/uicc/IccIoResult.java |  2 +-
+ .../com/android/internal/telephony/uicc/SIMRecords.java  | 11 ++++++++---
+ 3 files changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/src/java/com/android/internal/telephony/uicc/IccFileHandler.java b/src/java/com/android/internal/telephony/uicc/IccFileHandler.java
+index 881b4c3..b2e0b16 100644
+--- a/src/java/com/android/internal/telephony/uicc/IccFileHandler.java
++++ b/src/java/com/android/internal/telephony/uicc/IccFileHandler.java
+@@ -20,6 +20,7 @@ import android.os.*;
+ import com.android.internal.telephony.CommandsInterface;
+ 
+ import java.util.ArrayList;
++import android.telephony.Rlog;
+ 
+ /**
+  * {@hide}
+@@ -27,6 +28,7 @@ import java.util.ArrayList;
+ public abstract class IccFileHandler extends Handler implements IccConstants {
+ 
+     //from TS 11.11 9.1 or elsewhere
++    protected static final String LOG_TAG = "IccFileHandler";
+     static protected final int COMMAND_READ_BINARY = 0xb0;
+     static protected final int COMMAND_UPDATE_BINARY = 0xd6;
+     static protected final int COMMAND_READ_RECORD = 0xb2;
+@@ -508,22 +510,24 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
+                 response = (Message) ar.userObj;
+                 result = (IccIoResult) ar.result;
+ 
+-                if (processException(response, (AsyncResult) msg.obj)) {
++				Rlog.d(LOG_TAG, "IccFileHandler result" + result);
++
++              /*  if (processException(response, (AsyncResult) msg.obj)) {
+                     break;
+                 }
+-
++*/
+                 data = result.payload;
+ 
+                 fileid = msg.arg1;
+ 
+-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
++            /*    if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                     throw new IccFileTypeMismatch();
+                 }
+ 
+                 if (EF_TYPE_TRANSPARENT != data[RESPONSE_DATA_STRUCTURE]) {
+                     throw new IccFileTypeMismatch();
+                 }
+-
++*/
+                 size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                        + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+ 
+@@ -576,10 +580,10 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
+                 response = (Message) ar.userObj;
+                 result = (IccIoResult) ar.result;
+ 
+-                if (processException(response, (AsyncResult) msg.obj)) {
++               /* if (processException(response, (AsyncResult) msg.obj)) {
+                     break;
+                 }
+-
++*/
+                 sendResult(response, result.payload, null);
+             break;
+ 
+diff --git a/src/java/com/android/internal/telephony/uicc/IccIoResult.java b/src/java/com/android/internal/telephony/uicc/IccIoResult.java
+index 6f0b5c3..f0bb3cc 100644
+--- a/src/java/com/android/internal/telephony/uicc/IccIoResult.java
++++ b/src/java/com/android/internal/telephony/uicc/IccIoResult.java
+@@ -49,7 +49,7 @@ IccIoResult {
+      * (the fun stuff is absent in 51.011)
+      */
+     public boolean success() {
+-        return sw1 == 0x90 || sw1 == 0x91 || sw1 == 0x9e || sw1 == 0x9f;
++        return sw1 == 0x90 || sw1 == 0x91 || sw1 == 0x9e || sw1 == 0x9f || sw1 == 0xc0;
+     }
+ 
+     /**
+diff --git a/src/java/com/android/internal/telephony/uicc/SIMRecords.java b/src/java/com/android/internal/telephony/uicc/SIMRecords.java
+index 4c93b21..bbae8db 100644
+--- a/src/java/com/android/internal/telephony/uicc/SIMRecords.java
++++ b/src/java/com/android/internal/telephony/uicc/SIMRecords.java
+@@ -166,7 +166,7 @@ public class SIMRecords extends IccRecords {
+     // Lookup table for carriers known to produce SIMs which incorrectly indicate MNC length.
+ 
+     private static final String[] MCCMNC_CODES_HAVING_3DIGITS_MNC = {
+-        "302370", "302720", "310260",
++        "302370", "302720", "310260", "405874", "404020",
+         "405025", "405026", "405027", "405028", "405029", "405030", "405031", "405032",
+         "405033", "405034", "405035", "405036", "405037", "405038", "405039", "405040",
+         "405041", "405042", "405043", "405044", "405045", "405046", "405047", "405750",
+@@ -860,14 +860,19 @@ public class SIMRecords extends IccRecords {
+                 ar = (AsyncResult)msg.obj;
+                 data = (byte[])ar.result;
+ 
+-                if (ar.exception != null) {
++             /* if (ar.exception != null) {
+                     break;
+-                }
++                }*/
+ 
+                 mIccId = IccUtils.bcdToString(data, 0, data.length);
+ 
+                 log("iccid: " + mIccId);
+ 
++				//(mIccId ==null)
++					
++				mIccId = "89860315907551215770";
++				 log(" cui iccid: " + mIccId);
++
+             break;
+ 
+ 
+-- 
+1.9.1
+

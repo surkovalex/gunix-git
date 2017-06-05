@@ -1,0 +1,255 @@
+From d9a2822f0d5ebcd5515613d5d0943df8be4f0cf4 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Fri, 13 Jan 2017 13:07:06 +0800
+Subject: [PATCH] adapt 4G module
+
+---
+ common/products/mbox/init.amlogic.rc               |  8 ++++++++
+ common/products/mbox/product_mbox.mk               |  9 +++++++++
+ p212/BoardConfig.mk                                |  6 ++++++
+ p212/init.amlogic.board.rc                         | 23 ++++++++++++++++++++++
+ .../frameworks/base/core/res/res/values/config.xml |  4 ++++
+ p212/p212.mk                                       |  6 ++++++
+ p212/system.prop                                   |  2 ++
+ p230/BoardConfig.mk                                |  6 ++++++
+ p230/init.amlogic.board.rc                         | 23 ++++++++++++++++++++++
+ .../frameworks/base/core/res/res/values/config.xml |  4 ++++
+ p230/p230.mk                                       |  6 ++++++
+ p230/system.prop                                   |  2 ++
+ 12 files changed, 99 insertions(+)
+
+diff --git a/common/products/mbox/init.amlogic.rc b/common/products/mbox/init.amlogic.rc
+index a8647d5..e943e6a 100644
+--- a/common/products/mbox/init.amlogic.rc
++++ b/common/products/mbox/init.amlogic.rc
+@@ -335,6 +335,8 @@ on boot
+     chmod 664 /sys/module/di/parameters/prog_proc_config
+     chown root system /sys/module/di/parameters/det3d_en
+     chown root system /sys/module/di/parameters/prog_proc_config
++	
++	echo "05c6 9025" > /sys/bus/usb-serial/drivers/option1/new_id
+ 
+ #   start sdcard
+ 
+@@ -464,6 +466,12 @@ service instaboot /system/bin/instabootserver
+     group root
+     seclabel u:r:instaboot:s0
+ 
++service pppd_gprs /system/etc/ppp/init.gprs-pppd
++    user root
++    group radio cache inet misc
++    disabled
++    oneshot
++
+ on property:config.disable_instaboot=false
+     start instaboot
+ 
+diff --git a/common/products/mbox/product_mbox.mk b/common/products/mbox/product_mbox.mk
+index baedad2..59ae78e 100644
+--- a/common/products/mbox/product_mbox.mk
++++ b/common/products/mbox/product_mbox.mk
+@@ -43,6 +43,15 @@ PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
+ PRODUCT_PACKAGES += \
+     TvSettings
+ 
++PRODUCT_PACKAGES += \
++    TeleService \
++    modem_dongle_d \
++    usb_modeswitch \
++    libaml-ril.so \
++    init-pppd.sh \
++    rild \
++    ip-up \
++    chat
+ 
+ #USB PM
+ PRODUCT_PACKAGES += \
+diff --git a/p212/BoardConfig.mk b/p212/BoardConfig.mk
+index 3413f7e..b9ef44e 100644
+--- a/p212/BoardConfig.mk
++++ b/p212/BoardConfig.mk
+@@ -87,3 +87,9 @@ TARGET_OTA_UPDATE_DTB := true
+ include device/amlogic/common/sepolicy.mk
+ include device/amlogic/common/gpu/mali450-user-$(TARGET_ARCH).mk
+ #MALLOC_IMPL := dlmalloc
++
++BOARD_HAVE_MODEM := true
++BOARD_MODEM_VENDOR := SIGNAL
++BOARD_MODEM_ID := SLM630
++BOARD_MODEM_HAVE_DATA_DEVICE := true
++BOARD_USE_AML_STANDARD_RIL := true
+diff --git a/p212/init.amlogic.board.rc b/p212/init.amlogic.board.rc
+index 8846a9a..01ef98f 100644
+--- a/p212/init.amlogic.board.rc
++++ b/p212/init.amlogic.board.rc
+@@ -76,6 +76,29 @@ service p2p_supplicant /system/bin/wpa_supplicant \
+     disabled
+     oneshot
+ 
++service ril-daemon /system/bin/rild -l /system/lib/libsignal-ril.so -- -d /dev/ttyUSB2 -u /dev/ttyUSB1
++    class main
++    socket rild stream 660 root radio
++    socket sap_uim_socket1 stream 660 bluetooth bluetooth
++    socket rild-debug stream 660 radio system
++    user root
++    group radio cache inet misc audio log
++
++    on property:ril.reset.rild=1
++    stop ril-daemon
++
++service pppd_gprs /system/bin/init-pppd.sh
++    user root
++    group root radio net_admin cache inet misc system
++    disabled
++    oneshot
++
++on property:ro.radio.noril=true
++    stop ril-daemon
++
++on property:ro.radio.noril=false
++    start ril-daemon
++
+ service tee_supplicant /system/bin/tee-supplicant
+ 		class main
+ 		oneshot
+diff --git a/p212/overlay/frameworks/base/core/res/res/values/config.xml b/p212/overlay/frameworks/base/core/res/res/values/config.xml
+index c1d525e..dfced26 100644
+--- a/p212/overlay/frameworks/base/core/res/res/values/config.xml
++++ b/p212/overlay/frameworks/base/core/res/res/values/config.xml
+@@ -11,6 +11,10 @@
+     <!-- the 6th element indicates boot-time dependency-met value. -->
+     <string-array translatable="false" name="networkAttributes">
+         <item>"wifi,1,1,1,-1,true"</item>
++        <item>"mobile,0,0,0,-1,true"</item>
++        <item>"mobile_supl,3,0,2,60000,true"</item>
++        <item>"mobile_hipri,5,0,3,60000,true"</item>
++        <item>"mobile_fota,10,0,2,60000,true"</item>
+         <item>"ethernet,9,9,9,-1,true"</item>
+         <item>"pppoe,8,8,1,-1,true"</item>
+     </string-array>
+diff --git a/p212/p212.mk b/p212/p212.mk
+index f2d323d..031faf0 100644
+--- a/p212/p212.mk
++++ b/p212/p212.mk
+@@ -237,6 +237,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
+     ro.platform.has.pppoe=true
+ endif
+ 
++
++PRODUCT_PACKAGES += modem_dongle_d \
++    TeleService
++
++PRODUCT_PACKAGES += libusb usb_modeswitch
++
+ #################################################################################
+ #
+ #                                                DEFAULT LOWMEMORYKILLER CONFIG
+diff --git a/p212/system.prop b/p212/system.prop
+index 2a2d02c..7b2c720 100644
+--- a/p212/system.prop
++++ b/p212/system.prop
+@@ -18,6 +18,8 @@ ro.radio.noril=false
+ #if need pppoe
+ ro.net.pppoe=true
+ 
++hw.nophone=false
++
+ #the prop is used for enable or disable
+ #DD+/DD force output when HDMI EDID is not supported
+ #by default,the force output mode is enabled.
+diff --git a/p230/BoardConfig.mk b/p230/BoardConfig.mk
+index eba8d8d..59212db 100644
+--- a/p230/BoardConfig.mk
++++ b/p230/BoardConfig.mk
+@@ -88,3 +88,9 @@ BOARD_HAVE_BLUETOOTH_BCM := true
+ include device/amlogic/common/sepolicy.mk
+ include device/amlogic/common/gpu/mali450-user-$(TARGET_ARCH).mk
+ #MALLOC_IMPL := dlmalloc
++
++BOARD_HAVE_MODEM := true
++BOARD_MODEM_VENDOR := SIGNAL
++BOARD_MODEM_ID := SLM630
++BOARD_MODEM_HAVE_DATA_DEVICE := true
++BOARD_USE_AML_STANDARD_RIL := true
+diff --git a/p230/init.amlogic.board.rc b/p230/init.amlogic.board.rc
+index ecdc25c..6a02bb0 100644
+--- a/p230/init.amlogic.board.rc
++++ b/p230/init.amlogic.board.rc
+@@ -77,6 +77,29 @@ service p2p_supplicant /system/bin/wpa_supplicant \
+     socket wpa_wlan0 dgram 660 wifi wifi
+     disabled
+     oneshot
++	
++service ril-daemon /system/bin/rild -l /system/lib/libsignal-ril.so -- -d /dev/ttyUSB2 -u /dev/ttyUSB1
++    class main
++    socket rild stream 660 root radio
++    socket sap_uim_socket1 stream 660 bluetooth bluetooth
++    socket rild-debug stream 660 radio system
++    user root
++    group radio cache inet misc audio log
++
++    on property:ril.reset.rild=1
++    stop ril-daemon
++
++service pppd_gprs /system/bin/init-pppd.sh
++    user root
++    group root radio net_admin cache inet misc system
++    disabled
++    oneshot
++
++on property:ro.radio.noril=true
++    stop ril-daemon
++
++on property:ro.radio.noril=false
++    start ril-daemon
+ 
+ service tee_supplicant /system/bin/tee-supplicant
+ 		class main
+diff --git a/p230/overlay/frameworks/base/core/res/res/values/config.xml b/p230/overlay/frameworks/base/core/res/res/values/config.xml
+index e000e5d..8ccbab6 100644
+--- a/p230/overlay/frameworks/base/core/res/res/values/config.xml
++++ b/p230/overlay/frameworks/base/core/res/res/values/config.xml
+@@ -11,6 +11,10 @@
+     <!-- the 6th element indicates boot-time dependency-met value. -->
+     <string-array translatable="false" name="networkAttributes">
+         <item>"wifi,1,1,1,-1,true"</item>
++        <item>"mobile,0,0,0,-1,true"</item>
++        <item>"mobile_supl,3,0,2,60000,true"</item>
++        <item>"mobile_hipri,5,0,3,60000,true"</item>
++        <item>"mobile_fota,10,0,2,60000,true"</item>
+         <item>"ethernet,9,9,9,-1,true"</item>
+         <item>"pppoe,8,8,1,-1,true"</item>
+     </string-array>
+diff --git a/p230/p230.mk b/p230/p230.mk
+index c3008e6..4c4dae7 100644
+--- a/p230/p230.mk
++++ b/p230/p230.mk
+@@ -234,6 +234,12 @@ PRODUCT_PACKAGES += \
+ PRODUCT_PROPERTY_OVERRIDES += \
+     ro.platform.has.pppoe=true
+ endif
++
++PRODUCT_PACKAGES += modem_dongle_d \
++    TeleService
++
++PRODUCT_PACKAGES += libusb usb_modeswitch
++
+ #################################################################################
+ #
+ #                                                DEFAULT LOWMEMORYKILLER CONFIG
+diff --git a/p230/system.prop b/p230/system.prop
+index a785d14..14dbe40 100644
+--- a/p230/system.prop
++++ b/p230/system.prop
+@@ -18,6 +18,8 @@ ro.radio.noril=false
+ #if need pppoe
+ ro.net.pppoe=true
+ 
++hw.nophone=false
++
+ #the prop is used for enable or disable
+ #DD+/DD force output when HDMI EDID is not supported
+ #by default,the force output mode is enabled.
+-- 
+1.9.1
+

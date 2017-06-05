@@ -1,0 +1,25 @@
+From 86f19fd5778f2d590f2572c71b93f1af7ab72f10 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Sat, 24 Dec 2016 15:02:21 +0800
+Subject: [PATCH] add 1g dts
+
+---
+ p230/Kernel.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/p230/Kernel.mk b/p230/Kernel.mk
+index 5e90047..2295447 100644
+--- a/p230/Kernel.mk
++++ b/p230/Kernel.mk
+@@ -16,7 +16,7 @@ $(INSTALLED_KERNEL_TARGET): $(TARGET_PREBUILT_KERNEL) | $(ACP)
+ 
+ else
+ 
+-KERNEL_DEVICETREE := gxl_p230_2g
++KERNEL_DEVICETREE := gxl_p230_1g gxl_p230_2g
+ KERNEL_DEFCONFIG := meson64_defconfig
+ KERNEL_ARCH := arm64
+ KERNEL_ROOTDIR := common
+-- 
+1.9.1
+

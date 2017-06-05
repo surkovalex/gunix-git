@@ -1,0 +1,26 @@
+From 7a4d8cff55226457c6eca2e8871a3a1a530fadc1 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Mon, 9 Jan 2017 14:57:37 +0800
+Subject: [PATCH] del kernel builder info
+
+---
+ Settings/src/com/android/tv/settings/about/AboutActivity.java | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Settings/src/com/android/tv/settings/about/AboutActivity.java b/Settings/src/com/android/tv/settings/about/AboutActivity.java
+index 6827265..840e196 100644
+--- a/Settings/src/com/android/tv/settings/about/AboutActivity.java
++++ b/Settings/src/com/android/tv/settings/about/AboutActivity.java
+@@ -382,8 +382,7 @@ public class AboutActivity extends SettingsLayoutActivity {
+                     + " groups");
+             return "Unavailable";
+         }
+-        return m.group(2) + " " + m.group(3) + "\n" + // x@y.com #1
+-            m.group(4);                            // Thu Jun 28 11:02:39 PDT 2012
++		return m.group(4); 
+     }
+ 
+     /*public static class RebootConfirmFragment extends GuidedStepFragment {
+-- 
+1.9.1
+

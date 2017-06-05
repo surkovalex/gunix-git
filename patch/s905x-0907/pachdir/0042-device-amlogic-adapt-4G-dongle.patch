@@ -1,0 +1,145 @@
+From c899febada7ebf74e1cd1b48b1a2e24200c7425c Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Wed, 28 Dec 2016 10:03:03 +0800
+Subject: [PATCH] adapt 4G dongle
+
+---
+ common/products/mbox/product_mbox.mk | 11 +++++++++++
+ common/sepolicy/file_contexts        |  1 +
+ common/sepolicy/init.te              |  2 ++
+ common/sepolicy/modem_dongle_d.te    |  6 ++++++
+ common/sepolicy/usb_modeswitch.te    |  5 +++++
+ p212/init.amlogic.board.rc           | 24 ++++++++++++++++++++++++
+ p212/p212.mk                         |  1 +
+ 7 files changed, 50 insertions(+)
+ create mode 100644 common/sepolicy/usb_modeswitch.te
+
+diff --git a/common/products/mbox/product_mbox.mk b/common/products/mbox/product_mbox.mk
+index baedad2..68c257a 100644
+--- a/common/products/mbox/product_mbox.mk
++++ b/common/products/mbox/product_mbox.mk
+@@ -43,6 +43,15 @@ PRODUCT_PROPERTY_OVERRIDES += ro.hdmi.device_type=4
+ PRODUCT_PACKAGES += \
+     TvSettings
+ 
++PRODUCT_PACKAGES += \
++    TeleService \
++    modem_dongle_d \
++    usb_modeswitch \
++    libaml-ril.so \
++    init-pppd.sh \
++    rild \
++    ip-up \
++    chat
+ 
+ #USB PM
+ PRODUCT_PACKAGES += \
+@@ -96,6 +105,8 @@ PRODUCT_COPY_FILES += \
+ ADDITIONAL_BUILD_PROPERTIES += \
+     ro.config.wallpaper=/system/etc/default_wallpaper.png
+ 
++$(call inherit-product-if-exists, external/libusb/usbmodeswitch/CopyConfigs.mk)
++	
+ # Include BUILD_NUMBER if defined
+ VERSION_ID=$(shell find device/*/$(TARGET_PRODUCT) -name version_id.mk)
+ $(call inherit-product, $(VERSION_ID))
+diff --git a/common/sepolicy/file_contexts b/common/sepolicy/file_contexts
+index 499e3da..35ee0c5 100644
+--- a/common/sepolicy/file_contexts
++++ b/common/sepolicy/file_contexts
+@@ -77,6 +77,7 @@
+ /system/bin/usbtestpm       u:object_r:usbpm_exec:s0
+ /system/bin/hdcp_tx22       u:object_r:hdcp_tx22_exec:s0
+ /system/bin/hdcp_rx22       u:object_r:hdcp_rx22_exec:s0
++/system/bin/modem_dongle_d  u:object_r:modem_dongle_d_exec:s0
+ 
+ /sys/class/audiodsp/digital_raw         u:object_r:sysfs_xbmc:s0
+ /sys/class/video/disable_video          u:object_r:sysfs_xbmc:s0
+diff --git a/common/sepolicy/init.te b/common/sepolicy/init.te
+index f29a806..700388e 100644
+--- a/common/sepolicy/init.te
++++ b/common/sepolicy/init.te
+@@ -6,6 +6,8 @@ domain_auto_trans(init, system_control_exec, system_server)
+ #allow init imageserver_service:service_manager add;
+ domain_trans(init, imageserver_exec, imageserver)
+ 
++domain_trans(init, modem_dongle_d_exec, modem_dongle_d)
++domain_auto_trans(init, modem_dongle_d_exec, modem_dongle_d)
+ domain_trans(init, logcat, logcat)
+ 
+ domain_trans(init, tee_exec, tee)
+diff --git a/common/sepolicy/modem_dongle_d.te b/common/sepolicy/modem_dongle_d.te
+index 98a5fad..598590c 100644
+--- a/common/sepolicy/modem_dongle_d.te
++++ b/common/sepolicy/modem_dongle_d.te
+@@ -3,6 +3,12 @@ type modem_dongle_d_exec, exec_type, file_type;
+ 
+ init_daemon_domain(modem_dongle_d)
+ 
++allow modem_dongle_d modem_dongle_d_exec:file { entrypoint read };
++allow modem_dongle_d system_file:file { x_file_perms execmod };
++allow modem_dongle_d system_file:file execute_no_trans;
+ allow modem_dongle_d self:netlink_kobject_uevent_socket create_socket_perms;
+ allow modem_dongle_d shell_exec:file rx_file_perms;
+ allow modem_dongle_d device:dir { open read };
++allow modem_dongle_d usb_device:dir { open read search };
++allow modem_dongle_d usb_device:chr_file { read open write ioctl };
++allow modem_dongle_d self:capability { net_admin net_raw };
+diff --git a/common/sepolicy/usb_modeswitch.te b/common/sepolicy/usb_modeswitch.te
+new file mode 100644
+index 0000000..78f969b
+--- /dev/null
++++ b/common/sepolicy/usb_modeswitch.te
+@@ -0,0 +1,5 @@
++type usb_modeswitch, domain;
++type usb_modeswitch_exec, exec_type, file_type;
++
++allow usb_modeswitch usb_device:dir read ;
++allow usb_modeswitch usb_device:chr_file { read open write ioctl };
+diff --git a/p212/init.amlogic.board.rc b/p212/init.amlogic.board.rc
+index 8846a9a..15c20cf 100644
+--- a/p212/init.amlogic.board.rc
++++ b/p212/init.amlogic.board.rc
+@@ -91,3 +91,27 @@ service preinstall /system/bin/preinstall.sh
+     disabled
+     oneshot
+ 
++service ril-daemon /system/bin/rild -l /system/lib/libhuawei-ril.so
++    socket rild stream 660 radio radio
++    socket rild-debug stream 660 radio system
++    user root
++    group root net_admin radio cache inet misc audio system
++    disabled
++    seclabel u:r:rild:s0
++
++service modem_dongle_d /system/bin/modem_dongle_d
++	class main
++	user root
++    group root net_admin radio cache inet misc system
++
++service pppd_gprs /system/bin/init-pppd.sh
++    user root
++    group root radio net_admin cache inet misc system
++    disabled
++    oneshot
++
++on property:ro.radio.noril=true
++    stop ril-daemon
++
++on property:ro.radio.noril=false
++    start ril-daemon
+diff --git a/p212/p212.mk b/p212/p212.mk
+index 36d7724..5025eb9 100644
+--- a/p212/p212.mk
++++ b/p212/p212.mk
+@@ -239,6 +239,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
+     ro.platform.has.pppoe=true
+ endif
+ 
++PRODUCT_PACKAGES += libusb usb_modeswitch
+ #################################################################################
+ #
+ #                                                DEFAULT LOWMEMORYKILLER CONFIG
+-- 
+1.9.1
+

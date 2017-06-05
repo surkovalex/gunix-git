@@ -1,0 +1,17 @@
+diff --git a/healthd/BatteryMonitor.cpp b/healthd/BatteryMonitor.cpp
+index 396dfef..e72a100 100644
+--- a/healthd/BatteryMonitor.cpp
++++ b/healthd/BatteryMonitor.cpp
+@@ -557,9 +557,9 @@ void BatteryMonitor::init(struct healthd_config *hc) {
+     // and are always plugged into AC mains.
+     if (!mChargerNames.size()) {
+         KLOG_ERROR(LOG_TAG, "No charger supplies found\n");
+-        mBatteryFixedCapacity = ALWAYS_PLUGGED_CAPACITY;
+-        mBatteryFixedTemperature = FAKE_BATTERY_TEMPERATURE;
+-        mAlwaysPluggedDevice = true;
++        // mBatteryFixedCapacity = ALWAYS_PLUGGED_CAPACITY;
++        // mBatteryFixedTemperature = FAKE_BATTERY_TEMPERATURE;
++        // mAlwaysPluggedDevice = true;
+     }
+     if (!mBatteryDevicePresent) {
+         KLOG_WARNING(LOG_TAG, "No battery devices found\n");

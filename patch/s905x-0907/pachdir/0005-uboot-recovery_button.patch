@@ -1,0 +1,113 @@
+From efa12f40c602cde708ee43f70b360dd2ee4a701f Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Sat, 24 Dec 2016 14:06:46 +0800
+Subject: [PATCH] recovery botton
+
+---
+ board/amlogic/configs/gxl_p212_v1.h | 8 ++++++++
+ board/amlogic/configs/gxm_q200_v1.h | 8 ++++++++
+ board/amlogic/configs/gxm_q201_v1.h | 8 ++++++++
+ 3 files changed, 24 insertions(+)
+
+diff --git a/board/amlogic/configs/gxl_p212_v1.h b/board/amlogic/configs/gxl_p212_v1.h
+index 3d2bff9..62febed 100644
+--- a/board/amlogic/configs/gxl_p212_v1.h
++++ b/board/amlogic/configs/gxl_p212_v1.h
+@@ -203,6 +203,12 @@
+                 "if gpio input GPIOAO_2; then run update; fi;"\
+             "fi;"\
+             "\0"\
++        "recovery_key="\
++            "saradc open 0; "\
++            "if saradc get_in_range 0x0 0x258; then "\
++                "echo detect upgrade key; run update;"\
++            "fi;"\
++            "\0"\
+ 
+ #define CONFIG_PREBOOT  \
+             "run factory_reset_poweroff_protect;"\
+@@ -210,6 +216,7 @@
+             "run init_display;"\
+             "run storeargs;"\
+             "run upgrade_key;" \
++            "run recovery_key;" \
+             "run switch_bootmode;"
+ #define CONFIG_BOOTCOMMAND "run storeboot"
+ 
+@@ -374,6 +381,7 @@
+ #define CONFIG_CMD_CPU_TEMP 1
+ #define CONFIG_SYS_MEM_TOP_HIDE 0x08000000 //hide 128MB for kernel reserve
+ #define CONFIG_MULTI_DTB	1
++#define CONFIG_CMD_SARADC	1
+ 
+ /* debug mode defines */
+ //#define CONFIG_DEBUG_MODE           1
+diff --git a/board/amlogic/configs/gxm_q200_v1.h b/board/amlogic/configs/gxm_q200_v1.h
+index 62a9c46..c796a9c 100644
+--- a/board/amlogic/configs/gxm_q200_v1.h
++++ b/board/amlogic/configs/gxm_q200_v1.h
+@@ -206,6 +206,12 @@
+                 "if gpio input GPIOAO_2; then run update; fi;"\
+             "fi;"\
+             "\0"\
++        "recovery_key="\
++            "saradc open 0; "\
++            "if saradc get_in_range 0x0 0x258; then "\
++                "echo detect upgrade key; run update;"\
++            "fi;"\
++            "\0"\
+ 
+ #define CONFIG_PREBOOT  \
+             "run factory_reset_poweroff_protect;"\
+@@ -213,6 +219,7 @@
+             "run init_display;"\
+             "run storeargs;"\
+             "run upgrade_key;" \
++			"run recovery_key;" \
+             "forceupdate;" \
+             "run switch_bootmode;"
+ #define CONFIG_BOOTCOMMAND "run storeboot"
+@@ -379,6 +386,7 @@
+ #define CONFIG_CMD_MISC     1
+ #define CONFIG_CMD_ITEST    1
+ #define CONFIG_CMD_CPU_TEMP 1
++#define CONFIG_CMD_SARADC	1
+ #define CONFIG_SYS_MEM_TOP_HIDE 0x08000000 //hide 128MB for kernel reserve
+ 
+ /* debug mode defines */
+diff --git a/board/amlogic/configs/gxm_q201_v1.h b/board/amlogic/configs/gxm_q201_v1.h
+index 6ccd4d2..765ee31 100644
+--- a/board/amlogic/configs/gxm_q201_v1.h
++++ b/board/amlogic/configs/gxm_q201_v1.h
+@@ -206,6 +206,12 @@
+                 "if gpio input GPIOAO_2; then run update; fi;"\
+             "fi;"\
+             "\0"\
++        "recovery_key="\
++            "saradc open 0; "\
++            "if saradc get_in_range 0x0 0x258; then "\
++                "echo detect upgrade key; run update; "\
++            "fi;"\
++            "\0"\
+ 
+ #define CONFIG_PREBOOT  \
+             "run factory_reset_poweroff_protect;"\
+@@ -213,6 +219,7 @@
+             "run init_display;"\
+             "run storeargs;"\
+             "run upgrade_key;" \
++            "run recovery_key;" \
+             "forceupdate;" \
+             "run switch_bootmode;"
+ #define CONFIG_BOOTCOMMAND "run storeboot"
+@@ -381,6 +388,7 @@
+ #define CONFIG_CMD_CPU_TEMP 1
+ #define CONFIG_SYS_MEM_TOP_HIDE 0x08000000 //hide 128MB for kernel reserve
+ #define CONFIG_MULTI_DTB	1
++#define CONFIG_CMD_SARADC	1
+ 
+ /* debug mode defines */
+ //#define CONFIG_DEBUG_MODE           1
+-- 
+1.9.1
+

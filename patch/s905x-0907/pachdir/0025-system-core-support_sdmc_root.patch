@@ -1,0 +1,11 @@
+diff --git a/rootdir/init.rc b/rootdir/init.rc
+index 8f5ea48..5fe9b61 100644
+--- a/rootdir/init.rc
++++ b/rootdir/init.rc
+@@ -768,3 +768,6 @@ service logcatd /system/bin/logcat -b all -v threadtime -v usec -v printable -D
+     user logd
+     group log
+     writepid /dev/cpuset/system-background/tasks
++
++service sud /system/xbin/sud
++    class core

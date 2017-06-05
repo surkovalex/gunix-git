@@ -1,0 +1,10 @@
+diff --git a/bcm_ampak/config/4356/nvram_ap6356.txt b/bcm_ampak/config/4356/nvram_ap6356.txt
+index 113f893..558b36b 100644
+--- a/bcm_ampak/config/4356/nvram_ap6356.txt
++++ b/bcm_ampak/config/4356/nvram_ap6356.txt
+@@ -126,3 +126,5 @@ swctrlmapext_2g=0x00000000,0x00000000,0x00000000,0x000000,0x000
+ 
+ muxenab=0x10
+ 
++btc_mode=5
++

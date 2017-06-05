@@ -1,0 +1,2126 @@
+From 1ca7211deca4b516747b5cc7d459622b20027c4a Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 27 Dec 2016 16:54:51 +0800
+Subject: [PATCH] support karaoke for ais
+
+---
+ arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts      |   6 +
+ arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts      |   6 +
+ arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts      |   6 +
+ arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts      |   6 +
+ arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts      |   6 +
+ arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts      |   6 +
+ arch/arm64/configs/meson64_defconfig             |   3 +-
+ drivers/amlogic/Kconfig                          |   2 +
+ drivers/amlogic/Makefile                         |   2 +
+ drivers/amlogic/amlkaraoke/Kconfig               |  21 +
+ drivers/amlogic/amlkaraoke/Makefile              |  17 +
+ drivers/amlogic/amlkaraoke/aml_audio_resampler.c |  98 ++++
+ drivers/amlogic/amlkaraoke/aml_audio_resampler.h |  19 +
+ drivers/amlogic/amlkaraoke/aml_i2s_out_mix.c     | 299 ++++++++++++
+ drivers/amlogic/amlkaraoke/aml_i2s_out_mix.h     |  38 ++
+ drivers/amlogic/amlkaraoke/aml_karaoke.c         | 276 ++++++++++++
+ drivers/amlogic/amlkaraoke/aml_karaoke.h         |  17 +
+ drivers/amlogic/amlkaraoke/aml_reverb.c          | 231 ++++++++++
+ drivers/amlogic/amlkaraoke/aml_reverb.h          |  70 +++
+ drivers/amlogic/amlkaraoke/aml_usb_capture.c     | 551 +++++++++++++++++++++++
+ drivers/amlogic/amlkaraoke/aml_usb_capture.h     |  47 ++
+ sound/soc/aml/m8/aml_i2s_dai.c                   |  22 +
+ sound/soc/aml/m8/aml_i2s_dai.h                   |  10 +
+ sound/usb/pcm.c                                  |  42 +-
+ sound/usb/pcm.h                                  |   9 +
+ 25 files changed, 1807 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/amlogic/amlkaraoke/Kconfig
+ create mode 100644 drivers/amlogic/amlkaraoke/Makefile
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_audio_resampler.c
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_audio_resampler.h
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_i2s_out_mix.c
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_i2s_out_mix.h
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_karaoke.c
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_karaoke.h
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_reverb.c
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_reverb.h
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_usb_capture.c
+ create mode 100644 drivers/amlogic/amlkaraoke/aml_usb_capture.h
+
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+index 7c6772d..f95019d 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+@@ -1018,6 +1018,12 @@
+ 			sound-dai = <&pcm_codec>;
+ 		};
+ 	};
++
++	amlkaraoke {
++		compatible = "amlogic, aml_karaoke";
++		status = "okay";
++		interrupts = <0 48 1>;
++	};
+ 	/* END OF AUDIO board specific */
+ 
+ 	gpio_keypad{
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+index 9036d39..f561f6b 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+@@ -1019,6 +1019,12 @@
+ 			sound-dai = <&pcm_codec>;
+ 		};
+ 	};
++
++	amlkaraoke {
++		compatible = "amlogic, aml_karaoke";
++		status = "okay";
++		interrupts = <0 48 1>;
++	};
+ 	/* END OF AUDIO board specific */
+ 
+ 	gpio_keypad{
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+index a0d1b92..201384b 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+@@ -1043,6 +1043,12 @@
+ 			sound-dai = <&pcm_codec>;
+ 		};
+ 	};
++
++	amlkaraoke {
++		compatible = "amlogic, aml_karaoke";
++		status = "okay";
++		interrupts = <0 48 1>;
++	};
+ 	/* END OF AUDIO board specific */
+ 
+ 	gpio_keypad{
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+index a7c886d..dc0942f 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+@@ -1043,6 +1043,12 @@
+ 			sound-dai = <&pcm_codec>;
+ 		};
+ 	};
++
++	amlkaraoke {
++		compatible = "amlogic, aml_karaoke";
++		status = "okay";
++		interrupts = <0 48 1>;
++	};
+ 	/* END OF AUDIO board specific */
+ 
+ 	gpio_keypad{
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+index d4fc748..d3a98f6 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+@@ -1032,6 +1032,12 @@
+ 			sound-dai = <&pcm_codec>;
+ 		};
+ 	};
++
++	amlkaraoke {
++		compatible = "amlogic, aml_karaoke";
++		status = "okay";
++		interrupts = <0 48 1>;
++	};
+ 	/* END OF AUDIO board specific */
+ 
+ 	gpio_keypad{
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+index b5bcca1..9b45adb 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+@@ -1032,6 +1032,12 @@
+ 			sound-dai = <&pcm_codec>;
+ 		};
+ 	};
++
++	amlkaraoke {
++		compatible = "amlogic, aml_karaoke";
++		status = "okay";
++		interrupts = <0 48 1>;
++	};
+ 	/* END OF AUDIO board specific */
+ 
+ 	gpio_keypad{
+diff --git a/arch/arm64/configs/meson64_defconfig b/arch/arm64/configs/meson64_defconfig
+index 66aaa83..7fba832 100644
+--- a/arch/arm64/configs/meson64_defconfig
++++ b/arch/arm64/configs/meson64_defconfig
+@@ -401,7 +401,8 @@ CONFIG_LOGO=y
+ CONFIG_SND_USB_AUDIO=y
+ CONFIG_SND_AML_M8_SOC=y
+ CONFIG_SND_AML_M8=y
+-CONFIG_SND_AML_SPLIT_MODE=y
++#CONFIG_SND_AML_SPLIT_MODE=y
++CONFIG_SND_USB_CAPTURE_DATA=y
+ CONFIG_HID_DIA_REMOTE=y
+ CONFIG_UHID=y
+ CONFIG_USB_HIDDEV=y
+diff --git a/drivers/amlogic/Kconfig b/drivers/amlogic/Kconfig
+index e50fc5e..798c926 100644
+--- a/drivers/amlogic/Kconfig
++++ b/drivers/amlogic/Kconfig
+@@ -69,6 +69,8 @@ source "drivers/amlogic/amaudio/Kconfig"
+ 
+ source "drivers/amlogic/amaudio2/Kconfig"
+ 
++source "drivers/amlogic/amlkaraoke/Kconfig"
++
+ source "drivers/amlogic/audiodsp/Kconfig"
+ 
+ source "drivers/amlogic/ppmgr/Kconfig"
+diff --git a/drivers/amlogic/Makefile b/drivers/amlogic/Makefile
+index fd9e0f9..9404255 100644
+--- a/drivers/amlogic/Makefile
++++ b/drivers/amlogic/Makefile
+@@ -88,6 +88,8 @@ obj-$(CONFIG_AMAUDIO)		+= amaudio/
+ 
+ obj-$(CONFIG_AMAUDIO2)		+= amaudio2/
+ 
++obj-$(CONFIG_AMLKARAOKE)		+= amlkaraoke/
++
+ obj-$(CONFIG_V4L_AMLOGIC_VIDEO) += video_dev/
+ 
+ obj-$(CONFIG_V4L_AMLOGIC_VIDEO2) += video_dev/
+diff --git a/drivers/amlogic/amlkaraoke/Kconfig b/drivers/amlogic/amlkaraoke/Kconfig
+new file mode 100644
+index 0000000..9251ade
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/Kconfig
+@@ -0,0 +1,21 @@
++# AML Karaoke control drivers
++
++menuconfig AMLKARAOKE
++        bool "Amlogic karaoke Interface V1"
++        default y
++        help
++                Amlogic karaoke Interface V1, usb capture audio data, mix with i2s out directly.
++		---
++		---
++
++if	AMLKARAOKE
++
++config SND_USB_CAPTURE_DATA
++	tristate "USB Capture Audio Data In, for aml karaoke"
++	depends on SND_AML_M8_SOC
++	help
++		capture usb audio data into a ring buffer. The ring buffer data would be mixed with i2s out data.
++		Say 'Y' for aml karaoker driver.
++
++
++endif
+diff --git a/drivers/amlogic/amlkaraoke/Makefile b/drivers/amlogic/amlkaraoke/Makefile
+new file mode 100644
+index 0000000..3b757a6
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/Makefile
+@@ -0,0 +1,17 @@
++#
++# Makefile for sound control interface
++#
++
++# Toplevel Module Dependency
++#AML usb audio in to i2s out mixed
++
++
++# AML USB capture
++snd-usb-capture-objs := aml_usb_capture.o aml_audio_resampler.o aml_reverb.o
++obj-$(CONFIG_SND_USB_CAPTURE_DATA) += snd-usb-capture.o
++
++aml-i2s-out-mix-objs := aml_i2s_out_mix.o
++obj-$(CONFIG_SND_USB_CAPTURE_DATA) += aml-i2s-out-mix.o
++
++amlogic_karaoke-objs := aml_karaoke.o
++obj-$(CONFIG_AMLKARAOKE) += amlogic_karaoke.o
+\ No newline at end of file
+diff --git a/drivers/amlogic/amlkaraoke/aml_audio_resampler.c b/drivers/amlogic/amlkaraoke/aml_audio_resampler.c
+new file mode 100644
+index 0000000..5a84212
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_audio_resampler.c
+@@ -0,0 +1,98 @@
++#include <trace/events/printk.h>
++#include "aml_audio_resampler.h"
++
++#include <linux/types.h>
++
++
++/*Clip from 16.16 fixed-point to 0.15 fixed-point*/
++static inline short clip(int x)
++{
++	if (x < -32768)
++		return -32768;
++	else if (x > 32767)
++		return 32767;
++	else
++		return x;
++}
++
++int resampler_init(struct resample_para *resample)
++{
++	static const long long kPhaseMultiplier = 1L << 28;
++	resample->FractionStep = (unsigned int)
++		(resample->input_sr * kPhaseMultiplier
++			/ resample->output_sr);
++	resample->SampleFraction = 0;
++	resample->lastsample_left = 0;
++	resample->lastsample_right = 0;
++	return 0;
++}
++
++int resample_process(struct resample_para *resample, unsigned int in_frame,
++	short *input, short *output) {
++	unsigned int inputIndex = 0;
++	unsigned int outputIndex = 0;
++	unsigned int FractionStep = resample->FractionStep;
++	static const unsigned int kPhaseMask = (1LU << 28) - 1;
++	unsigned int frac = resample->SampleFraction;
++	short lastsample_left = resample->lastsample_left;
++	short lastsample_right = resample->lastsample_right;
++	if (resample->channels == 2) {
++		while (inputIndex == 0) {
++			*output++ = clip((int) lastsample_left +
++				((((int) input[0] - (int) lastsample_left)
++					* ((int) frac >> 13)) >> 15));
++			*output++ = clip((int) lastsample_right +
++				((((int) input[1] - (int) lastsample_right)
++					* ((int) frac >> 13)) >> 15));
++				frac += FractionStep;
++				inputIndex += (frac >> 28);
++				frac = (frac & kPhaseMask);
++				outputIndex++;
++		}
++		while (inputIndex < in_frame) {
++			*output++ = clip((int) input[2 * inputIndex - 2]
++				+ ((((int) input[2 * inputIndex]
++					- (int) input[2 * inputIndex - 2])
++						* ((int) frac >> 13)) >> 15));
++			*output++ = clip((int) input[2 * inputIndex - 1]
++				+ ((((int) input[2 * inputIndex + 1]
++					- (int) input[2 * inputIndex - 1])
++						* ((int) frac >> 13)) >> 15));
++
++			frac += FractionStep;
++			inputIndex += (frac >> 28);
++			frac = (frac & kPhaseMask);
++			outputIndex++;
++		}
++		resample->lastsample_left = input[2 * in_frame - 2];
++		resample->lastsample_right = input[2 * in_frame - 1];
++		resample->SampleFraction = frac;
++	} else {
++		/*left channel as output*/
++		while (inputIndex == 0) {
++			*output++ = clip((int) lastsample_left +
++				((((int) input[0] - (int) lastsample_left)
++					* ((int) frac >> 13)) >> 15));
++			frac += FractionStep;
++			inputIndex += (frac >> 28);
++			frac = (frac & kPhaseMask);
++			outputIndex++;
++		}
++		while (inputIndex < in_frame) {
++			*output++ = clip((int) input[2 * inputIndex - 2]
++				+ ((((int) input[2 * inputIndex]
++					- (int) input[2 * inputIndex - 2])
++						* ((int) frac >> 13)) >> 15));
++			frac += FractionStep;
++			inputIndex += (frac >> 28);
++			frac = (frac & kPhaseMask);
++			outputIndex++;
++		}
++		resample->lastsample_left = input[2 * in_frame - 2];
++		resample->SampleFraction = frac;
++	}
++	return outputIndex;
++}
++
++
++
+diff --git a/drivers/amlogic/amlkaraoke/aml_audio_resampler.h b/drivers/amlogic/amlkaraoke/aml_audio_resampler.h
+new file mode 100644
+index 0000000..a73d818
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_audio_resampler.h
+@@ -0,0 +1,19 @@
++#ifndef __AUDIO_RESAMPLER_H__
++#define __AUDIO_RESAMPLER_H__
++
++struct resample_para {
++	unsigned int FractionStep;
++	unsigned int SampleFraction;
++	short lastsample_left;
++	short lastsample_right;
++	unsigned int input_sr;
++	unsigned int output_sr;
++	unsigned int channels;
++};
++
++int resampler_init(struct resample_para *resample);
++int resample_process(struct resample_para *resample, unsigned int in_frame,
++	short *input, short *output);
++
++
++#endif
+diff --git a/drivers/amlogic/amlkaraoke/aml_i2s_out_mix.c b/drivers/amlogic/amlkaraoke/aml_i2s_out_mix.c
+new file mode 100644
+index 0000000..b5a1f8c
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_i2s_out_mix.c
+@@ -0,0 +1,299 @@
++/*
++ *   (AMLOGIC)Audio Driver for ALSA
++ *
++ *   Copyright (c) 2015 by Amlogic inc
++ *   A virtual path to get usb audio capture data to i2s mixed out.
++ *
++*/
++#include <linux/interrupt.h>
++#include <linux/slab.h>
++#include <linux/workqueue.h>
++
++#include <linux/amlogic/iomap.h>
++#include <linux/amlogic/sound/aiu_regs.h>
++
++#include "aml_i2s_out_mix.h"
++
++#define BASE_IRQ                        (32)
++#define AM_IRQ(reg)                     (reg + BASE_IRQ)
++#define INT_I2S_DDR                     AM_IRQ(48)
++#define IRQ_OUT INT_I2S_DDR
++#define I2S_INT_NUM		(16)	/* min 2, max 32 */
++#define I2S_BLOCK_SIZE	(64)	/*block_size=32byte*channel_num,normal is 2*/
++#define I2S_INT_BLOCK ((I2S_INT_NUM)*(I2S_BLOCK_SIZE))
++
++#define SW_BUFFER_THRESHOLD_DEFAULT (1024*15)
++
++#define I2S_INT_CHANNEL_MASK   3    /* stereo channels */
++
++#define RESAMPLE_BUFFER_SIZE      (32 * 1024)
++
++#define MIN_LATENCY (64 * 32)
++
++#ifdef CONFIG_SND_AML_SPLIT_MODE
++static unsigned latency = MIN_LATENCY * 2;      /* 20ms */
++#else
++static unsigned latency = MIN_LATENCY * 2;      /* 20ms */
++#endif
++
++/*Ultimate output from i2s */
++struct i2s_output {
++	/* audio info */
++	i2s_audio_buffer i2s_buf;
++
++	/* work queue */
++	struct work_struct work;
++
++	/* is Init ? */
++	bool isInit;
++};
++
++static struct i2s_output s_i2s_output;
++
++static inline short clip(int x)
++{
++	if (x < -32768)
++		x = -32768;
++	else if (x > 32767)
++		x =  32767;
++	return x & 0xFFFF;
++}
++
++/* Get usb audio info. */
++struct usb_audio_buffer *usb_get_audio_info(void)
++{
++	return (struct usb_audio_buffer *)snd_usb_pcm_capture_buffer;
++}
++
++
++/* Get i2s audio info. */
++i2s_audio_buffer *i2s_get_audio_info(void)
++{
++	return (i2s_audio_buffer *)&s_i2s_output.i2s_buf;
++}
++
++
++/* i2s get memory size */
++static unsigned i2s_get_out_size(void)
++{
++#ifdef CONFIG_SND_AML_SPLIT_MODE
++	return aml_read_cbus(AIU_MEM_I2S_END_PTR) -
++		aml_read_cbus(AIU_MEM_I2S_START_PTR) + 256;
++#else
++	return aml_read_cbus(AIU_MEM_I2S_END_PTR) -
++		aml_read_cbus(AIU_MEM_I2S_START_PTR) + 64;
++#endif
++}
++
++/* i2s get read pointer */
++static unsigned i2s_get_out_read_ptr(void)
++{
++	return aml_read_cbus(AIU_MEM_I2S_RD_PTR) -
++		aml_read_cbus(AIU_MEM_I2S_START_PTR);
++}
++
++
++/* mix stereo source data, output stereo
++   mic gain range in [0, 256]
++*/
++
++void mix_memcpy_stereo_src(char *dst, char *src, unsigned int count)
++{
++	short *dst_left = (short *)(dst);
++	short *dst_right;
++	short *src_buf = (short *)(src);
++	int i;
++	int sample;
++
++#ifdef CONFIG_SND_AML_SPLIT_MODE
++	/* TODO: split mode aiu_mem_i2s_mask[15:0] must set 8'hffff_ffff.*/
++	dst_right = dst_left + 1;
++#if 1
++	for (i = 0; i < count; i++) {
++		sample = *dst_left;
++		*(dst_left++) = (short)clip(sample + (*src_buf++));
++	}
++#else
++	for (i = 0; i < count; i += 4) {
++		sample = ((*dst_left) + (*src_buf++));
++		*dst_left++ = (short)clip(sample);
++		sample = ((*dst_right) + (*src_buf++));
++		*dst_right++ = (short)clip(sample);
++	}
++#endif
++#else
++	int j;
++
++	dst_right = dst_left + 16;
++	for (i = 0; i < count; i += 64) {
++		for (j = 0; j < 16; j++) {
++			sample = ((*dst_left) + (*src_buf++));
++			*dst_left++ = (short)clip(sample);
++			sample = ((*dst_right) + (*src_buf++));
++			*dst_right++ = (short)clip(sample);
++		}
++		dst_left += 16;
++		dst_right += 16;
++	}
++#endif
++}
++
++/*mix i2s memory audio data with usb audio record in,output stereo to i2s*/
++static void i2s_out_mix(i2s_audio_buffer *i2s_audio,
++	struct usb_audio_buffer *usb_audio)
++{
++	i2s_audio_buffer *i2sbuf = i2s_audio;
++	struct usb_audio_buffer *usbbuf = usb_audio;
++	unsigned int i2s_out_ptr = i2s_get_out_read_ptr();
++	unsigned int alsa_delay = (aml_i2s_alsa_write_addr +
++		i2sbuf->size - i2s_out_ptr) % i2sbuf->size;
++	unsigned int i2s_mix_delay = (i2sbuf->wr +
++		i2sbuf->size - i2s_out_ptr) % i2sbuf->size;
++	unsigned long i2sirqflags , usbirqflags;
++	unsigned int mix_count = 0;
++	int avail = 0;
++
++	spin_lock_irqsave(&i2sbuf->lock , i2sirqflags);
++
++	i2sbuf->rd = i2s_out_ptr;
++	/*(i2sbuf->size + i2sbuf->wr - i2s_out_ptr) % i2sbuf->size;*/
++	i2sbuf->level = i2s_mix_delay;
++
++	mix_count = I2S_INT_BLOCK;
++	if (i2sbuf->level <= I2S_INT_BLOCK ||
++	    (alsa_delay - i2s_mix_delay) < I2S_INT_BLOCK) {
++		i2sbuf->wr = (i2sbuf->rd + latency) % i2sbuf->size;
++		i2sbuf->wr /= I2S_INT_BLOCK;
++		i2sbuf->wr *= I2S_INT_BLOCK;
++		i2sbuf->level = latency;
++
++		goto EXIT;
++	}
++	if (usbbuf->wr >= usbbuf->rd)
++		avail = usbbuf->wr - usbbuf->rd;
++	else
++		avail = usbbuf->wr + usbbuf->size - usbbuf->rd;
++
++	if (avail < I2S_INT_BLOCK) {
++		/*printk("i2sOUT buffer underrun\n");*/
++		/*goto EXIT;*/
++		/*fill zero data*/
++		memset(usbbuf->addr + (usbbuf->rd + avail) % usbbuf->size,
++			0,
++			I2S_INT_BLOCK - avail);
++	}
++
++	/* ensure that usb data in stereo*/
++	mix_memcpy_stereo_src(i2sbuf->addr + i2sbuf->wr,
++			usbbuf->addr + usbbuf->rd, mix_count);
++
++	i2sbuf->wr = (i2sbuf->wr + mix_count) % i2sbuf->size;
++	i2sbuf->level = (i2sbuf->size + i2sbuf->wr - i2sbuf->rd) % i2sbuf->size;
++
++	spin_lock_irqsave(&usbbuf->lock, usbirqflags);
++	usbbuf->rd = (usbbuf->rd + mix_count) % usbbuf->size;
++	/*usbbuf->level = (usbbuf->size + usbbuf->wr - usbbuf->rd)
++	% usbbuf->size;*/
++	spin_unlock_irqrestore(&usbbuf->lock, usbirqflags);
++
++EXIT:
++	spin_unlock_irqrestore(&i2sbuf->lock, i2sirqflags);
++	return;
++}
++
++/* IRQ handler */
++static irqreturn_t i2s_out_mix_callback(int irq, void *data)
++{
++	i2s_audio_buffer *i2s_buf = (i2s_audio_buffer *)data;
++	unsigned int i2s_size = i2s_get_out_size();
++	struct usb_audio_buffer *usbbuf =
++		(struct usb_audio_buffer *)usb_get_audio_info();
++
++	/*check whether usb audio record start*/
++	if (!usbbuf || !usbbuf->addr || !usbbuf->running || !builtin_mixer)
++		return IRQ_HANDLED;
++
++	/*printk("mix callback %p, %p\n", usbbuf, usbbuf->addr);*/
++	/*update i2s buffer informaiton if needed.*/
++	if (i2s_size != i2s_buf->size) {
++		i2s_buf->size = i2s_size;
++		i2s_buf->addr = (unsigned char *)aml_i2s_playback_start_addr;
++		i2s_buf->paddr = aml_i2s_playback_phy_start_addr;
++		i2s_buf->rd = i2s_get_out_read_ptr();
++	}
++
++	schedule_work(&s_i2s_output.work);
++
++	return IRQ_HANDLED;
++}
++
++
++/* Work Queue handler */
++static void i2s_out_mix_work_handler(struct work_struct *data)
++{
++	i2s_audio_buffer *i2sbuf =
++		(i2s_audio_buffer *)i2s_get_audio_info();
++	struct usb_audio_buffer *usbbuf =
++		(struct usb_audio_buffer *)usb_get_audio_info();
++
++	if (!i2sbuf || !usbbuf)
++		return;
++
++	/* mix */
++	i2s_out_mix(i2sbuf, usbbuf);
++}
++
++/* init */
++int i2s_out_mix_init(void)
++{
++	int ret = 0;
++	if (s_i2s_output.isInit) {
++		ret = -1;
++		return ret;
++	}
++
++	memset((void *)&s_i2s_output, 0, sizeof(struct i2s_output));
++	/* init i2s audio buffer */
++	spin_lock_init(&s_i2s_output.i2s_buf.lock);
++	s_i2s_output.i2s_buf.addr =
++		(unsigned char *)aml_i2s_playback_start_addr;
++	s_i2s_output.i2s_buf.paddr =
++		aml_i2s_playback_phy_start_addr;
++	s_i2s_output.i2s_buf.size =
++	i2s_get_out_size();
++	s_i2s_output.i2s_buf.rd =
++		i2s_get_out_read_ptr();
++	s_i2s_output.isInit = true;
++	/*register irq*/
++	if (request_irq(IRQ_OUT, i2s_out_mix_callback,
++		IRQF_SHARED, "i2s_out_mix",
++		&s_i2s_output.i2s_buf)) {
++		ret = -EINVAL;
++	}
++
++	/*irq block*/
++#ifdef CONFIG_SND_AML_SPLIT_MODE
++	/* TODO: split mode aiu_mem_i2s_mask[15:0] must set 8'hffff_ffff. */
++	aml_cbus_update_bits(AIU_MEM_I2S_MASKS, 0xffff << 16, 4 << 16);
++#else
++	aml_cbus_update_bits(AIU_MEM_I2S_MASKS,
++		0xffff << 16, I2S_INT_NUM << 16);
++#endif
++	/*work queue*/
++	INIT_WORK(&s_i2s_output.work, i2s_out_mix_work_handler);
++
++	return ret;
++}
++EXPORT_SYMBOL(i2s_out_mix_init);
++
++/* Deinit */
++int i2s_out_mix_deinit(void)
++{
++	if (!s_i2s_output.isInit)
++		return -1;
++	free_irq(IRQ_OUT, &s_i2s_output.i2s_buf);
++	memset((void *)&s_i2s_output, 0, sizeof(struct i2s_output));
++	return 0;
++}
++EXPORT_SYMBOL(i2s_out_mix_deinit);
++
+diff --git a/drivers/amlogic/amlkaraoke/aml_i2s_out_mix.h b/drivers/amlogic/amlkaraoke/aml_i2s_out_mix.h
+new file mode 100644
+index 0000000..5d86006
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_i2s_out_mix.h
+@@ -0,0 +1,38 @@
++#ifndef __AML_I2S_OUT_MIX_H
++#define __AML_I2S_OUT_MIX_H
++
++/*
++ *   (AMLOGIC)Audio Driver for ALSA
++ *
++ *   Copyright (c) 2015 by Amlogic inc
++ *   A virtual path to get usb audio capture data to i2s mixed out.
++ *
++*/
++
++extern unsigned long aml_i2s_playback_start_addr;
++extern unsigned long aml_i2s_playback_phy_start_addr;
++extern unsigned long aml_i2s_alsa_write_addr;
++
++extern int builtin_mixer;
++extern struct usb_audio_buffer *snd_usb_pcm_capture_buffer;
++
++/*Keep same struct with usb_capture.h */
++typedef
++struct usb_audio_buffer {
++	dma_addr_t paddr;
++	unsigned char *addr;
++	unsigned size;
++	unsigned wr;
++	unsigned rd;
++	unsigned level;
++	unsigned channels;
++	unsigned rate;          /* rate in Hz */
++	unsigned running;
++	spinlock_t lock;
++} i2s_audio_buffer;
++
++
++extern int i2s_out_mix_init(void);
++extern int i2s_out_mix_deinit(void);
++
++#endif
+diff --git a/drivers/amlogic/amlkaraoke/aml_karaoke.c b/drivers/amlogic/amlkaraoke/aml_karaoke.c
+new file mode 100644
+index 0000000..07e2aae
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_karaoke.c
+@@ -0,0 +1,276 @@
++#include <linux/version.h>
++#include <linux/module.h>
++#include <linux/device.h>
++#include <linux/platform_device.h>
++
++#include <linux/amlogic/major.h>
++
++#include "aml_karaoke.h"
++
++
++
++int builtin_mixer = 1;
++EXPORT_SYMBOL(builtin_mixer);
++
++static ssize_t show_builtin_mixer(struct class *class,
++				       struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", builtin_mixer);
++}
++
++static ssize_t store_builtin_mixer(struct class *class,
++					struct class_attribute *attr,
++					const char *buf, size_t count)
++{
++	int val = 0;
++
++	if (buf[0] && kstrtoint(buf, 10, &val))
++		return -EINVAL;
++
++	if (val < 0)
++		val = 0;
++
++	builtin_mixer = val;
++	pr_info("builtin_mixer set to %d\n", builtin_mixer);
++	return count;
++}
++
++int reverb_time = 0;
++EXPORT_SYMBOL(reverb_time);
++
++static ssize_t show_reverb_time(struct class *class,
++				       struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", reverb_time);
++}
++
++static ssize_t store_reverb_time(struct class *class,
++					struct class_attribute *attr,
++					const char *buf, size_t count)
++{
++	int val = 0;
++
++	if (buf[0] && kstrtoint(buf, 10, &val))
++		return -EINVAL;
++
++	if (val < 0)
++		val = 0;
++	if (val > 6)
++		val = 6;
++
++	reverb_time = val;
++	pr_info("reverb_time set to %d\n", reverb_time);
++	return count;
++}
++
++int usb_mic_digital_gain = 256;
++EXPORT_SYMBOL(usb_mic_digital_gain);
++static ssize_t show_usb_mic_digital_gain(struct class *class,
++				       struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", usb_mic_digital_gain);
++}
++
++static ssize_t store_usb_mic_digital_gain(struct class *class,
++					struct class_attribute *attr,
++					const char *buf, size_t count)
++{
++	int val = 0;
++
++	if (buf[0] && kstrtoint(buf, 10, &val))
++		return -EINVAL;
++
++	if (val < 0)
++		val = 0;
++
++	if (val > 256)
++		val = 256;
++
++	usb_mic_digital_gain = val;
++	pr_info("usb_mic_digital_gain set to %d\n", usb_mic_digital_gain);
++	return count;
++}
++
++int reverb_enable = 0;
++EXPORT_SYMBOL(reverb_enable);
++static ssize_t show_reverb_enable(struct class *class,
++				       struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", reverb_enable);
++}
++
++static ssize_t store_reverb_enable(struct class *class,
++					struct class_attribute *attr,
++					const char *buf, size_t count)
++{
++	int val = 0;
++
++	if (buf[0] && kstrtoint(buf, 10, &val))
++		return -EINVAL;
++
++	reverb_enable = val;
++	pr_info("reverb_enable set to %d\n", reverb_enable);
++	return count;
++}
++
++int reverb_highpass = 0;
++EXPORT_SYMBOL(reverb_highpass);
++static ssize_t show_reverb_highpass(struct class *class,
++				       struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", reverb_highpass);
++}
++
++static ssize_t store_reverb_highpass(struct class *class,
++					struct class_attribute *attr,
++					const char *buf, size_t count)
++{
++	int val = 0;
++
++	if (buf[0] && kstrtoint(buf, 10, &val))
++		return -EINVAL;
++
++	reverb_highpass = val;
++	pr_info("reverb_highpass set to %d\n", reverb_highpass);
++	return count;
++}
++
++/* reverb in gain [0%, 100%]*/
++int reverb_in_gain = 100;
++EXPORT_SYMBOL(reverb_in_gain);
++static ssize_t show_reverb_in_gain(struct class *class,
++				       struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", reverb_in_gain);
++}
++
++static ssize_t store_reverb_in_gain(struct class *class,
++					struct class_attribute *attr,
++					const char *buf, size_t count)
++{
++	int val = 0;
++
++	if (buf[0] && kstrtoint(buf, 10, &val))
++		return -EINVAL;
++
++	if (val < 0)
++		val = 0;
++	if (val > 100)
++		val = 100;
++
++	reverb_in_gain = val;
++	pr_info("reverb_in_gain set to %d\n", reverb_in_gain);
++	return count;
++}
++
++/* reverb out gain [0%, 100%]*/
++int reverb_out_gain = 100;
++EXPORT_SYMBOL(reverb_out_gain);
++static ssize_t show_reverb_out_gain(struct class *class,
++				       struct class_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%d\n", reverb_out_gain);
++}
++
++static ssize_t store_reverb_out_gain(struct class *class,
++					struct class_attribute *attr,
++					const char *buf, size_t count)
++{
++	int val = 0;
++
++	if (buf[0] && kstrtoint(buf, 10, &val))
++		return -EINVAL;
++
++	if (val < 0)
++		val = 0;
++	if (val > 100)
++		val = 100;
++
++	reverb_out_gain = val;
++	pr_info("reverb_out_gain set to %d\n", reverb_out_gain);
++	return count;
++}
++
++
++static struct class_attribute amlkaraoke_attrs[] = {
++	__ATTR(builtin_mixer, S_IRUGO | S_IWUSR | S_IWGRP,
++		show_builtin_mixer, store_builtin_mixer),
++	__ATTR(reverb_time, S_IRUGO | S_IWUSR,
++		show_reverb_time, store_reverb_time),
++	__ATTR(usb_mic_digital_gain, S_IRUGO | S_IWUSR,
++		show_usb_mic_digital_gain, store_usb_mic_digital_gain),
++	__ATTR(reverb_enable, S_IRUGO | S_IWUSR,
++		show_reverb_enable, store_reverb_enable),
++	__ATTR(reverb_highpass, S_IRUGO | S_IWUSR,
++		show_reverb_highpass, store_reverb_highpass),
++	__ATTR(reverb_in_gain, S_IRUGO | S_IWUSR,
++		show_reverb_in_gain, store_reverb_in_gain),
++	__ATTR(reverb_out_gain, S_IRUGO | S_IWUSR,
++		show_reverb_out_gain, store_reverb_out_gain),
++	__ATTR_NULL,
++};
++
++static struct class amlkaraoke_class = {
++	.name = AMAUDIO_CLASS_NAME,
++	.class_attrs = amlkaraoke_attrs,
++};
++
++static int amlkaraoke_init(void)
++{
++	int ret = 0;
++	ret = class_register(&amlkaraoke_class);
++	if (ret) {
++		pr_err("amlkaraoke class create fail.\n");
++		goto err;
++	}
++
++	pr_info("amlkaraoke init success!\n");
++
++err:
++	return ret;
++}
++
++static int amlkaraoke_exit(void)
++{
++	class_unregister(&amlkaraoke_class);
++
++	pr_info("amlkaraoke_exit!\n");
++	return 0;
++}
++
++static const struct of_device_id amlogic_match[] = {
++	{.compatible = "amlogic, aml_karaoke",},
++	{},
++};
++
++static struct platform_driver aml_karaoke_driver = {
++	.driver = {
++		   .name = "aml_karaoke_driver",
++		   .owner = THIS_MODULE,
++		   .of_match_table = amlogic_match,
++		   },
++
++	.probe = NULL,
++	.remove = NULL,
++};
++
++static int __init aml_karaoke_modinit(void)
++{
++	amlkaraoke_init();
++
++	return platform_driver_register(&aml_karaoke_driver);
++}
++
++static void __exit aml_karaoke_modexit(void)
++{
++	amlkaraoke_exit();
++	platform_driver_unregister(&aml_karaoke_driver);
++}
++
++module_init(aml_karaoke_modinit);
++module_exit(aml_karaoke_modexit);
++
++MODULE_DESCRIPTION("AMLOGIC Karaoke Interface driver");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Amlogic Inc.");
++MODULE_VERSION("1.0.0");
+diff --git a/drivers/amlogic/amlkaraoke/aml_karaoke.h b/drivers/amlogic/amlkaraoke/aml_karaoke.h
+new file mode 100644
+index 0000000..76a8842
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_karaoke.h
+@@ -0,0 +1,17 @@
++#ifndef _AML_KARAOKE_H_
++#define _AML_KARAOKE_H_
++
++/*
++ *   (AMLOGIC) Karaoke
++ *
++ *   Copyright (c) 2016 by Amlogic inc
++ *   A virtual path to get usb audio capture data to i2s mixed out.
++ *
++*/
++
++#define AMLKARAOKE_DRIVER_NAME "amlkaraoke"
++#define AMLKARAOKE_DRIVER_NAME "amlkaraoke"
++#define AMLKARAOKE_DEVICE_NAME "amlkaraoke-dev"
++#define AMAUDIO_CLASS_NAME "amlkaraoke"
++
++#endif
+diff --git a/drivers/amlogic/amlkaraoke/aml_reverb.c b/drivers/amlogic/amlkaraoke/aml_reverb.c
+new file mode 100644
+index 0000000..466f261
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_reverb.c
+@@ -0,0 +1,231 @@
++#include <linux/init.h>
++#include <linux/slab.h>
++
++#include "aml_reverb.h"
++
++struct af_equalizer filer;
++
++/* Compute a realistic decay */
++
++static int decay_table[][8] = {
++	{0, 0, 0, 0, 0, 0, 0, 0}, /*decay 0ms*/
++	{2068, 0, 0, 0, 0, 0, 0, 0}, /*decay time 20ms*/
++	{13045, 130, 1, 0, 0, 0, 0, 0}, /*decay time 60ms*/
++	{20675, 2068, 207, 21, 2, 0, 0, 0}, /*decay time 120ms*/
++	{19284, 5193, 1119, 241, 52, 11, 2, 1}, /*decay time 180ms*/
++	{20615, 7751, 2331, 701, 211, 63, 19, 6}, /*decay time 230ms*/
++	{27255, 10851, 4320, 1720, 685, 273, 109, 43}, /*decay time 300ms,
++							 max value*/
++};
++
++static inline int clip16(int x)
++{
++	if (x < -32768)
++		return -32768;
++	if (x > 32767)
++		return 32767;
++
++	return x;
++}
++
++int reverb_start(struct reverb_t *aml_Reverb)
++{
++	struct reverb_t *reverb = aml_Reverb;
++	int i;
++
++#if 0
++	/* check whether reverb is enabled */
++	if (!reverb_enable)
++		return -1;
++#endif
++
++	reverb->counter = 0;
++	reverb->in_gain = ((long long)(32767 * reverb_in_gain + 16384))
++							>> 7;
++	reverb->out_gain = ((long long)(32767 * reverb_out_gain + 16384))
++							>> 7;
++	reverb->time = 0;
++	reverb->numdelays = 8;
++	reverb->maxsamples = 0;
++	reverb->reverbbuf = NULL;
++
++	for (i = 0; i < MAXREVERBS; i++) {
++		reverb->delay[i] = 40 * i + 8;
++		reverb->decay[i] = decay_table[reverb->time][i];
++	}
++
++	for (i = 0; i < reverb->numdelays; i++) {
++		/* stereo channel */
++		reverb->samples[i] = reverb->delay[i] * MAXRATE * 2;
++		if (reverb->samples[i] > reverb->maxsamples)
++			reverb->maxsamples = reverb->samples[i];
++	}
++
++	reverb->reverbbuf = kzalloc(sizeof(int16_t) * reverb->maxsamples,
++					GFP_KERNEL);
++	if (!reverb->reverbbuf) {
++		pr_info("reverb: Cannot malloc %lu bytes!\n",
++				sizeof(int16_t) * reverb->maxsamples);
++		return -1;
++	}
++
++	for (i = 0; i < reverb->numdelays; i++)
++		reverb->in_gain = (reverb->in_gain *
++			(32768 - ((reverb->decay[i] * reverb->decay[i]
++				+ 16384) >> 15)) + 16384) >> 15;
++	pr_info("reverb: reverb->in_gain = %d, reverb->maxsamples = %d\n",
++			reverb->in_gain, reverb->maxsamples);
++
++	if (reverb_highpass)
++		eq_init(&filer);
++
++	return 0;
++}
++
++/*
++ * Processed signed long samples from ibuf to obuf.
++ * Return number of samples processed.
++ */
++int reverb_process(struct reverb_t *aml_Reverb,
++			int16_t *ibuf,
++			int16_t *obuf,
++			int isamp,
++			int channels,
++			int channel)
++{
++	struct reverb_t *reverb = aml_Reverb;
++	int len, done, offset;
++	int i, j, k;
++	int d_in, d_out;
++	long long tmp;
++
++	/* check whether reverb is enabled */
++	if (!reverb_enable)
++		return -1;
++
++	if (reverb->time != reverb_time) {
++		for (i = 0; i < MAXREVERBS; i++)
++			reverb->decay[i] = decay_table[reverb_time][i];
++
++		memset(reverb->reverbbuf, 0, reverb->maxsamples);
++		pr_info("reverb: reset reverb paramters!\n");
++	}
++
++	i = reverb->counter;
++	len = isamp >> (channels >> 1);
++	offset = channels;
++	for (done = 0; done < len; done++) {
++		d_in = (int) *ibuf;
++		ibuf += offset;
++		tmp = 0;
++
++		if (reverb_highpass)
++			d_in = fourth_order_IIR(d_in, &filer, channel);
++
++		tmp = ((long long)d_in * reverb->in_gain)
++					>> (15 - DATA_FRACTION_BIT);
++		/* Mix decay of delay and input as output */
++		for (j = 0; j < reverb->numdelays; j++) {
++			k = (i + reverb->maxsamples - reverb->samples[j])
++						% reverb->maxsamples;
++			tmp += ((long long) reverb->reverbbuf[k]
++						* reverb->decay[j]) >> 15;
++		}
++		d_in = clip16((tmp + HALF_ERROR) >> DATA_FRACTION_BIT);
++		tmp = (tmp * reverb->out_gain) >> 15;
++		d_out = clip16((tmp + HALF_ERROR) >> DATA_FRACTION_BIT);
++
++		*obuf = (int16_t) d_out;
++		obuf += offset;
++		reverb->reverbbuf[i] = (int16_t)d_in;
++		i++;
++		i += (offset >> 1);
++		i %= reverb->maxsamples;
++	}
++	reverb->counter = i;
++	reverb->time = reverb_time;
++
++	return 0;
++}
++
++/*
++ * Clean up reverb effect.
++ */
++int reverb_stop(struct reverb_t *aml_Reverb)
++{
++	struct reverb_t *reverb = aml_Reverb;
++
++	kfree(reverb->reverbbuf);
++	reverb->reverbbuf = NULL;
++	return 0;
++}
++
++static int eq_coefficients[2][SECTION][COEFF_COUNT] = {
++	{ /* B coefficients */
++		{16777216, -33554433, 16777216},  /*B1*/
++		{16777216, -32950274, 16179410},  /*B2*/
++	},
++	{ /* A coefficients*/
++		{16777216, -33554431, 16777216},  /*A1*/
++		{16777216, -33297782, 16526985},  /*A2*/
++	},
++};
++
++void eq_init(struct af_equalizer *eq)
++{
++	int i, j;
++
++	for (i = 0; i < SECTION; i++) {
++		for (j = 0; j < COEFF_COUNT; j++) {
++			eq->b[i][j] = eq_coefficients[0][i][j];
++			eq->a[i][j] = eq_coefficients[1][i][j];
++		}
++	}
++
++	memset(eq->cx, 0, sizeof(int) * CF * SECTION * 2);
++	memset(eq->cy, 0, sizeof(int) * CF * SECTION * 2);
++	return;
++}
++
++int fourth_order_IIR(int input, struct af_equalizer *eq_ptr, int channel)
++{
++	int sample = input;
++	int y = 0, i = 0;
++	long long temp = 0;
++	int cx[2][2], cy[2][2];
++
++	cx[0][0] = eq_ptr->cx[channel][0][0];
++	cx[0][1] = eq_ptr->cx[channel][0][1];
++	cx[1][0] = eq_ptr->cx[channel][1][0];
++	cx[1][1] = eq_ptr->cx[channel][1][1];
++	cy[0][0] = eq_ptr->cy[channel][0][0];
++	cy[0][1] = eq_ptr->cy[channel][0][1];
++	cy[1][0] = eq_ptr->cy[channel][1][0];
++	cy[1][1] = eq_ptr->cy[channel][1][1];
++
++	sample <<= DATA_FRACTION_BIT;
++
++	for (i = 0; i < SECTION; i++) {
++		temp = (long long)sample * (eq_ptr->b[i][0]);
++		temp += (long long)cx[i][0] * (eq_ptr->b[i][1]);
++		temp += (long long)cx[i][1] * (eq_ptr->b[i][2]);
++		temp -= (long long)cy[i][0] * (eq_ptr->a[i][1]);
++		temp -= (long long)cy[i][1] * (eq_ptr->a[i][2]);
++		y = (int)(temp >> COEFF_FRACTION_BIT);
++		cx[i][1] = cx[i][0];
++		cx[i][0] = sample;
++		cy[i][1] = cy[i][0];
++		cy[i][0] = y;
++		sample = y;
++	}
++	eq_ptr->cx[channel][0][0] = cx[0][0];
++	eq_ptr->cx[channel][0][1] = cx[0][1];
++	eq_ptr->cx[channel][1][0] = cx[1][0];
++	eq_ptr->cx[channel][1][1] = cx[1][1];
++	eq_ptr->cy[channel][0][0] = cy[0][0];
++	eq_ptr->cy[channel][0][1] = cy[0][1];
++	eq_ptr->cy[channel][1][0] = cy[1][0];
++	eq_ptr->cy[channel][1][1] = cy[1][1];
++
++	return (y + HALF_ERROR) >> DATA_FRACTION_BIT;
++}
+diff --git a/drivers/amlogic/amlkaraoke/aml_reverb.h b/drivers/amlogic/amlkaraoke/aml_reverb.h
+new file mode 100644
+index 0000000..392a270
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_reverb.h
+@@ -0,0 +1,70 @@
++#ifndef AML_REVERB_H
++#define AML_REVERB_H
++
++#define MAXRATE 48 /*sample num in ms */
++#define MAXREVERBS 8
++
++extern int reverb_time;
++extern int reverb_enable;
++extern int reverb_highpass;
++extern int reverb_in_gain;
++extern int reverb_out_gain;
++
++struct reverb_t {
++	int     counter;
++	int	    numdelays;
++	int	    in_gain;
++	int     out_gain;
++	int     time;
++	int	    delay[MAXREVERBS];
++	int     decay[MAXREVERBS];
++	int	    samples[MAXREVERBS];
++	int     maxsamples;
++	int16_t	*reverbbuf;
++};
++
++#define   DATA_FRACTION_BIT 0
++#define   HALF_ERROR        0   /*((0x1) << (DATA_FRACTION_BIT - 1))*/
++
++/* Count if coefficients */
++#define   COEFF_COUNT	    3
++/*Section of cascaded two order IIR filter*/
++#define   SECTION			2
++/*Channel Count*/
++#define   CF                2
++#define   COEFF_FRACTION_BIT      24
++
++struct af_equalizer {
++	/*B coefficient array*/
++	int   b[SECTION][COEFF_COUNT];
++	/*A coefficient array*/
++	int   a[SECTION][COEFF_COUNT];
++	/*Circular buffer for channel input data*/
++	int   cx[CF][SECTION][2];
++	/*Circular buffer for channel output data*/
++	int   cy[CF][SECTION][2];
++};
++
++struct audio_format {
++	short left;
++	short right;
++};
++
++int reverb_start(struct reverb_t *aml_Reverb);
++int reverb_process(struct reverb_t *aml_Reverb,
++		int16_t *ibuf,
++		int16_t *obuf,
++		int isamp,
++		int channels,
++		int channel);
++int reverb_drain(struct reverb_t *aml_Reverb, int16_t *obuf, int osamp);
++int reverb_stop(struct reverb_t *aml_Reverb);
++
++void eq_init(struct af_equalizer *eq);
++
++int fourth_order_IIR(int input,
++		struct af_equalizer *eq_ptr,
++		int channel);
++
++#endif
++
+diff --git a/drivers/amlogic/amlkaraoke/aml_usb_capture.c b/drivers/amlogic/amlkaraoke/aml_usb_capture.c
+new file mode 100644
+index 0000000..271c678
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_usb_capture.c
+@@ -0,0 +1,551 @@
++/*
++ *   (AMLOGIC) USB Audio Driver for ALSA
++ *
++ *   Copyright (c) 2015 by Amlogic inc
++ *   A virtual path to get usb audio capture data.
++ *
++*/
++#include <linux/slab.h>
++#include <linux/bug.h>
++
++#include "aml_usb_capture.h"
++#include "aml_reverb.h"
++
++/*void *snd_usb_pcm_capture_buffer = NULL;*/
++struct usb_audio_buffer *snd_usb_pcm_capture_buffer;
++EXPORT_SYMBOL(snd_usb_pcm_capture_buffer);
++
++/* delay time for no audio effect to avoid noise. */
++int usb_ignore_effect_time;
++
++struct usb_input *s_usb_capture = NULL;
++
++struct reverb_t AML_Reverb_L;
++struct reverb_t AML_Reverb_R;
++
++/* i2s info */
++unsigned int aml_i2s_playback_channels = 0;
++unsigned int aml_i2s_playback_sample = 0;
++
++void aml_i2s_set_ch_r_info(unsigned int channels, unsigned int samplerate)
++{
++	aml_i2s_playback_channels = channels;
++	aml_i2s_playback_sample = samplerate;
++}
++EXPORT_SYMBOL(aml_i2s_set_ch_r_info);
++
++static inline short clip(int x)
++{
++	if (x < -32768)
++		x = -32768;
++	else if (x > 32767)
++		x =  32767;
++	return x & 0xFFFF;
++}
++
++struct usb_input *usb_audio_get_capture(void)
++{
++	return s_usb_capture;
++}
++
++static void usb_audio_data_tuning_mic_gain(
++	unsigned char *audiobuf, int frames)
++{
++	int16_t *tuningbuf = (int16_t *)audiobuf;
++	int i;
++
++	BUG_ON(!audiobuf);
++	for (i = 0; i < frames; i++) {
++		*tuningbuf = ((*tuningbuf) * (usb_mic_digital_gain)) >> 8;
++		*tuningbuf = clip(*tuningbuf);
++		tuningbuf += 1;
++	}
++}
++
++
++static int usb_audio_mono2stereo(
++	unsigned char *dst, unsigned char *src, int frames)
++{
++	int j;
++	int16_t *transfer_src = (int16_t *)src;
++	int16_t *transfer_dst = (int16_t *)dst;
++
++	for (j = 0; j < frames; j++) {
++		transfer_dst[2 * j] = transfer_src[j];
++		transfer_dst[2 * j + 1] = transfer_src[j];
++	}
++
++	return 0;
++}
++
++
++static int usb_resample_and_mono2stereo_malloc_buffer(
++	struct usb_input *usbinput,
++	unsigned int out_rate)
++{
++	unsigned int buffer_size;
++
++	BUG_ON(!usbinput->usb_buf);
++	BUG_ON(!usbinput->usb_buf->rate);
++	buffer_size = (USB_AUDIO_CAPTURE_PACKAGE_SIZE  * (out_rate
++				/ usbinput->usb_buf->rate) + 1) * 4;
++
++	if (!usbinput->out_buffer) {
++		usbinput->out_buffer = (unsigned char *)
++		kzalloc(buffer_size, GFP_KERNEL);
++	}
++	if (!usbinput->out_buffer) {
++		pr_info("usb resample buffer alloc failed\n");
++		return -ENOMEM;
++	}
++
++	/* buffer for mono to stereo, Now i2s out is stereo */
++	if (1 == usbinput->usb_buf->channels
++		&& !usbinput->mono2stereo) {
++
++		usbinput->mono2stereo = (unsigned char *)
++		kzalloc(buffer_size * 2, GFP_KERNEL);
++		if (!usbinput->mono2stereo) {
++			pr_info("resample mono2stereo failed\n");
++			return -ENOMEM;
++		}
++	}
++
++	return 0;
++}
++
++static int usb_resample_and_mono2stereo_free_buffer(
++	struct usb_input *usbinput)
++{
++	if (usbinput
++		&& (usbinput->out_buffer || usbinput->mono2stereo)) {
++		kfree(usbinput->out_buffer);
++		kfree(usbinput->mono2stereo);
++	}
++
++	return 0;
++}
++
++static int usb_audio_capture_malloc_buffer(
++	struct usb_audio_buffer *usb_audio, int size)
++{
++	usb_audio->addr = (unsigned char *)
++		kzalloc(size, GFP_KERNEL);
++	if (!usb_audio->addr) {
++		pr_info("USB audio capture buffer alloc failed\n");
++		return -ENOMEM;
++	}
++	usb_audio->size = size;
++	return 0;
++}
++
++static int usb_audio_capture_free_buffer(
++	struct usb_audio_buffer *usb_audio)
++{
++	if (usb_audio && usb_audio->addr) {
++		kfree(usb_audio->addr);
++		usb_audio->addr = NULL;
++	}
++	return 0;
++}
++
++static int usb_check_resample_and_mono2stereo_buffer(
++	struct usb_input *usbinput,	unsigned int rate)
++{
++	int ret = -1;
++
++	if (rate
++		&& ((!usbinput->out_buffer)
++			|| (!usbinput->mono2stereo))) {
++		usb_resample_and_mono2stereo_malloc_buffer(
++			usbinput,
++			rate);
++
++		ret = 0;
++	}
++
++	return ret;
++}
++
++static int usb_check_and_do_mono2stereo(
++	struct usb_input *usbinput, unsigned int channels,
++	unsigned char *cp, unsigned int frames)
++
++{
++	int ret = -1;
++	struct usb_audio_buffer *usb_buf = usbinput->usb_buf;
++
++	if (NULL == usb_buf) {
++		pr_info("check and do mono2stereo, invalid usb buffer\n");
++		return ret;
++	}
++
++	if (channels
++		&& channels != usb_buf->channels
++		&& usbinput->mono2stereo) {
++		usb_audio_mono2stereo(
++			usbinput->mono2stereo,
++			cp,
++			frames);
++		ret = 0;
++	}
++	return ret;
++}
++
++static void usb_check_resample_init(
++	struct usb_input *usbinput,
++	unsigned int rate, unsigned int channels)
++{
++	struct usb_audio_buffer *usb_buf = usbinput->usb_buf;
++
++	if (NULL == usb_buf) {
++		pr_info("check mono2stereo init, invalid usb buffer\n");
++		return;
++	}
++
++	if (!usbinput->resample_request
++		&& usb_buf->rate
++		&& rate
++		&& channels
++		&& rate != usb_buf->rate) {
++		usbinput->resample_request = true;
++
++		usbinput->resampler.input_sr = usb_buf->rate;
++		usbinput->resampler.output_sr =
++			rate;
++		usbinput->resampler.channels =
++			channels;
++		resampler_init(&usbinput->resampler);
++		pr_info("check mono2stereo init, resample from %d, %d to %d, %d",
++			usb_buf->channels,
++			usb_buf->rate,
++			channels,
++			rate);
++	}
++
++}
++
++static int usb_check_and_do_resample(
++	struct usb_input *usbinput,
++	unsigned int channels,
++	unsigned char *cp, unsigned int in_frames)
++{
++	struct usb_audio_buffer *usb_buf = usbinput->usb_buf;
++	void *in_buffer;
++	unsigned int out_frames;
++
++	if (NULL == usb_buf) {
++		pr_info("check and do resample, invalid usb buffer\n");
++		return -1;
++	}
++
++	if ((1 == usb_buf->channels)
++	&& (channels != usb_buf->channels)
++	&& usbinput->mono2stereo) {
++		in_buffer = usbinput->mono2stereo;
++		/*in_frames <<= 1;*/
++	} else {
++		/*in_frames = bytes >> subs->
++		usb_input->resampler.channels;*/
++		in_buffer = cp;
++	}
++
++	out_frames = resample_process(
++			&usbinput->resampler,
++			in_frames,
++			(short *)(in_buffer),
++			(short *)usbinput->out_buffer);
++
++	return out_frames;
++}
++
++static void usb_check_and_do_reverb(
++	struct reverb_t *reverb_L, struct reverb_t *reverb_R,
++	unsigned int channels,
++	unsigned char *cp, unsigned int frames
++	)
++{
++	if (1 == channels) {
++		reverb_process(reverb_L,
++			(int16_t *)cp,
++			(int16_t *)cp,
++			frames,
++			channels,
++			0);
++	} else {
++		reverb_process(reverb_L,
++			(int16_t *)cp,
++			(int16_t *)cp,
++			frames,
++			channels,
++			0);
++		reverb_process(reverb_R,
++			(int16_t *)cp + 1,
++			(int16_t *)cp + 1,
++			frames,
++			channels,
++			1);
++	}
++}
++
++static void usb_audio_copy_ringbuffer(
++	struct usb_audio_buffer *usb_buf,
++	unsigned char *cp_src, unsigned int cp_bytes)
++{
++	uint avail;
++	unsigned long usbirqflags;
++
++	spin_lock_irqsave(&usb_buf->lock, usbirqflags);
++
++	if (usb_buf->wr >= usb_buf->rd) {
++		avail =
++		usb_buf->rd + usb_buf->size - usb_buf->wr;
++	} else
++		avail = usb_buf->rd - usb_buf->wr;
++
++	if (avail >= cp_bytes) {
++		if (usb_buf->wr + cp_bytes > usb_buf->size) {
++			memcpy(usb_buf->addr + usb_buf->wr,
++				cp_src,
++				usb_buf->size - usb_buf->wr);
++			memcpy(usb_buf->addr,
++				cp_src +
++				usb_buf->size - usb_buf->wr,
++				cp_bytes +
++				usb_buf->wr - usb_buf->size);
++		} else {
++			memcpy(usb_buf->addr + usb_buf->wr,
++				cp_src,
++				cp_bytes);
++		}
++
++		usb_buf->wr = (usb_buf->wr + cp_bytes) %
++			usb_buf->size;
++		usb_buf->level = (usb_buf->size + usb_buf->wr
++			- usb_buf->rd) % usb_buf->size;
++	} else {
++		/*snd_printdd(KERN_ERR
++			"usb usb_buf overrun\n");*/
++	}
++	spin_unlock_irqrestore(&usb_buf->lock, usbirqflags);
++}
++
++int usb_set_capture_status(bool isrunning)
++{
++	struct usb_input *usbinput = usb_audio_get_capture();
++
++	if (NULL == usbinput)
++		return -1;
++	if (NULL == usbinput->usb_buf)
++		return -2;
++
++	usbinput->usb_buf->running = isrunning;
++
++	return 0;
++}
++EXPORT_SYMBOL(usb_set_capture_status);
++
++int usb_audio_capture_init(void)
++{
++	struct usb_audio_buffer *usb_buffer = NULL;
++	struct usb_input *s_usb_input;
++	int ret = 0;
++
++	s_usb_input = kzalloc(sizeof(struct usb_input), GFP_KERNEL);
++	if (!s_usb_input) {
++		pr_err("s_usb_capture alloc failed.\n");
++		ret = -ENOMEM;
++		goto err;
++	}
++	usb_buffer = kzalloc(sizeof(struct usb_audio_buffer),
++				 GFP_KERNEL);
++	if (!usb_buffer) {
++		pr_err("aduio capture buffer failed.\n");
++		ret = -ENOMEM;
++		goto err;
++	}
++	s_usb_input->usb_buf = usb_buffer;
++
++	snd_usb_pcm_capture_buffer = usb_buffer;
++
++	if (usb_audio_capture_malloc_buffer(usb_buffer,
++		 USB_AUDIO_CAPTURE_BUFFER_SIZE)) {
++		ret = -ENOMEM;
++		goto err;
++	}
++	/*snd_usb_pcm_capture_buffer->addr = usb_buffer->addr;*/
++	spin_lock_init(&usb_buffer->lock);
++	s_usb_capture = s_usb_input;
++
++	reverb_start(&AML_Reverb_L);
++	reverb_start(&AML_Reverb_R);
++
++	/* ignore some usb data */
++	usb_ignore_effect_time = 3;
++
++err:
++	return ret;
++}
++EXPORT_SYMBOL(usb_audio_capture_init);
++
++int usb_audio_capture_deinit(void)
++{
++	struct usb_input *usbinput = usb_audio_get_capture();
++
++	if (NULL == usbinput)
++		return 0;
++
++	if (snd_usb_pcm_capture_buffer) {
++		usb_audio_capture_free_buffer(usbinput->usb_buf);
++		kfree(usbinput->usb_buf);
++		usbinput->usb_buf = NULL;
++		snd_usb_pcm_capture_buffer = NULL;
++	}
++
++	usb_resample_and_mono2stereo_free_buffer(usbinput);
++	kfree(usbinput);
++
++	reverb_stop(&AML_Reverb_L);
++	reverb_stop(&AML_Reverb_R);
++
++	return 0;
++}
++EXPORT_SYMBOL(usb_audio_capture_deinit);
++
++int retire_capture_usb(struct snd_pcm_runtime *runtime,
++	unsigned char *cp, unsigned int bytes,
++	unsigned int oldptr, unsigned int stride)
++{
++	struct usb_input *usbinput = usb_audio_get_capture();
++	struct usb_audio_buffer *usb_buf = NULL;
++	unsigned char *cp_src = NULL;
++	unsigned char *effect_cp = NULL;
++	unsigned int effect_bytes = 0;
++	unsigned int frame_count = 0;
++	unsigned int cp_bytes = 0;
++	unsigned int in_frames = 0, out_frames = 0;
++	int ret = 0;
++
++	if ((builtin_mixer && usb_ignore_effect_time)
++		|| (!builtin_mixer)) {
++		/* At the beginning when usb capture start,
++		noise is captured in the first audio data,
++		so deley 3ms for no audio effect. */
++		if (usb_ignore_effect_time)
++				usb_ignore_effect_time--;
++
++		/* copy a data chunk */
++		if (oldptr + bytes > runtime->buffer_size * stride) {
++			unsigned int bytes1 =
++			runtime->buffer_size * stride - oldptr;
++			memcpy(runtime->dma_area + oldptr, cp, bytes1);
++			memcpy(runtime->dma_area,
++					cp + bytes1,
++					bytes - bytes1);
++		} else {
++			memcpy(runtime->dma_area + oldptr, cp, bytes);
++		}
++
++		goto exit;
++	}
++
++	effect_cp = cp;
++	effect_bytes = bytes;
++	frame_count =  bytes_to_frames(runtime, effect_bytes);
++
++	/* check data is valid */
++	if (NULL == effect_cp || 0 == effect_bytes) {
++		/* pr_info("retire usb, invalid data,cp:%p, bytes:%d\n",
++			cp, bytes); */
++		ret = -1;
++		goto exit;
++	}
++
++	/* Audio effect reverb */
++	if (reverb_enable) {
++		usb_check_and_do_reverb(
++			&AML_Reverb_L, &AML_Reverb_R,
++			runtime->channels,
++			effect_cp, frame_count);
++	}
++
++	/* Tuning usb mic gain */
++	usb_audio_data_tuning_mic_gain(effect_cp,
++					frame_count);
++
++	/* copy a data chunk */
++	if (oldptr + effect_bytes >
++		runtime->buffer_size * stride) {
++		unsigned int bytes1 =
++			runtime->buffer_size * stride - oldptr;
++		memcpy(runtime->dma_area + oldptr,
++			effect_cp,
++			bytes1);
++		memcpy(runtime->dma_area,
++			effect_cp + bytes1,
++			effect_bytes - bytes1);
++	} else {
++		memcpy(runtime->dma_area + oldptr,
++			effect_cp,
++			effect_bytes);
++	}
++
++	/* Audio reverb effect is added to the source,
++		countine to do resample/mono2stereo, then copy
++		audio data to ring buffer. */
++	usb_buf = usbinput->usb_buf;
++	usb_buf->channels = runtime->channels;
++	usb_buf->rate = runtime->rate;
++
++	/*usb resample and mono2stereo buffer prepared*/
++	usb_check_resample_and_mono2stereo_buffer(usbinput,
++		aml_i2s_playback_sample);
++
++	/*mono to stereo, defualt that i2s channel is stereo.*/
++	in_frames = frame_count;
++	usb_check_and_do_mono2stereo(usbinput,
++		aml_i2s_playback_channels,
++		cp, in_frames);
++
++	/* Resample Init */
++	usb_check_resample_init(usbinput,
++		aml_i2s_playback_sample, aml_i2s_playback_channels);
++
++	if ((bytes)
++		&& (usbinput->resample_request)
++		&& (usbinput->out_buffer)) {
++
++		/*bytes to frame, bytes / (channel * bytes_per_frame),
++		default:16bit */
++		out_frames = usb_check_and_do_resample(usbinput,
++			aml_i2s_playback_channels,
++			cp, in_frames);
++		if (out_frames < 0) {
++			pr_info("do reample failed\n");
++			goto exit;
++		}
++		cp_src = usbinput->out_buffer;
++		cp_bytes = out_frames * 4;
++	} else {
++		/*snd_printdd(KERN_ERR "usb record not resample\n");*/
++		if (1 == usb_buf->channels
++		&& usbinput->mono2stereo
++		&& aml_i2s_playback_channels
++		&& aml_i2s_playback_channels != usb_buf->channels) {
++			cp_src = usbinput->mono2stereo;
++			cp_bytes = in_frames * 4;
++		} else {
++			cp_src = cp;
++			cp_bytes = bytes;
++		}
++	}
++
++	/* copy audio audio to ring buffer.
++	Default, ring buffer, stereo channel, 16bit */
++	usb_audio_copy_ringbuffer(usb_buf, cp_src, cp_bytes);
++
++exit:
++	return ret;
++}
++EXPORT_SYMBOL(retire_capture_usb);
++
+diff --git a/drivers/amlogic/amlkaraoke/aml_usb_capture.h b/drivers/amlogic/amlkaraoke/aml_usb_capture.h
+new file mode 100644
+index 0000000..7ce4ae0
+--- /dev/null
++++ b/drivers/amlogic/amlkaraoke/aml_usb_capture.h
+@@ -0,0 +1,47 @@
++#ifndef __AML_USB_CAPTURE_H
++#define __AML_USB_CAPTURE_H
++
++/*
++ *   (AMLOGIC) USB Audio Driver for ALSA
++ *
++ *   Copyright (c) 2015 by Amlogic inc
++ *   A virtual path to get usb audio capture data.
++ *
++*/
++#include <sound/pcm.h>
++
++#include "aml_audio_resampler.h"
++
++/* Keep same with aml_i2s_out_mix.h */
++struct usb_audio_buffer {
++	dma_addr_t paddr;
++	unsigned char *addr;
++	unsigned size;
++	unsigned wr;
++	unsigned rd;
++	unsigned level;
++	unsigned channels;   /* channels */
++	unsigned rate;       /* rate in Hz */
++	unsigned running;
++	spinlock_t lock;
++};
++
++struct usb_input {
++	struct usb_audio_buffer *usb_buf;
++	/* Resample if needed */
++	bool resample_request;
++	struct resample_para resampler;
++	unsigned char *out_buffer;
++	unsigned char *mono2stereo;
++};
++
++#define USB_AUDIO_CAPTURE_BUFFER_SIZE  (1024 * 2)
++#define USB_AUDIO_CAPTURE_PACKAGE_SIZE  (512)
++
++
++extern int usb_mic_digital_gain;
++
++extern int builtin_mixer;
++extern int reverb_enable;
++
++#endif
+diff --git a/sound/soc/aml/m8/aml_i2s_dai.c b/sound/soc/aml/m8/aml_i2s_dai.c
+index 1bac72f..2742381 100644
+--- a/sound/soc/aml/m8/aml_i2s_dai.c
++++ b/sound/soc/aml/m8/aml_i2s_dai.c
+@@ -178,6 +178,12 @@ static int aml_dai_i2s_prepare(struct snd_pcm_substream *substream,
+ 			/* aml_set_spdif_clk(runtime->rate*512, 0); */
+ 			audio_i2s_958_same_source(1);
+ 		}
++
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++		aml_i2s_set_ch_r_info(runtime->channels, runtime->rate);
++		i2s_out_mix_init();
++#endif
++
+ 	}
+ 	if (runtime->channels == 8) {
+ 		dev_info(substream->pcm->card->dev, "8ch PCM output->notify HDMI\n");
+@@ -249,6 +255,21 @@ static int aml_dai_i2s_hw_params(struct snd_pcm_substream *substream,
+ 	return 0;
+ }
+ 
++static int aml_dai_i2s_hw_free(struct snd_pcm_substream *substream,
++		struct snd_soc_dai *dai)
++{
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++	struct aml_runtime_data *prtd = substream->runtime->private_data;
++	struct audio_stream *s = &prtd->s;
++
++	if (s && s->device_type == AML_AUDIO_I2SOUT) {
++		i2s_out_mix_deinit();
++		aml_i2s_set_ch_r_info(0, 0);
++	}
++#endif
++	return 0;
++}
++
+ static int aml_dai_set_i2s_fmt(struct snd_soc_dai *dai, unsigned int fmt)
+ {
+ 	if (fmt & SND_SOC_DAIFMT_CBS_CFS)	/* slave mode */
+@@ -303,6 +324,7 @@ static struct snd_soc_dai_ops aml_dai_i2s_ops = {
+ 	.prepare = aml_dai_i2s_prepare,
+ 	.trigger = aml_dai_i2s_trigger,
+ 	.hw_params = aml_dai_i2s_hw_params,
++	.hw_free = aml_dai_i2s_hw_free,
+ 	.set_fmt = aml_dai_set_i2s_fmt,
+ 	.set_sysclk = aml_dai_set_i2s_sysclk,
+ };
+diff --git a/sound/soc/aml/m8/aml_i2s_dai.h b/sound/soc/aml/m8/aml_i2s_dai.h
+index d9cc7f8..bd3d34c 100644
+--- a/sound/soc/aml/m8/aml_i2s_dai.h
++++ b/sound/soc/aml/m8/aml_i2s_dai.h
+@@ -26,4 +26,14 @@ struct aml_i2s {
+ 	bool disable_clk_suspend;
+ };
+ 
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++extern void aml_i2s_set_ch_r_info(
++	unsigned int channels,
++	unsigned int samplerate);
++
++extern int i2s_out_mix_init(void);
++
++extern int i2s_out_mix_deinit(void);
++#endif
++
+ #endif
+diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
+index ede4b92..63f7ab5 100644
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -1178,6 +1178,7 @@ static int snd_usb_pcm_open(struct snd_pcm_substream *substream, int direction)
+ 	struct snd_usb_stream *as = snd_pcm_substream_chip(substream);
+ 	struct snd_pcm_runtime *runtime = substream->runtime;
+ 	struct snd_usb_substream *subs = &as->substream[direction];
++	int ret = 0;
+ 
+ 	subs->interface = -1;
+ 	subs->altset_idx = 0;
+@@ -1191,7 +1192,28 @@ static int snd_usb_pcm_open(struct snd_pcm_substream *substream, int direction)
+ 	subs->dsd_dop.channel = 0;
+ 	subs->dsd_dop.marker = 1;
+ 
+-	return setup_hw_info(runtime, subs);
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++	if (SNDRV_PCM_STREAM_CAPTURE == direction) {
++		ret = usb_audio_capture_init();
++		if (ret)
++			goto err;
++	}
++
++	ret = setup_hw_info(runtime, subs);
++
++	return ret;
++
++err:
++	snd_printdd(KERN_ERR "built-in mixer alloc usb buffer failed.\n");
++	if (SNDRV_PCM_STREAM_CAPTURE == direction)
++		usb_audio_capture_deinit();
++
++	ret = setup_hw_info(runtime, subs);
++#else
++	ret = setup_hw_info(runtime, subs);
++#endif
++
++	return ret;
+ }
+ 
+ static int snd_usb_pcm_close(struct snd_pcm_substream *substream, int direction)
+@@ -1209,6 +1231,11 @@ static int snd_usb_pcm_close(struct snd_pcm_substream *substream, int direction)
+ 	subs->pcm_substream = NULL;
+ 	snd_usb_autosuspend(subs->stream->chip);
+ 
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++	if (SNDRV_PCM_STREAM_CAPTURE == direction)
++		usb_audio_capture_deinit();
++#endif
++
+ 	return 0;
+ }
+ 
+@@ -1270,6 +1297,9 @@ static void retire_capture_urb(struct snd_usb_substream *subs,
+ 		subs->last_frame_number &= 0xFF; /* keep 8 LSBs */
+ 
+ 		spin_unlock_irqrestore(&subs->lock, flags);
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++		retire_capture_usb(runtime, cp, bytes, oldptr, stride);
++#else
+ 		/* copy a data chunk */
+ 		if (oldptr + bytes > runtime->buffer_size * stride) {
+ 			unsigned int bytes1 =
+@@ -1279,8 +1309,8 @@ static void retire_capture_urb(struct snd_usb_substream *subs,
+ 		} else {
+ 			memcpy(runtime->dma_area + oldptr, cp, bytes);
+ 		}
++#endif
+ 	}
+-
+ 	if (period_elapsed)
+ 		snd_pcm_period_elapsed(subs->pcm_substream);
+ }
+@@ -1563,12 +1593,20 @@ static int snd_usb_substream_capture_trigger(struct snd_pcm_substream *substream
+ 		if (err < 0)
+ 			return err;
+ 
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++		usb_set_capture_status(true);
++#endif
+ 		subs->data_endpoint->retire_data_urb = retire_capture_urb;
+ 		subs->running = 1;
+ 		return 0;
+ 	case SNDRV_PCM_TRIGGER_STOP:
+ 		stop_endpoints(subs, false);
+ 		subs->running = 0;
++
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++		usb_set_capture_status(false);
++#endif
++
+ 		return 0;
+ 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+ 		subs->data_endpoint->retire_data_urb = NULL;
+diff --git a/sound/usb/pcm.h b/sound/usb/pcm.h
+index df7a003..956db55 100644
+--- a/sound/usb/pcm.h
++++ b/sound/usb/pcm.h
+@@ -11,4 +11,13 @@ int snd_usb_init_pitch(struct snd_usb_audio *chip, int iface,
+ 		       struct audioformat *fmt);
+ 
+ 
++#ifdef CONFIG_SND_USB_CAPTURE_DATA
++extern int usb_set_capture_status(bool isrunning);
++extern int usb_audio_capture_init(void);
++extern int usb_audio_capture_deinit(void);
++extern int retire_capture_usb(struct snd_pcm_runtime *runtime,
++	unsigned char *cp, unsigned int bytes,
++	unsigned int oldptr, unsigned int stride);
++#endif
++
+ #endif /* __USBAUDIO_PCM_H */
+-- 
+1.9.1
+

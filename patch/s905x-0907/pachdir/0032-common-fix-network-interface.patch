@@ -1,0 +1,83 @@
+From 01a24f8772e7bbaf84c90f118f609424d6a05e1a Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 27 Dec 2016 15:45:55 +0800
+Subject: [PATCH] fix network interface
+
+---
+ arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts | 10 +++++-----
+ arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts | 10 +++++-----
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+index a735da4..401f859 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_1g.dts
+@@ -213,7 +213,7 @@
+ 			status = "okay";
+ 	};
+ 	/*external phy config*/
+-	ethmac: ethernet@0xc9410000 {
++	/*ethmac: ethernet@0xc9410000 {
+ 			compatible = "amlogic, gxbb-rgmii-dwmac";
+ 			reg = <0x0 0xc9410000 0x0 0x10000
+ 			0x0 0xc8834540 0x0 0x8
+@@ -233,9 +233,9 @@
+ 			clocks = <&clock CLK_81>;
+ 			clock-names = "ethclk81";
+ 			internal_phy=<0>;
+-    };
+-  /*internal phy config*/
+-  /*ethmac: ethernet@0xc9410000 {
++    };*/
++	/*internal phy config*/
++	ethmac: ethernet@0xc9410000 {
+ 			compatible = "amlogic, gxbb-rmii-dwmac";
+ 			reg = <0x0 0xc9410000 0x0 0x10000
+ 			0x0 0xc8834540 0x0 0x8
+@@ -251,7 +251,7 @@
+ 			clocks = <&clock CLK_81>;
+ 			clock-names = "ethclk81";
+ 			internal_phy=<1>;
+-    };*/
++    };
+ 	mesonstream {
+ 		compatible = "amlogic, codec, streambuf";
+ 		dev_name = "mesonstream";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+index b4cc616..5154a3e 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p230_2g.dts
+@@ -213,7 +213,7 @@
+ 			status = "okay";
+ 	};
+ 	/*external phy config*/
+-	ethmac: ethernet@0xc9410000 {
++	/*ethmac: ethernet@0xc9410000 {
+ 			compatible = "amlogic, gxbb-rgmii-dwmac";
+ 			reg = <0x0 0xc9410000 0x0 0x10000
+ 			0x0 0xc8834540 0x0 0x8
+@@ -233,9 +233,9 @@
+ 			clocks = <&clock CLK_81>;
+ 			clock-names = "ethclk81";
+ 			internal_phy=<0>;
+-    };
+-  /*internal phy config*/
+-  /*ethmac: ethernet@0xc9410000 {
++    };*/
++	/*internal phy config*/
++	ethmac: ethernet@0xc9410000 {
+ 			compatible = "amlogic, gxbb-rmii-dwmac";
+ 			reg = <0x0 0xc9410000 0x0 0x10000
+ 			0x0 0xc8834540 0x0 0x8
+@@ -251,7 +251,7 @@
+ 			clocks = <&clock CLK_81>;
+ 			clock-names = "ethclk81";
+ 			internal_phy=<1>;
+-    };*/
++    };
+ 	mesonstream {
+ 		compatible = "amlogic, codec, streambuf";
+ 		dev_name = "mesonstream";
+-- 
+1.9.1
+

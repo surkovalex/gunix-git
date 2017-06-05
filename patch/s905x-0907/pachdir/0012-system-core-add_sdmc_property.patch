@@ -1,0 +1,20 @@
+diff --git a/init/property_service.cpp b/init/property_service.cpp
+index b48e8f2..5a96d36 100644
+--- a/init/property_service.cpp
++++ b/init/property_service.cpp
+@@ -56,6 +56,7 @@
+ #include "log.h"
+ 
+ #define PERSISTENT_PROPERTY_DIR  "/data/property"
++#define PROP_PATH_SDMC_BUILD     "/system/sdmc.prop"
+ #define FSTAB_PREFIX "/fstab."
+ #define RECOVERY_MOUNT_POINT "/recovery"
+ 
+@@ -562,6 +563,7 @@ void load_recovery_id_prop() {
+ }
+ 
+ void load_system_props() {
++    load_properties_from_file(PROP_PATH_SDMC_BUILD, NULL);
+     load_properties_from_file(PROP_PATH_SYSTEM_BUILD, NULL);
+     load_properties_from_file(PROP_PATH_VENDOR_BUILD, NULL);
+     load_properties_from_file(PROP_PATH_FACTORY, "ro.*");

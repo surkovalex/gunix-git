@@ -1,0 +1,204 @@
+From feb0908527703dcbcb53af78e76492744ccb541f Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Tue, 27 Dec 2016 15:37:25 +0800
+Subject: [PATCH] support gb netcard
+
+---
+ arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts | 36 +++++++++++++++-------------
+ arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts | 36 +++++++++++++++-------------
+ arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts | 36 +++++++++++++++-------------
+ arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts | 37 ++++++++++++++++-------------
+ 4 files changed, 81 insertions(+), 64 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+index 8405331..f8a8b88 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_1g.dts
+@@ -210,22 +210,26 @@
+ 			dev_name = "codec_mm";
+ 			status = "okay";
+ 	};
+-			ethmac: ethernet@0xc9410000 {
+-						compatible = "amlogic, gxbb-rmii-dwmac";
+-						reg = <0x0 0xc9410000 0x0 0x10000
+-						0x0 0xc8834540 0x0 0x8
+-						0x0 0xc8834558 0x0 0xc>;
+-						interrupts = <0 8 1>;
+-						phy-mode= "rmii";
+-						pinctrl-names = "internal_eth_pins";
+-						pinctrl-0 = <&internal_eth_pins>;
+-						mc_val = <0x1800>;
+-						resets = <&clock GCLK_IDX_ETHERNET>;
+-						reset-names = "ethpower";
+-						interrupt-names = "macirq";
+-						clocks = <&clock CLK_81>;
+-						clock-names = "ethclk81";
+-						internal_phy=<1>;
++	ethmac: ethernet@0xc9410000 {
++			compatible = "amlogic, gxbb-rgmii-dwmac";
++			reg = <0x0 0xc9410000 0x0 0x10000
++			0x0 0xc8834540 0x0 0x8
++			0x0 0xc8834558 0x0 0xc>;
++			interrupts = <0 8 1>;
++			phy-mode= "rgmii";
++			pinctrl-names = "external_eth_pins";
++			pinctrl-0 = <&external_eth_pins>;
++			rst_pin-gpios = <&gpio GPIOZ_14 0>;
++			GPIOZ4_pin-gpios = <&gpio GPIOZ_4 0>;
++			GPIOZ5_pin-gpios = <&gpio GPIOZ_5 0>;
++			mc_val = <0x1621>;
++			cali_val = <0x20000>;
++			resets = <&clock GCLK_IDX_ETHERNET>;
++			reset-names = "ethpower";
++			interrupt-names = "macirq";
++			clocks = <&clock CLK_81>;
++			clock-names = "ethclk81";
++			internal_phy=<0>;
+     };
+ 	mesonstream {
+ 		compatible = "amlogic, codec, streambuf";
+diff --git a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+index 03854a7..f03c4c2 100644
+--- a/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxl_p212_2g.dts
+@@ -211,22 +211,26 @@
+ 			dev_name = "codec_mm";
+ 			status = "okay";
+ 	};
+-			ethmac: ethernet@0xc9410000 {
+-						compatible = "amlogic, gxbb-rmii-dwmac";
+-						reg = <0x0 0xc9410000 0x0 0x10000
+-						0x0 0xc8834540 0x0 0x8
+-						0x0 0xc8834558 0x0 0xc>;
+-						interrupts = <0 8 1>;
+-						phy-mode= "rmii";
+-						pinctrl-names = "internal_eth_pins";
+-						pinctrl-0 = <&internal_eth_pins>;
+-						mc_val = <0x1800>;
+-						resets = <&clock GCLK_IDX_ETHERNET>;
+-						reset-names = "ethpower";
+-						interrupt-names = "macirq";
+-						clocks = <&clock CLK_81>;
+-						clock-names = "ethclk81";
+-						internal_phy=<1>;
++	ethmac: ethernet@0xc9410000 {
++			compatible = "amlogic, gxbb-rgmii-dwmac";
++			reg = <0x0 0xc9410000 0x0 0x10000
++			0x0 0xc8834540 0x0 0x8
++			0x0 0xc8834558 0x0 0xc>;
++			interrupts = <0 8 1>;
++			phy-mode= "rgmii";
++			pinctrl-names = "external_eth_pins";
++			pinctrl-0 = <&external_eth_pins>;
++			rst_pin-gpios = <&gpio GPIOZ_14 0>;
++			GPIOZ4_pin-gpios = <&gpio GPIOZ_4 0>;
++			GPIOZ5_pin-gpios = <&gpio GPIOZ_5 0>;
++			mc_val = <0x1621>;
++			cali_val = <0x20000>;
++			resets = <&clock GCLK_IDX_ETHERNET>;
++			reset-names = "ethpower";
++			interrupt-names = "macirq";
++			clocks = <&clock CLK_81>;
++			clock-names = "ethclk81";
++			internal_phy=<0>;
+     };
+ 	mesonstream {
+ 		compatible = "amlogic, codec, streambuf";
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+index 0ae8cc9..a4a66bc 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_1g.dts
+@@ -212,22 +212,26 @@
+ 			dev_name = "codec_mm";
+ 			status = "okay";
+ 	};
+-			ethmac: ethernet@0xc9410000 {
+-						compatible = "amlogic, gxbb-rmii-dwmac";
+-						reg = <0x0 0xc9410000 0x0 0x10000
+-						0x0 0xc8834540 0x0 0x8
+-						0x0 0xc8834558 0x0 0xc>;
+-						interrupts = <0 8 1>;
+-						phy-mode= "rmii";
+-						pinctrl-names = "internal_eth_pins";
+-						pinctrl-0 = <&internal_eth_pins>;
+-						mc_val = <0x1800>;
+-						resets = <&clock GCLK_IDX_ETHERNET>;
+-						reset-names = "ethpower";
+-						interrupt-names = "macirq";
+-						clocks = <&clock CLK_81>;
+-						clock-names = "ethclk81";
+-						internal_phy=<1>;
++	ethmac: ethernet@0xc9410000 {
++			compatible = "amlogic, gxbb-rgmii-dwmac";
++			reg = <0x0 0xc9410000 0x0 0x10000
++			0x0 0xc8834540 0x0 0x8
++			0x0 0xc8834558 0x0 0xc>;
++			interrupts = <0 8 1>;
++			phy-mode= "rgmii";
++			pinctrl-names = "external_eth_pins";
++			pinctrl-0 = <&external_eth_pins>;
++			rst_pin-gpios = <&gpio GPIOZ_14 0>;
++			GPIOZ4_pin-gpios = <&gpio GPIOZ_4 0>;
++			GPIOZ5_pin-gpios = <&gpio GPIOZ_5 0>;
++			mc_val = <0x1621>;
++			cali_val = <0x20000>;
++			resets = <&clock GCLK_IDX_ETHERNET>;
++			reset-names = "ethpower";
++			interrupt-names = "macirq";
++			clocks = <&clock CLK_81>;
++			clock-names = "ethclk81";
++			internal_phy=<0>;
+     };
+ 	mesonstream {
+ 		compatible = "amlogic, codec, streambuf";
+diff --git a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+index 9ed68da..c8624e6 100644
+--- a/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
++++ b/arch/arm64/boot/dts/amlogic/gxm_q201_2g.dts
+@@ -212,22 +212,27 @@
+ 			dev_name = "codec_mm";
+ 			status = "okay";
+ 	};
+-			ethmac: ethernet@0xc9410000 {
+-						compatible = "amlogic, gxbb-rmii-dwmac";
+-						reg = <0x0 0xc9410000 0x0 0x10000
+-						0x0 0xc8834540 0x0 0x8
+-						0x0 0xc8834558 0x0 0xc>;
+-						interrupts = <0 8 1>;
+-						phy-mode= "rmii";
+-						pinctrl-names = "internal_eth_pins";
+-						pinctrl-0 = <&internal_eth_pins>;
+-						mc_val = <0x1800>;
+-						resets = <&clock GCLK_IDX_ETHERNET>;
+-						reset-names = "ethpower";
+-						interrupt-names = "macirq";
+-						clocks = <&clock CLK_81>;
+-						clock-names = "ethclk81";
+-						internal_phy=<1>;
++	/*external phy config*/
++	ethmac: ethernet@0xc9410000 {
++			compatible = "amlogic, gxbb-rgmii-dwmac";
++			reg = <0x0 0xc9410000 0x0 0x10000
++			0x0 0xc8834540 0x0 0x8
++			0x0 0xc8834558 0x0 0xc>;
++			interrupts = <0 8 1>;
++			phy-mode= "rgmii";
++			pinctrl-names = "external_eth_pins";
++			pinctrl-0 = <&external_eth_pins>;
++			rst_pin-gpios = <&gpio GPIOZ_14 0>;
++			GPIOZ4_pin-gpios = <&gpio GPIOZ_4 0>;
++			GPIOZ5_pin-gpios = <&gpio GPIOZ_5 0>;
++			mc_val = <0x1621>;
++			cali_val = <0x20000>;
++			resets = <&clock GCLK_IDX_ETHERNET>;
++			reset-names = "ethpower";
++			interrupt-names = "macirq";
++			clocks = <&clock CLK_81>;
++			clock-names = "ethclk81";
++			internal_phy=<0>;
+     };
+ 	mesonstream {
+ 		compatible = "amlogic, codec, streambuf";
+-- 
+1.9.1
+

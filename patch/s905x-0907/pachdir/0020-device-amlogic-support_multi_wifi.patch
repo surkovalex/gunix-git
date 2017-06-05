@@ -1,0 +1,62 @@
+From e28f890daab4f6a0828f03d122589b12c91af5a2 Mon Sep 17 00:00:00 2001
+From: luodongdong <luodongdong@mail.sdmc.com>
+Date: Wed, 16 Nov 2016 18:21:59 +0800
+Subject: [PATCH] support multi wifi
+
+---
+ common/wifi.mk | 11 +++++++++++
+ p230/Kernel.mk |  2 +-
+ p230/p230.mk   |  2 +-
+ 3 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/common/wifi.mk b/common/wifi.mk
+index 0ff8f7a..23c7ced 100644
+--- a/common/wifi.mk
++++ b/common/wifi.mk
+@@ -1330,6 +1330,17 @@ PRODUCT_COPY_FILES += \
+ PRODUCT_PROPERTY_OVERRIDES += \
+         wifi.interface=wlan0
+ 
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/AP6330/BT/bcm40183b2.hcd:system/etc/bluetooth/BCM4330.hcd
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/62x2/BT/bcm43241b4.hcd:system/etc/bluetooth/bcm43241b4.hcd
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/6212/BT/bcm43438a0.hcd:system/etc/bluetooth/4343.hcd
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/4354/bcm4354a1.hcd:system/etc/bluetooth/BCM4350.hcd
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/4356/bcm4356a2.hcd:system/etc/bluetooth/BCM4354.hcd
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/43458/BCM4345C0.hcd:system/etc/bluetooth/BCM4345.hcd
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/6335/BT/bcm4335c0.hcd:system/etc/bluetooth/bcm4335c0.hcd
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/AP6330/Wi-Fi/fw_bcm40183b2.bin:system/etc/wifi/AP6330/Wi-Fi/fw_bcm40183b2.bin
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/AP6330/Wi-Fi/fw_bcm40183b2_apsta.bin:system/etc/wifi/AP6330/Wi-Fi/fw_bcm40183b2_apsta.bin
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/AP6330/Wi-Fi/fw_bcm40183b2_p2p.bin:system/etc/wifi/AP6330/Wi-Fi/fw_bcm40183b2_p2p.bin
++PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/AP6330/Wi-Fi/nvram_ap6330.txt:system/etc/wifi/AP6330/Wi-Fi/nvram_ap6330.txt
+ PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/6212/fw_bcm43438a0.bin:system/etc/wifi/6212/fw_bcm43438a0.bin
+ PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/6212/fw_bcm43438a0_apsta.bin:system/etc/wifi/6212/fw_bcm43438a0_apsta.bin
+ PRODUCT_COPY_FILES += hardware/amlogic/wifi/bcm_ampak/config/6212/fw_bcm43438a0_p2p.bin:system/etc/wifi/6212/fw_bcm43438a0_p2p.bin
+diff --git a/p230/Kernel.mk b/p230/Kernel.mk
+index 5e90047..aa151ff 100644
+--- a/p230/Kernel.mk
++++ b/p230/Kernel.mk
+@@ -2,7 +2,7 @@
+ -include device/amlogic/common/gpu.mk
+ 
+ USE_PREBUILT_KERNEL := false
+-WIFI_MODULE := bcm4356
++WIFI_MODULE := multiwifi
+ 
+ INSTALLED_KERNEL_TARGET := $(PRODUCT_OUT)/kernel
+ 
+diff --git a/p230/p230.mk b/p230/p230.mk
+index c75e110..10db534 100644
+--- a/p230/p230.mk
++++ b/p230/p230.mk
+@@ -109,7 +109,7 @@ endif # ifeq ($(BUILD_WITH_DM_VERITY), true)
+ #
+ #########################################################################
+ 
+-WIFI_MODULE := bcm4356
++MULTI_WIFI_SUPPORT := true
+ include device/amlogic/common/wifi.mk
+ 
+ # Change this to match target country
+-- 
+1.9.1
+

@@ -1,0 +1,119 @@
+diff --git a/common/factory.mk b/common/factory.mk
+index cdaa2d9..6542db5 100644
+--- a/common/factory.mk
++++ b/common/factory.mk
+@@ -97,8 +97,8 @@ INSTALLED_MANIFEST_XML := $(PRODUCT_OUT)/manifests/manifest-$(BUILD_TIME).xml
+ $(INSTALLED_MANIFEST_XML):
+ 	$(hide) mkdir -p $(PRODUCT_OUT)/manifests
+ 	$(hide) mkdir -p $(PRODUCT_OUT)/upgrade
+-	repo manifest -r -o $(INSTALLED_MANIFEST_XML)
+-	$(hide) cp $(INSTALLED_MANIFEST_XML) $(PRODUCT_OUT)/upgrade/manifest.xml
++	#repo manifest -r -o $(INSTALLED_MANIFEST_XML)
++	#$(hide) cp $(INSTALLED_MANIFEST_XML) $(PRODUCT_OUT)/upgrade/manifest.xml
+ 
+ .PHONY:build_manifest
+ build_manifest:$(INSTALLED_MANIFEST_XML)
+diff --git a/p212/upgrade/aml_upgrade_package.conf b/p212/upgrade/aml_upgrade_package.conf
+index c84e44b..b4855b6 100644
+--- a/p212/upgrade/aml_upgrade_package.conf
++++ b/p212/upgrade/aml_upgrade_package.conf
+@@ -9,7 +9,7 @@ file="platform.conf"        main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"     main_type="ini"           sub_type="aml_sdc_burn"
+ #file="meson_target.dtd" main_type="dtd"           sub_type="meson_target"
+ file="meson.dtb"        main_type="dtb"           sub_type="meson1"
+-file="manifest.xml"         main_type="xml"           sub_type="manifest"
++#file="manifest.xml"         main_type="xml"           sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
+diff --git a/p212/upgrade/aml_upgrade_package_enc.conf b/p212/upgrade/aml_upgrade_package_enc.conf
+index 7b2f62c..f2052f3 100644
+--- a/p212/upgrade/aml_upgrade_package_enc.conf
++++ b/p212/upgrade/aml_upgrade_package_enc.conf
+@@ -11,7 +11,7 @@ file="u-boot.bin.encrypt.sd.bin"        main_type= "UBOOT.ENC"     sub_type="aml
+ file="platform.conf"                    main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"                 main_type="ini"            sub_type="aml_sdc_burn"
+ file="meson.dtb"                        main_type="dtb"            sub_type="meson1"
+-file="manifest.xml"                     main_type="xml"            sub_type="manifest"
++#file="manifest.xml"                     main_type="xml"            sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
+diff --git a/p230/upgrade/aml_upgrade_package.conf b/p230/upgrade/aml_upgrade_package.conf
+index c84e44b..b4855b6 100644
+--- a/p230/upgrade/aml_upgrade_package.conf
++++ b/p230/upgrade/aml_upgrade_package.conf
+@@ -9,7 +9,7 @@ file="platform.conf"        main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"     main_type="ini"           sub_type="aml_sdc_burn"
+ #file="meson_target.dtd" main_type="dtd"           sub_type="meson_target"
+ file="meson.dtb"        main_type="dtb"           sub_type="meson1"
+-file="manifest.xml"         main_type="xml"           sub_type="manifest"
++#file="manifest.xml"         main_type="xml"           sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
+diff --git a/p230/upgrade/aml_upgrade_package_enc.conf b/p230/upgrade/aml_upgrade_package_enc.conf
+index 7b2f62c..f2052f3 100644
+--- a/p230/upgrade/aml_upgrade_package_enc.conf
++++ b/p230/upgrade/aml_upgrade_package_enc.conf
+@@ -11,7 +11,7 @@ file="u-boot.bin.encrypt.sd.bin"        main_type= "UBOOT.ENC"     sub_type="aml
+ file="platform.conf"                    main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"                 main_type="ini"            sub_type="aml_sdc_burn"
+ file="meson.dtb"                        main_type="dtb"            sub_type="meson1"
+-file="manifest.xml"                     main_type="xml"            sub_type="manifest"
++#file="manifest.xml"                     main_type="xml"            sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
+diff --git a/q200/upgrade/aml_upgrade_package.conf b/q200/upgrade/aml_upgrade_package.conf
+index c84e44b..b4855b6 100644
+--- a/q200/upgrade/aml_upgrade_package.conf
++++ b/q200/upgrade/aml_upgrade_package.conf
+@@ -9,7 +9,7 @@ file="platform.conf"        main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"     main_type="ini"           sub_type="aml_sdc_burn"
+ #file="meson_target.dtd" main_type="dtd"           sub_type="meson_target"
+ file="meson.dtb"        main_type="dtb"           sub_type="meson1"
+-file="manifest.xml"         main_type="xml"           sub_type="manifest"
++#file="manifest.xml"         main_type="xml"           sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
+diff --git a/q200/upgrade/aml_upgrade_package_enc.conf b/q200/upgrade/aml_upgrade_package_enc.conf
+index 7b2f62c..f2052f3 100644
+--- a/q200/upgrade/aml_upgrade_package_enc.conf
++++ b/q200/upgrade/aml_upgrade_package_enc.conf
+@@ -11,7 +11,7 @@ file="u-boot.bin.encrypt.sd.bin"        main_type= "UBOOT.ENC"     sub_type="aml
+ file="platform.conf"                    main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"                 main_type="ini"            sub_type="aml_sdc_burn"
+ file="meson.dtb"                        main_type="dtb"            sub_type="meson1"
+-file="manifest.xml"                     main_type="xml"            sub_type="manifest"
++#file="manifest.xml"                     main_type="xml"            sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
+diff --git a/q201/upgrade/aml_upgrade_package.conf b/q201/upgrade/aml_upgrade_package.conf
+index c84e44b..b4855b6 100644
+--- a/q201/upgrade/aml_upgrade_package.conf
++++ b/q201/upgrade/aml_upgrade_package.conf
+@@ -9,7 +9,7 @@ file="platform.conf"        main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"     main_type="ini"           sub_type="aml_sdc_burn"
+ #file="meson_target.dtd" main_type="dtd"           sub_type="meson_target"
+ file="meson.dtb"        main_type="dtb"           sub_type="meson1"
+-file="manifest.xml"         main_type="xml"           sub_type="manifest"
++#file="manifest.xml"         main_type="xml"           sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
+diff --git a/q201/upgrade/aml_upgrade_package_enc.conf b/q201/upgrade/aml_upgrade_package_enc.conf
+index 7b2f62c..f2052f3 100644
+--- a/q201/upgrade/aml_upgrade_package_enc.conf
++++ b/q201/upgrade/aml_upgrade_package_enc.conf
+@@ -11,7 +11,7 @@ file="u-boot.bin.encrypt.sd.bin"        main_type= "UBOOT.ENC"     sub_type="aml
+ file="platform.conf"                    main_type= "conf"          sub_type="platform"
+ file="aml_sdc_burn.ini"                 main_type="ini"            sub_type="aml_sdc_burn"
+ file="meson.dtb"                        main_type="dtb"            sub_type="meson1"
+-file="manifest.xml"                     main_type="xml"            sub_type="manifest"
++#file="manifest.xml"                     main_type="xml"            sub_type="manifest"
+ 
+ [LIST_VERIFY]
+ #partition images needed verify
