@@ -1,3 +1,5 @@
+#include <sys/types.h>
+#include <unistd.h>
 #include <fcntl.h>
 
 int efuse_read(uint8_t *buf, uint32_t offset, uint32_t len)
@@ -21,9 +23,9 @@ int efuse_read(uint8_t *buf, uint32_t offset, uint32_t len)
     return avail;
 }
 
-void main()
+int main(void)
 {
-	int avail;
+	int avail, i;
     uint8_t buf[8];
     uint32_t offset, len;
     offset = 176;
@@ -35,5 +37,7 @@ void main()
 			printf("%02x", buf[i]);
 		printf("\n");
 	}
+
+	return 0;
 }
 
