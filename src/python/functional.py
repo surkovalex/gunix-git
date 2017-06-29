@@ -58,5 +58,65 @@ def is_prime(n):
 
 print('sum(1, 100, is_prime) = %d' % sum(1, 100, is_prime))
 
+def product(start, end, handle):
+	total = 1;
+	for x in range(start, end+1):
+		total *= handle(x)
+	return total
+
+def factroial(n):
+	return product(1, n, identify)
+
+print('product(1, 10, identify) = %d' % factroial(10))
+
+def accumulate(start, end, handle, init_value, combine):
+	def symbol(a, b, combine):
+		if '+' == combine:
+			return a+b
+		elif '*' == combine:
+			return a*b
+		else:
+			pass
+
+	total = init_value
+	for x in range(start, end+1):
+		total = symbol(total, handle(x), combine)
+	return total
+
+def sum(start, end, handle):
+	return accumulate(start, end, handle, 0, '+')
+
+def product(start, end, handle):
+	return accumulate(start, end, handle, 1, '*')
+
+print('sum(1, 100, identify) = %d' % sum(1, 100, identify))
+print('product(1, 6, identify) = %d' % product(1, 6, identify))
+
+
+def Sum(start, end, handle):
+	return reduce(lambda x, y: x + y, map(lambda x: handle(x), \
+			[x for x in range(start, end + 1)]))
+
+def Product(start, end, handle):
+	return reduce(lambda x, y: x * y, map(lambda x: handle(x), \
+			[x for x in range(start, end + 1)]))
+
+def Accumulate(start, end, handle, combine):
+	def symbol(a, b, combine):
+		if '+' == combine:
+			return a+b
+		elif '*' == combine:
+			return a*b
+		else:
+			pass
+
+	return reduce(lambda x, y: symbol(x, y, combine), map(lambda x: handle(x), \
+			[x for x in range(start, end + 1)]))
+
+def Sum(start, end, handle):
+	return accumulate(start, end, handle, '+')
+
+def Product(start, end, handle):
+	return accumulate(start, end, handle, '*')
 
 
