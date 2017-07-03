@@ -65,7 +65,30 @@ def prod(L):
 
 print('3 * 5 * 7 * 9 =', prod([3, 5, 7, 9]))
 
+def str2float2(s):
+  L = s.split('.', 1)
+  num_i = reduce(lambda x, y : 10*x + y, map(char2num, L[0]))
+  list_f = list(map(char2num, L[1]))[::-1]
+  num_f = reduce(lambda x, y : x/10 + y, list_f)/10
+  return num_i + num_f
 
+print('str2float(\'123.456\') =', str2float2('123.456'))
+#print('str2float(\'.123\') =', str2float2('.123'))
+#print('str2float(\'123\') = ', str2float2('123'))
+
+def str2float3(s):
+  if '.' in s:
+    L = s.split('.')
+    left_part=reduce(lambda x, y : x*10 + y, map(char2num, L[0]))
+    # 123.456
+    right_part=reduce(lambda x, y : x/10 + y, map(char2num, L[1][::-1]))/10
+    return left_part + right_part
+  else:
+    return reduce(lambda x, y : x*10 + y, map(char2num, s))
+
+print('str2float(\'123.456\') =', str2float3('123.456'))
+#print('str2float(\'.123\') =', str2float3('.123'))
+#print('str2float(\'123\') = ', str2float3('123'))
 
 
 
