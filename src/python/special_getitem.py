@@ -13,21 +13,24 @@ class Fib(object):
 		if self.a > 100000:
 			raise StopIteration()
 		return self.a
+
 	def __getitem__(self, n):
+		a, b = 1, 1
 		if isinstance(n, int):		# n is index
-			a, b = 1, 1
 			for x in range(n):
 				a, b = b, a+b
 			return a
 		if isinstance(n, slice):	# n is slice
 			start = n.start
 			stop = n.stop
+			step = n.step
 			if start is None:
 				start = 0
-			a, b = 1, 1
+			if step is None:
+				step = 1
 			L = []
 			for x in range(stop):
-				if x >= start:
+				if x >= start and (x - start) % step == 0:
 					L.append(a)
 				a, b = b, a+b
 			return L
@@ -38,4 +41,5 @@ print(f[5])
 print(f[100])
 print(f[0:5])
 print(f[:10])
+print(f[1:10:2])
 
