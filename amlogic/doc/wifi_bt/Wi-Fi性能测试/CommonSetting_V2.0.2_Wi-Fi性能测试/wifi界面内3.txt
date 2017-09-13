@@ -1,0 +1,128 @@
+                                   IXCHARIOT
+
+
+SUMMARY - UNTITLED1.TST
+
+Console version      6.70
+Console build level  44
+Console product type IxChariot
+Filename             untitled1.tst
+Run start time       2009年6月27日, 0:13:29
+Run end time         2009年6月27日, 0:14:29
+Elapsed time         00:01:00
+How the test ended   Ran to completion
+Number of pairs      1
+
+
+RUN OPTIONS
+
+End type                                               Run for a fixed duration
+Duration                                               00:01:00
+Reporting type                                         Real-time
+Automatically poll endpoints                           Yes
+Polling interval (minutes)                             1
+Stop run upon initialization failure                   Yes
+Connect timeout during test (minutes)                  0
+Stop test after this many running pairs fail           1
+Collect endpoint CPU utilization                       No
+Collect TCP statistics                                 No
+Allow pair reinitialization for setup                  No
+Maximum number of setup reinitializations              3
+Setup reinitialization wait interval (milliseconds)    10
+Allow pair reinitialization at runtime                 No
+Maximum number of runtime reinitializations            3
+Runtime reinitialization wait interval (milliseconds)  10
+Validate data upon receipt                             No
+Use a new seed for random variables on every run       Yes
+Enable Ixia hardware timestamps                        Yes
+Clock synchronization                                  'Endpoint'
+Console Service Quality
+Endpoint Service Quality
+
+
+TEST SETUP (CONSOLE TO ENDPOINT 1)
+
+                                  Console
+Group/    Console Knows  Console  Service Pair
+Pair      Endpoint 1     Protocol Quality Comment
+--------- -------------- -------- ------- -------
+All Pairs
+ 1        192.168.31.200 TCP      n/a
+
+
+TEST SETUP (ENDPOINT 1 TO ENDPOINT 2)
+
+          Endpoint 1              UDP
+          Knows          Endpoint compliant
+Group/    Endpoint 2     2 Setup  with
+Pair      (Setup)        Protocol RFC768
+--------- -------------- -------- ---------
+All Pairs
+ 1        192.168.31.217 TCP      n/a
+
+
+TEST EXECUTION (ENDPOINT 1 TO ENDPOINT 2)
+
+Group/                                  Network  Service Script/Stream
+Pair      Endpoint 1     Endpoint 2     Protocol Quality Name
+--------- -------------- -------------- -------- ------- --------------
+All Pairs
+ 1        192.168.31.200 192.168.31.217 TCP              Throughput.scr
+
+
+THROUGHPUT
+
+                                  Throughput
+                                         95% Measured
+Group/    Average Minimum Maximum Confidence     Time  Relative
+Pair       (Mbps)  (Mbps)  (Mbps)   Interval   (secs) Precision
+--------- ------- ------- ------- ---------- -------- ---------
+All Pairs  20.965   0.509  53.334
+ 1         21.280   0.509  53.334      4.603   59.099    21.631
+Totals:    20.965   0.509  53.334
+
+
+TRANSACTION RATE
+
+                                              Transaction
+          Transaction Transaction Transaction    Rate 95% Measured
+Group/           Rate        Rate        Rate  Confidence     Time  Relative
+Pair          Average     Minimum     Maximum    Interval   (secs) Precision
+--------- ----------- ----------- ----------- ----------- -------- ---------
+All Pairs      26.599       0.636      66.667
+ 1             26.599       0.636      66.667       5.754   59.099    21.631
+Totals:        26.599       0.636      66.667
+
+
+RESPONSE TIME
+
+                                       Response
+          Response Response Response   Time 95% Measured
+Group/        Time     Time     Time Confidence     Time  Relative
+Pair       Average  Minimum  Maximum   Interval   (secs) Precision
+--------- -------- -------- -------- ---------- -------- ---------
+All Pairs    0.038    0.015    1.572
+ 1           0.038    0.015    1.572      0.008   59.099    21.631
+Totals:      0.038    0.015    1.572
+
+
+ENDPOINT CONFIGURATION
+
+                                       E1    E1      E1 use    E1      E2                 E2    E2      E2 use    E2
+Group/                        E1       Build Product encrypted actual  Operating E2       Build Product encrypted actual
+Pair      E1 Operating System Version  Level Type    flows     address System    Version  Level Type    flows     address
+--------- ------------------- -------- ----- ------- --------- ------- --------- -------- ----- ------- --------- -------
+All Pairs
+ 1        Windows XP (32-bit) 7.30 SP1 32    Retail  No                Android   7.30 SP1 32    Retail  No
+
+
+RAW DATA TOTALS
+
+           Number
+               of                            Bytes Measured
+Group/     Timing Transaction  Bytes Sent Received     Time  Relative
+Pair      Records       Count       by E1    by E1   (secs) Precision
+--------- ------- ----------- ----------- -------- -------- ---------
+All Pairs   1,572       1,572 157,200,000    1,572
+ 1          1,572       1,572 157,200,000    1,572   59.099    21.631
+Totals:     1,572       1,572 157,200,000    1,572

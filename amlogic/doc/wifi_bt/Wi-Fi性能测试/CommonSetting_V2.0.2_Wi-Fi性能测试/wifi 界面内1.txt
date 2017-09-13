@@ -1,0 +1,127 @@
+                                   IXCHARIOT
+
+
+SUMMARY - UNTITLED1.TST
+
+Console version      6.70
+Console build level  44
+Console product type IxChariot
+Filename             untitled1.tst
+Run start time       2009年6月27日, 0:03:08
+Run end time         2009年6月27日, 0:04:08
+Elapsed time         00:01:00
+How the test ended   Ran to completion
+Number of pairs      1
+
+RUN OPTIONS
+
+End type                                               Run for a fixed duration
+Duration                                               00:01:00
+Reporting type                                         Real-time
+Automatically poll endpoints                           Yes
+Polling interval (minutes)                             1
+Stop run upon initialization failure                   Yes
+Connect timeout during test (minutes)                  0
+Stop test after this many running pairs fail           1
+Collect endpoint CPU utilization                       No
+Collect TCP statistics                                 No
+Allow pair reinitialization for setup                  No
+Maximum number of setup reinitializations              3
+Setup reinitialization wait interval (milliseconds)    10
+Allow pair reinitialization at runtime                 No
+Maximum number of runtime reinitializations            3
+Runtime reinitialization wait interval (milliseconds)  10
+Validate data upon receipt                             No
+Use a new seed for random variables on every run       Yes
+Enable Ixia hardware timestamps                        Yes
+Clock synchronization                                  'Endpoint'
+Console Service Quality
+Endpoint Service Quality
+
+
+TEST SETUP (CONSOLE TO ENDPOINT 1)
+
+                                       Console
+Group/         Console Knows  Console  Service Pair
+Pair           Endpoint 1     Protocol Quality Comment
+-------------- -------------- -------- ------- -------
+Throughput.scr
+ 1             192.168.31.200 TCP      n/a
+
+
+TEST SETUP (ENDPOINT 1 TO ENDPOINT 2)
+
+               Endpoint 1              UDP
+               Knows          Endpoint compliant
+Group/         Endpoint 2     2 Setup  with
+Pair           (Setup)        Protocol RFC768
+-------------- -------------- -------- ---------
+Throughput.scr
+ 1             192.168.31.217 TCP      n/a
+
+
+TEST EXECUTION (ENDPOINT 1 TO ENDPOINT 2)
+
+Group/                                       Network  Service Script/Stream
+Pair           Endpoint 1     Endpoint 2     Protocol Quality Name
+-------------- -------------- -------------- -------- ------- --------------
+Throughput.scr
+ 1             192.168.31.200 192.168.31.217 TCP              Throughput.scr
+
+
+THROUGHPUT
+
+                                       Throughput
+                                              95% Measured
+Group/         Average Minimum Maximum Confidence     Time  Relative
+Pair            (Mbps)  (Mbps)  (Mbps)   Interval   (secs) Precision
+-------------- ------- ------- ------- ---------- -------- ---------
+Throughput.scr  18.894   0.512  50.000
+ 1              19.171   0.512  50.000      4.159   59.132    21.696
+Totals:         18.894   0.512  50.000
+
+
+TRANSACTION RATE
+
+                                                   Transaction
+               Transaction Transaction Transaction    Rate 95% Measured
+Group/                Rate        Rate        Rate  Confidence     Time  Relative
+Pair               Average     Minimum     Maximum    Interval   (secs) Precision
+-------------- ----------- ----------- ----------- ----------- -------- ---------
+Throughput.scr      23.963       0.640      62.500
+ 1                  23.963       0.640      62.500       5.199   59.132    21.696
+Totals:             23.963       0.640      62.500
+
+
+RESPONSE TIME
+
+                                            Response
+               Response Response Response   Time 95% Measured
+Group/             Time     Time     Time Confidence     Time  Relative
+Pair            Average  Minimum  Maximum   Interval   (secs) Precision
+-------------- -------- -------- -------- ---------- -------- ---------
+Throughput.scr    0.042    0.016    1.563
+ 1                0.042    0.016    1.563      0.009   59.132    21.696
+Totals:           0.042    0.016    1.563
+
+
+ENDPOINT CONFIGURATION
+
+                                            E1    E1      E1 use    E1      E2                 E2    E2      E2 use    E2
+Group/                             E1       Build Product encrypted actual  Operating E2       Build Product encrypted actual
+Pair           E1 Operating System Version  Level Type    flows     address System    Version  Level Type    flows     address
+-------------- ------------------- -------- ----- ------- --------- ------- --------- -------- ----- ------- --------- -------
+Throughput.scr
+ 1             Windows XP (32-bit) 7.30 SP1 32    Retail  No                Android   7.30 SP1 32    Retail  No
+
+
+RAW DATA TOTALS
+
+                Number
+                    of                            Bytes Measured
+Group/          Timing Transaction  Bytes Sent Received     Time  Relative
+Pair           Records       Count       by E1    by E1   (secs) Precision
+-------------- ------- ----------- ----------- -------- -------- ---------
+Throughput.scr   1,417       1,417 141,700,000    1,417
+ 1               1,417       1,417 141,700,000    1,417   59.132    21.696
+Totals:          1,417       1,417 141,700,000    1,417
