@@ -1,0 +1,81 @@
+Please check the below code:
+
+Get Method (Working)
+String EMClass = "android.net.ethernet.EthernetManager";
+String EDIClass = "android.net.ethernet.EthernetDevInfo";
+try {
+    // Get ethernetManager- Class and EthernetDevInfo-Class for ethernet configuration
+    Class<?> ethernetManagerClass = Class.forName(EMClass);
+    Class<?> devInfoClass = Class.forName(EDIClass);
+
+
+    // Get method to read current ethernet configurations and read out current configuration
+    Method methodGetSavedEthConfig = ethernetManagerClass.getMethod("getSavedEthConfig");
+    methodGetSavedEthConfig.setAccessible(true);
+    Object myConfig = methodGetSavedEthConfig.invoke(emInstance);
+
+    // get method to set a new IP and set new IP
+    Method connectMode = devInfoClass.getMethod("getConnectMode");
+    Method getMask = devInfoClass.getMethod("getNetMask");
+
+
+    // String ipStr = "192.168.27.42";
+    //getMask.invoke(myConfig, ipStr);
+    mask.setText(getMask.invoke(myConfig).toString());
+    Log.v("getMask", "" + getMask.invoke(myConfig).toString());
+    if (connectMode.invoke(myConfig).toString().equals("dhcp")) {
+        dhcp_ethernet.setChecked(true);
+    } else {
+        dhcp_ethernet.setChecked(false);
+    }
+
+} catch (ClassNotFoundException e) {
+    e.printStackTrace();
+} catch (NoSuchMethodException e) {
+    e.printStackTrace();
+} catch (IllegalAccessException e) {
+    e.printStackTrace();
+} catch (InvocationTargetException e) {
+    e.printStackTrace();
+} catch (NullPointerException e) {
+    e.printStackTrace();
+}
+
+
+Set Method (not working)
+
+
+ Object DevInfoObj = null;
+
+    try {
+        DevInfoObj = devInfoClass.newInstance();
+
+        // get method to set a new IP and set new IP
+        Method methodSetMode = devInfoClass.getMethod("setConnectMode", String.class);
+        String ipStr = "manually";
+        methodSetMode.invoke(DevInfoObj, ipStr);
+        Method methodSetIp = devInfoClass.getMethod("setIpAddress", String.class);
+        ipStr = "192.168.27.49";
+        //methodSetIp.invoke(DevInfoObj, ipStr);
+        methodSetIp.invoke(DevInfoObj, ipStr);
+        Log.v("DevInfoObj", "" + DevInfoObj);
+    } catch (InstantiationException e) {
+        e.printStackTrace();
+    }
+
+    // Get method to read current ethernet configurations and read out current configuration
+    Method methodUpdateEthConfig = ethernetManagerClass.getMethod("updateEthDevInfo", new Class[]{devInfoClass});
+    methodUpdateEthConfig.setAccessible(true);
+    methodUpdateEthConfig.invoke(emInstance, DevInfoObj);
+} catch (ClassNotFoundException e) {
+    e.printStackTrace();
+} catch (NoSuchMethodException e) {
+    e.printStackTrace();
+} catch (IllegalAccessException e) {
+    e.printStackTrace();
+} catch (InvocationTargetException e) {
+    e.printStackTrace();
+} catch (NullPointerException e) {
+    e.printStackTrace();
+}
+ 

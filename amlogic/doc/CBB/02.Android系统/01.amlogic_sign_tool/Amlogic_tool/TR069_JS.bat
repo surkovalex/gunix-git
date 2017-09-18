@@ -1,0 +1,1 @@
+java -jar signapk.jar platform.x509.pem platform.pk8 TR069Service.apk TR069Service_sign.apk 

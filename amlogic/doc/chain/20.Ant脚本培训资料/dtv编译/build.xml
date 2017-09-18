@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="dtv" default="release">
+    
+    <property name = "apk_name" value = "${ant.project.name}.apk"/>
+    <property name = "sign_apk_name" value = "${ant.project.name}-sign.apk"/>
+    <property name = "release_apk_name" value = "${ant.project.name}-release.apk"/>
+    <property name = "sign_release_apk_name" value = "${ant.project.name}-release-sign.apk"/>
+    
+    <property file="local.properties" />
+    <property file="ant.properties" />
+    
+    <property environment="env" />
+    <condition property="sdk.dir" value="${env.ANDROID_HOME}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+
+    <loadproperties srcFile="project.properties" />
+
+    <fail
+            message="sdk.dir is missing. Make sure to generate local.properties using 'android update project' or to inject it through the ANDROID_HOME environment variable."
+            unless="sdk.dir"
+    />
+
+    <import file="custom_rules.xml" optional="true" />
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+
+    <target name="sign" >
+            <exec executable="cmd.exe" failonerror="true">
+                   <arg line="/c &quot;java -jar .\sign\signapk.jar .\sign\platform.x509.pem .\sign\platform.pk8 .\bin\${apk_name} .\bin\${sign_apk_name} &amp;&amp; java -jar .\sign\signapk.jar .\sign\platform.x509.pem .\sign\platform.pk8 .\bin\${release_apk_name} .\bin\${sign_release_apk_name} &quot;"/>  
+            </exec>
+    </target>
+	 
+</project>

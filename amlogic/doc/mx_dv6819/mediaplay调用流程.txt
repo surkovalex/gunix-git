@@ -1,0 +1,54 @@
+1.  Y:\mx_fw_0428_new\frameworks\base\media\java\android\media\MediaPlayer.java \\上层API接口
+
+2.  Y:\mx_fw_0428_new\frameworks\base\media\jni\android_media_MediaPlayer.cpp  \\JNI 实现
+
+3.  Y:\mx_fw_0428_new\frameworks\av\media\libmedia\mediaplayer.cpp  \\JNI 层实现
+
+4、frameworks/av/media/libmedia/IMediaDeathNotifier.cpp    \\ Ibinder 机制 
+getMediaPlayerService方法，获得了返回值，并把它赋值给了service。接下来我们就要看看MediaPlayer使用这个service都做了些什么事情。
+
+5、[/frameworks/av/media/libmediaplayerservice/MediaPlayerService.cpp]  \\server  端
+
+从代码中，我们可以看出，在Server端，我们新建的对象是Client，是MediaPlayerService的内部类。
+但是这个Client执行了MediaPlayerService的绝大部分操作。同样我们将来传输过来的数据也都是会交给内部类Client进行处理的。
+到这里，在Server端的对象就创建完成了。
+
+接下来就是要做第二件事情了，就是在MediaPlayer中调用player->setDataSource();，这件事还是要在Server完成的，代码如下：
+
+6、frameworks/av/include/media/MediaPlayerInterface.h 
+
+获取对应的playtype类型
+
+7、/frameworks/av/media/libmediaplayerservice/MediaPlayerFactory.cpp
+注册们想要在Android中扩展，使用新的解码工具，可以直接继承MediaPlayerFactory类，然后在这里注册所需要的type就行了。
+
+【/frameworks/av/media/libmediaplayerservice/MediaPlayerService.cpp】
+
+frameworks/av/media/libmediaplayerservice/StagefrightPlayer.cpp
+
+
+参考文档： http://blog.csdn.net/mirkerson/article/details/40184461
+
+
+Y:\mx_fw_0428_new\frameworks\av\media\libmediaplayerservice\AmSuperPlayer.cpp    
+
+Y:\mx_fw_0428_new\frameworks\av\media\libmediaplayerservice\AmlogicPlayer.cpp
+
+
+-----------------------------
+
+
+Y:\mx_fw_0428_new\packages\amlogic\LibPlayer\amplayer
+
+Y:\mx_fw_0428_new\packages\amlogic\LibPlayer\amffmpeg
+
+
+-----------------------------------------------------------
+
+流媒体网络协议解析层代码：
+
+Y:\mx_fw_0428_new\frameworks\av\media\libmediaplayerservice\nuplayer
+
+
+
+

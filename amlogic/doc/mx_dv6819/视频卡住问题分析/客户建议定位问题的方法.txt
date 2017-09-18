@@ -1,0 +1,41 @@
+It will concentrate on investigating cause of freezing issue in the system player with streams.
+
+My suggestions for "discontinuously issue" testing. I use these cases for our player:
+
+1) Setup unstable network Wi-Fi point with randomly bandwidth limitations. (i use wi-fi card + linux scripts)
+
+ - It can force start Microsoft Smooth Streaming protocol bandwidth adaptation logic.
+ - It can test player (source reader-> demuxer-> decoder -> render) fully cycle testing on stress situations.
+
+2) Periodically disable/enable network by turn of Wi-Fi or Ethernet cable from board. 
+(of cause short and long periods)
+
+ - It can test audio + video chunks loading + buffering aborting.
+ - It can test corrupted data in BufferQueue of player. (PTS / DTS corruption)
+ - It can test player re-buffering after network problems.
+
+3) Also seeking in VOD content with hot network operations can reproduce issue faster.
+
+Please use these cases for reproduce problem. And issue randomization will be defeated.
+
+
+
+客户的应用每过十分钟无人操作会进入待机模式
+
+
+---------------------------------------------
+
+分析点一：数据下载失败
+HTTPDataSource  
+
+分析点二：网络连接失败
+amplayer: [non_raw_read] EAGAIN, try the count = 65
+
+Network is unreachable
+
+分析点三：解码器buffer数据不足
+amplayer: **[update_state]abuflevel=0.99603462 vbublevel=0.00002266 abufrp=92fbac40 vbufrp=9292a800 read_end=0
+
+
+
+

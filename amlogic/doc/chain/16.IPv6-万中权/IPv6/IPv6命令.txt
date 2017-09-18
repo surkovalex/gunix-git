@@ -1,0 +1,63 @@
+logcat -s ConnectivityService  
+getprop | grep dns 
+/system/etc/dhcpcd/dhcpcd.conf
+
+#busybox ifconfig                                                             查看IPv6地址
+#busybox ifconfig wlan0 add 4006:e2024:680:5356:9a3b:16ff:feb2:5566/64        添加IPv6地址    
+#busybox route -A inet6                                                       查看IPv6路由表
+#busybox route -A inet6 add ::/0(default) gw 4006:e024:680:5356::1            添加默认路由
+#echo 1 》 /proc/sys/net/ipv6/conf/all/disable_ipv6                           禁用所有接口包括回环接口的IPv6 
+===========================================================================================================
+是否支持IPv6： 查看cat /proc/net/if_inet6 文件是否存在
+
+#ifconfig wlan0 add 2001:250:3002:4650:21f::100/80 设置临时IPv6地址（证实可行）
+#route -A inet6 add default gw 2001:da8:2004:1000::1 (添加默认路由) 
+
+# ping6 ipv6.scau.edu.cn 
+
+ifconfig查看的是活动的网卡信息，ifconfig -a 查看的是所有的网卡信息
+
+ipv6 address FE80:0:0:0:0123:0456:0789:0abc link-local   手工指定link-local地址
+========================================================================================================
+route：直接可以查看我们系统上的路由信息
+route –n ：以数字的形式显示路由信息(IPv4)
+
+添加Ipv4的默认网关 route add default gw 192.168.1.1
+
+格式：route add -net|host DEST gw NEXTHOP
+例如，添加一条路由，让主机通过172.16.7.3访问192.168.0.0/24网段
+         route add –net 192.168.0.0/24 gw 172.16.7.3
+         
+Gateway：该网域是通过那个 gateway 连接出去的？ 如果显示 0.0.0.0 表示该路由是直接由本机传送，亦即可以透过区域网路的 MAC 直接传讯；
+         如果有显示 IP 的话，表示该路由需要经过路由器 (通讯闸) 的帮忙才能够传送出去。
+Flags：  总共有多个旗标，代表的意义如下：                        
+         U (route is up)：该路由是启动的；                       
+         H (target is a host)：目标是一部主机 (IP) 而非网域；                       
+         G (use gateway)：需要透过外部的主机 (gateway) 来转递封包；                       
+         R (reinstate route for dynamic routing)：使用动态路由时，恢复路由资讯的旗标；                       
+         D (dynamically installed by daemon or redirect)：已经由服务或转 port 功能设定为动态路由                       
+M (modified from routing daemon or redirect)：路由已经被修改了； 
+
+-------------------------------------------------------------------------
+查看IPv6路由表 busybox route -A inet6 
+添加路由：route  -A inet6  add   网段或网址  gw   地址 （添加默认网关）
+  busybox route -A inet6 add ::/0 gw 4006:e024:680:5356::1 （待验证）
+====================================================================================================================
+Google Public DNS
+2001:4860:4860::8888   8.8.8.8  
+2001:4860:4860::8844   8.8.4.4  
+
+OpenDNS
+2620:0:ccc::2
+2620:0:ccd::2
+2001:778::37
+
+配置dns：
+echo nameserver 192.168.0.1etcresolv.conf
+======================================================================================================================
+禁用IPv6
+
+$ sudo sh -c ‘echo 1 》 /proc/sys/net/ipv6/conf/eth0/disable_ipv6'  禁用eth0的IPv6
+$ echo 1 》 /proc/sys/net/ipv6/conf/all/disable_ipv6  禁用所有接口包括回环接口的IPv6 
+
+

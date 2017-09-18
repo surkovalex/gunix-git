@@ -1,0 +1,70 @@
+private void updateConnectionInfo() {		
+		if (mWifiAdmins.isWifiConnected(getApplicationContext()) == WifiAdmins.WIFI_CONNECTED) {
+			mLastInfo = mWifiManager.getConnectionInfo();
+			LogUtil.d(TAG, "WiFi Connected");
+			
+			if (mLastInfo != null) {
+				mWifiConfigurationList = mWifiManager.getConfiguredNetworks();				
+				int end = mLastInfo.getSSID().toCharArray().length - 1;
+				mHasConnectedWifi.setText(mLastInfo.getSSID().substring(1, end));
+				mHasConnectIpAddr.setText(getResources().getString(
+						R.string.wifi_has_connected)  + mWiFiAdmin.getWifiInfo().mIP);
+				mLevel = WifiManager.calculateSignalLevel(mWifiManager
+						.getConnectionInfo().getRssi(), 4);
+				mSignalIcon.setImageLevel(mLevel);
+			} else if(mLastInfo == null) {
+				mHasConnectedWifi.setText("");
+				mHasConnectIpAddr.setText(getResources().getString(R.string.select_wifi_connect));
+			}
+		} else if (mWifiAdmins.isWifiConnected(getApplicationContext()) == WifiAdmins.WIFI_CONNECTING) {
+			LogUtil.d(TAG, "WiFi Connecting");
+			mLastInfo = mWifiManager.getConnectionInfo();
+			if (mLastInfo != null) {
+				int end = mLastInfo.getSSID().toCharArray().length - 1;
+				mHasConnectedWifi.setText(mLastInfo.getSSID().substring(1, end));
+				mHasConnectIpAddr.setText(WifiActivity.getConnectPrompt(this, null, mLastState));
+			} else {
+				LogUtil.v(TAG," mWifiConfiguration = "+ mWifiConfiguration.toString());
+				mHasConnectedWifi.setText(mWifiConfiguration.SSID);
+				mHasConnectIpAddr.setText(getResources().getString(R.string.wifi_authing));
+			}
+		} else if (mWifiAdmins.isWifiConnected(getApplicationContext()) == WifiAdmins.WIFI_CONNECT_FAILED) {
+			// mLastInfo = mWifiManager.getConnectionInfo();
+			LogUtil.d(TAG, "WiFi Connected Failed ");
+			if (mWifiConfiguration != null) {
+				LogUtil.v(TAG,"updateConnectionInfo mWifiConfiguration.disableReason =  "
+								+ mWifiConfiguration.disableReason);
+				if (mWifiConfiguration.disableReason == WifiConfiguration.DISABLED_AUTH_FAILURE) {				
+					forget(mWifiConfiguration);
+					mHasConnectedWifi.setText("");
+					mHasConnectIpAddr.setText(getResources().getString(R.string.select_wifi_connect));
+				}
+			}
+			mHasConnectedWifi.setText("");
+			mHasConnectIpAddr.setText(getResources().getString(R.string.select_wifi_connect));
+		}
+	}
+	
+	
+	public int isWifiConnected(Context context) {
+		ConnectivityManager connectivityManager = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo wifiNetworkInfo = connectivityManager
+				  .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+
+		Log.v(TAG, "#####isConnectedOrConnecting = "
+						+ wifiNetworkInfo.isConnectedOrConnecting());
+		Log.v(TAG, "#####wifiNetworkInfo.getDetailedState() = "
+				+ wifiNetworkInfo.getDetailedState());
+		
+		if (wifiNetworkInfo.getDetailedState() == DetailedState.OBTAINING_IPADDR
+				|| wifiNetworkInfo.getDetailedState() == DetailedState.CONNECTING) {
+			return WIFI_CONNECTING;
+		} else if (wifiNetworkInfo.getDetailedState() == DetailedState.CONNECTED) {
+			return WIFI_CONNECTED;
+		} else {
+			Log.v(TAG, "#####getDetailedState() = "
+							+ wifiNetworkInfo.getDetailedState());
+			return WIFI_CONNECT_FAILED;
+		}
+	}

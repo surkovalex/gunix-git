@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+
+android {   //android此语法只有当你的apply plugin：'com.android.xxx'时才能用
+    compileSdkVersion 24    //开发采用的sdk版本
+    buildToolsVersion "25.0.2"  //编译采用的编译工具版本
+
+    signingConfigs {//签名配置
+        config {//此config名称是自定义的
+            keyAlias '指定签名文件的别名'
+            keyPassword '指定签名文件的别名配对密码'
+            storeFile file('签名文件路径')
+            storePassword '签名文件的密码'
+        }
+    }
+
+    defaultConfig { //默认项目配置信息
+        applicationId "com.example.sdmc.ndk_test"   //应用的id，这里决定应用的唯一标识
+        minSdkVersion 19    //决定此应用最低兼容的安卓系统版本
+        targetSdkVersion 24 //决定此应用最高兼容的安卓系统版本
+        versionCode 1   //应用的版本号
+        versionName "1.0"   //应用的版本名
+//        testApplicationId '测试工程的application id'
+        signingConfig signingConfigs.config //配置默认签名配置
+//        proguardFile '默认混淆文件配置'
+//        proguardFiles '默认多个混淆文件配置'
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"//测试工程
+    }
+    buildTypes {    //构建的类型方式
+        release {   //release方式，一般这种是定义为正式包渠道
+            minifyEnabled false //编译时是否混淆的开关
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            /*混淆文件的路径，注意这里用的是progrardFiles，是后面带s的，所以可以添加多个混淆文件路径，每个
+            之间用“,”隔开*/
+        }
+
+        debug {//debug,默认包含此类型，参数都是默认的
+            //这里就以debug为例，这里的语法在release和自定义中也是支持的
+            debuggable true //默认false，是否开启断点调试
+            jniDebuggable true //默认false，是否开启jni的断点调试
+            signingConfig signingConfigs.config //配置签名方式，这里配置会覆盖defaultConfig中配置的签名方式
+            renderscriptDebuggable true //默认false，是否开启renderscript断点调试
+            renderscriptOptimLevel 2 //renderscript的版本号
+            minifyEnabled true //默认false ，是否混淆的开关
+            pseudoLocalesEnabled true //默认false，是否支持本地化管理
+            applicationIdSuffix '.test' //applicationId的后缀，相当于更改了applicationId，可以认为是一个新的应用
+            versionNameSuffix '.520' //版本名的后缀
+            zipAlignEnabled false //默认true，是否进行zip align优化
+
+            buildConfigField "boolean","IS_DEBUG","true" //为BuildConfig类创建一个常量，类型为boolean，变量名为IS_DEBUG，值为true
+            resValue "string","name","value" //在string.xml中创建一个名为name,值为value的一个字符串资源
+
+        }
+    }
+
+    sourceSets {//目录指向配置
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])   //编译的文件树
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'   //正常项目需要引用的
+    testCompile 'junit:junit:4.12'  //测试项目需要引用的
+}

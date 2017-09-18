@@ -1,0 +1,46 @@
+Please check the below code:
+
+Get Method (Working)
+String EMClass = "android.net.EthernetManager";
+String EDIClass = "android.net.IpConfiguration";
+String STATICIPClass = "android.net.StaticIpConfiguration";
+
+try {
+
+    Class<?> ethernetManagerClass = Class.forName(EMClass);
+    Class<?> devInfoClass = Class.forName(EDIClass);
+    Class<?> STATICIPClass = Class.forName(STATICIPClass);
+
+   
+    // Get method to read current ethernet configurations and read out current configuration
+    Method methodGetSavedEthConfig = ethernetManagerClass.getMethod("getConfiguration");
+    methodGetSavedEthConfig.setAccessible(true);
+    Object myConfig = methodGetSavedEthConfig.invoke();
+
+    // get method to set a new IP and set new IP
+    Method connectMode = devInfoClass.getMethod("getIpAssignment");
+    Method getStaticConfigMethod = devInfoClass.getMethod("getStaticIpConfiguration");
+    Method  IpConfigurationMethod = devInfoClass.getMethod("IpConfiguration");
+    Method  setIpAssignmentMethod =  devInfoClass.getMethod("setIpAssignment");
+    int     mIpAssignment =  IpAssignment.STATIC ; 
+    setIpAssignmentMethod.setAccessible(true);
+    setIpAssignmentMethod.invoke(mIpAssignment);
+    if (connectMode.invoke(myConfig).toString().equals("dhcp")) {
+        dhcp_ethernet.setChecked(true);
+    } else {
+        dhcp_ethernet.setChecked(false);
+    }
+
+} catch (ClassNotFoundException e) {
+    e.printStackTrace();
+} catch (NoSuchMethodException e) {
+    e.printStackTrace();
+} catch (IllegalAccessException e) {
+    e.printStackTrace();
+} catch (InvocationTargetException e) {
+    e.printStackTrace();
+} catch (NullPointerException e) {
+    e.printStackTrace();
+}
+
+

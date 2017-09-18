@@ -1,0 +1,57 @@
+public WifiConfiguration createWifiConfig(String SSID, String password, int type) {
+		WifiConfiguration config = new WifiConfiguration();
+		Log.v(TAG, "createWifiConfig SSID = " + SSID + ",password = " + password + 
+				",type = " + type + ",password.Length()= " + password.length());
+        
+		config.allowedAuthAlgorithms.clear();
+		config.allowedGroupCiphers.clear();
+		config.allowedKeyManagement.clear();
+		config.allowedPairwiseCiphers.clear();
+		config.allowedProtocols.clear();
+		config.SSID = "\"" + SSID + "\"";
+
+		WifiConfiguration tempConfig = this.IsExsits(SSID);
+		if (tempConfig != null) {
+			mWifiManager.removeNetwork(tempConfig.networkId);
+		}
+		if (type == TYPE_NO_PASSWD) {
+			Log.v(TAG, "##createWifiConfig TYPE_NO_PASSWD ");
+			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+		} else if (type == TYPE_WEP) {	
+			 config.allowedKeyManagement.set(KeyMgmt.NONE);
+             config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+             config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+             if (password.length() != 0) {
+                 int length = password.length();
+                 // WEP-40, WEP-104, and 256-bit WEP (WEP-232?)
+                 if ((length == 10 || length == 26 || length == 58) &&
+                         password.matches("[0-9A-Fa-f]*")) {
+                     config.wepKeys[0] = password;
+                 } else {
+                     config.wepKeys[0] = '"' + password + '"';
+                 }
+             }
+		} else if (type == TYPE_WPA) {
+			Log.v(TAG, "##createWifiConfig TYPE_WPA ");
+			config.preSharedKey = "\"" + password + "\"";
+			config.hiddenSSID = true;
+			config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+			config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+			config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+			config.status = WifiConfiguration.Status.ENABLED;
+		} else if (type == TYPE_EAP) {
+			config.preSharedKey = "\"" + password + "\"";
+			config.hiddenSSID = true;
+			config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+			config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_EAP);
+			config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+			config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+			config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+			config.status = WifiConfiguration.Status.ENABLED;
+		}
+		return config;
+	}

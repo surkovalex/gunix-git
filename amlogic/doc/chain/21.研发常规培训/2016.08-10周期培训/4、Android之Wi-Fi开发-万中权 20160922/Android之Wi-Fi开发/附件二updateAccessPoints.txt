@@ -1,0 +1,97 @@
+private void updateAccessPoints() {
+		final int wifiState = mWifiManager.getWifiState();   
+
+		switch (wifiState) {
+		case WifiManager.WIFI_STATE_ENABLED:
+			List<AccessPoint> accessPoints = constructAccessPoints();
+			
+		    if(mLastInfo != null && accessPoints.size() > 0){
+				if(mLastInfo.getSSID().length() != 0 && mLastInfo.getSSID() != null){
+					int connectIndex = getConnectSSIDIndex(accessPoints);
+					if(connectIndex != -1){
+						accessPoints.remove(connectIndex);					
+					}					
+				}
+			}  
+		    
+		    //remove the accesspoint which is not in range
+		    for( Iterator it = accessPoints.iterator() ; it.hasNext() ;) {
+		    	AccessPoint accessPoint = (AccessPoint)it.next();
+		    	 if(accessPoint.getLevel() == -1){		    		  
+				     //mWifiManager.removeNetwork(accessPoint.networkId);
+		    		 it.remove(); 
+				    }
+		    }
+		    
+        	mWifiAccessPointAdapter = new WifiAccessPointAdapter(
+					WifiActivity.this, accessPoints);
+			mSelectLv.setAdapter(mWifiAccessPointAdapter);
+			setSelectLVSelection();
+			break;
+		case WifiManager.WIFI_STATE_ENABLING:
+			break;
+		case WifiManager.WIFI_STATE_DISABLING:
+			break;
+		case WifiManager.WIFI_STATE_DISABLED:
+			break;
+		}
+	}
+	
+	
+	private List<AccessPoint> constructAccessPoints() {
+		List<AccessPoint> accessPoints = new ArrayList<AccessPoint>();
+		/**
+		 * Lookup table to more quickly update AccessPoints by only considering
+		 * objects with the correct SSID. Maps SSID -> List of AccessPoints with
+		 * the given SSID.   
+		 */
+		Multimap<String, AccessPoint> apMap = new Multimap<String, AccessPoint>();
+		final List<WifiConfiguration> configs = mWifiManager.getConfiguredNetworks();
+		if (configs != null) {
+			for (WifiConfiguration config : configs) {
+				 if (config.disableReason == WifiConfiguration.DISABLED_AUTH_FAILURE) {
+					LogUtil.v(TAG, "INVALID networkId = " + config.networkId);
+					mWifiManager.forget(config.networkId, null);
+					mWifiManager.removeNetwork(config.networkId);
+                    mWifiManager.saveConfiguration();
+					mHasConnectedWifi.setText("");
+					mHasConnectIpAddr.setText(getResources().getString(
+							R.string.select_wifi_connect));
+					Toast.makeText(WifiActivity.this, getResources().getString(R.string.password_wrong), 1).show();
+				}
+				
+				//if(config.SSID != null){
+					AccessPoint accessPoint = new AccessPoint(this, config);
+					accessPoint.update(mLastInfo, mLastState);
+					accessPoints.add(accessPoint);
+					apMap.put(accessPoint.ssid, accessPoint);
+				//}
+			}
+		}
+
+		final List<ScanResult> results = mWifiManager.getScanResults();
+		if (results != null) {
+			for (ScanResult result : results) {
+				// Ignore hidden and ad-hoc networks.
+				if (result.SSID == null || result.SSID.length() == 0
+						|| result.capabilities.contains("[IBSS]")) {
+					continue;
+				}
+
+				boolean found = false;
+				for (AccessPoint accessPoint : apMap.getAll(result.SSID)) {
+					if (accessPoint.update(result)){
+						found = true;
+					}						
+				}
+				if (!found) {  
+					AccessPoint accessPoint = new AccessPoint(this, result);
+					accessPoints.add(accessPoint);
+					apMap.put(accessPoint.ssid, accessPoint);
+				}
+			}
+		}
+		// Pre-sort accessPoints to speed preference insertion
+		Collections.sort(accessPoints);
+		return accessPoints;
+	}

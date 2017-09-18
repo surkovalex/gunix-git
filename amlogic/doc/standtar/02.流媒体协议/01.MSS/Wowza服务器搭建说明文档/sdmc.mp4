@@ -1,0 +1,12 @@
+<mp4>
+    <head>
+    </head>
+    <body>
+        <switch>
+            <video src="sample_480P.mp4" system-bitrate="1500000"/>   
+            <video src="sample_480P.mp4" system-bitrate="3000000"/>	
+            <video src="sample_720P.mp4" system-bitrate="4500000"/>
+			<video src="sample_1080P.mp4" system-bitrate="6000000"/>
+        </switch>
+    </body>
+</mp4>

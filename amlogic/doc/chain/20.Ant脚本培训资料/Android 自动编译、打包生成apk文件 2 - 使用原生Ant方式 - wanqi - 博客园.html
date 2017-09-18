@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)http://www.cnblogs.com/wanqieddy/p/3628700.html -->
+<html lang="zh-cn"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园</title>
+<link type="text/css" rel="stylesheet" href="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/blog-common.css">
+<link id="MainCss" type="text/css" rel="stylesheet" href="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/bundle-En_summerGarden.css">
+<link id="mobile-style" media="only screen and (max-width: 768px)" type="text/css" rel="stylesheet" href="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/bundle-En_summerGarden-mobile.css">
+<link title="RSS" type="application/rss+xml" rel="alternate" href="http://www.cnblogs.com/wanqieddy/rss">
+<link title="RSD" type="application/rsd+xml" rel="EditURI" href="http://www.cnblogs.com/wanqieddy/rsd.xml">
+<link type="application/wlwmanifest+xml" rel="wlwmanifest" href="http://www.cnblogs.com/wanqieddy/wlwmanifest.xml">
+<script src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/jquery.js" type="text/javascript"></script>  
+<script type="text/javascript">var currentBlogApp = 'wanqieddy', cb_enable_mathjax=false;var isLogined=false;</script>
+<script src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/blog-common.js" type="text/javascript"></script>
+</head>
+<body>
+<a name="top"></a>
+
+<!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+	<a id="lnkBlogLogo" href="http://www.cnblogs.com/wanqieddy/"><img id="blogLogo" src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/logo.gif" alt="Return Home"></a>			
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/wanqieddy/">wanqi</a></h1>
+<h2></h2>
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<!--done-->
+			<ul id="navList">
+				<li><a id="blog_nav_sitehome" class="menu" href="http://www.cnblogs.com/">CnBlogs</a></li>
+				<li><a id="blog_nav_myhome" class="menu" href="http://www.cnblogs.com/wanqieddy/">Home</a></li>
+				<li><a id="blog_nav_newpost" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">New Post</a></li>
+				<li><a id="blog_nav_contact" accesskey="9" class="menu" rel="nofollow" href="https://msg.cnblogs.com/send/wanqi">Contact</a></li>
+				<li><a id="blog_nav_admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">Admin</a></li>
+				<li><a id="blog_nav_rss" class="menu" href="http://www.cnblogs.com/wanqieddy/rss">Rss</a>
+				<a id="blog_nav_rss_image" class="aHeaderXML" href="http://www.cnblogs.com/wanqieddy/rss"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/xml.gif" alt="Rss"></a></li>
+			</ul>
+
+
+		<div class="blogStats">
+			
+			<div id="blog_stats">
+<!--done-->
+Posts - 487&nbsp;
+Articles - 10&nbsp;
+Comments - 95&nbsp;
+</div>
+			
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		
+<div id="post_detail">
+<!--done-->
+<div id="topics">
+	<div class="post">
+		<h1 class="postTitle">
+			<a id="cb_post_title_url" class="postTitle2" href="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园.html">Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式</a>
+		</h1>
+		<div class="clear"></div>
+		<div class="postBody">
+			<div id="cnblogs_post_body"><p><span>&nbsp;from://<a href="http://blog.csdn.net/androiddevelop/article/details/11100109">http://blog.csdn.net/androiddevelop/article/details/11100109</a></span></p>
+<p><span>相关文章列表：</span></p>
+<p>&nbsp;</p>
+<div>《<a href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">Android 自动编译、打包生成apk文件 1 - 命令行方式</a>》</div>
+<div>《Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式》（当前文章）</div>
+<div>《<a href="http://blog.csdn.net/androiddevelop/article/details/11553215" target="_blank">Android 自动编译、打包生成apk文件 3 - 使用SDK Ant方式</a>》&nbsp;</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp; &nbsp; 上次使用命令行生成apk文件<a href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">《Android 命令行编译、打包生成apk文件》</a>，学习命令行生成的目的是为了编写ant打下基础。</p>
+<p>&nbsp;</p>
+<p>一、 ant环境</p>
+<p>下载ant包，配置环境变量</p>
+<p>&nbsp;</p>
+<p>二、ant编译Android项目</p>
+<p>&nbsp;</p>
+<div>1. 生成R文件</div>
+<div>2. Java代码生成class文件</div>
+<div>3. class文件生成dex文件</div>
+<div>4. 打包资源</div>
+<div>5. 生成apk</div>
+<div>6<span>. 签名apk</span></div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>
+<div>1. aapt命令， 生成R文件<br>
+<div class="dp-highlighter bg_plain">
+<div class="bar">
+<div class="tools"><strong>[plain]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">?</a>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol start="1">
+<li class="alt"><span><span>&gt;&nbsp;aapt&nbsp;package&nbsp;-f&nbsp;-m&nbsp;-J&nbsp;./gen&nbsp;-S&nbsp;res&nbsp;-M&nbsp;AndroidManifest.xml&nbsp;-I&nbsp;D:\android.jar&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+
+<br>-f 如果编译生成的文件已经存在，强制覆盖。<br>-m 使生成的包的目录存放在-J参数指定的目录<br>-J 指定生成的R.java 的输出目录路径<br>-S&nbsp;指定res文件夹的路径</div>
+<div>-I&nbsp;指定某个版本平台的android.jar文件的路径</div>
+<div>-A&nbsp;指定assert文件夹的路径</div>
+
+</div>
+<div>转换为ant为：</div>
+<div>
+<div class="dp-highlighter bg_html">
+<div class="bar">
+<div class="tools"><strong>[html]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/11100109">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/11100109">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/11100109">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/11100109">?</a><a title="在CODE上查看代码片" href="https://code.csdn.net/snippets/133706" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/CODE_ico.png" alt="在CODE上查看代码片" width="12" height="12"></a><a title="派生到我的代码片" href="https://code.csdn.net/snippets/133706/fork" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/ico_fork.svg" alt="派生到我的代码片" width="12" height="12"></a>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol class="dp-xml" start="1">
+<li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"aapt"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"package"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-m"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-J"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"gen"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-S"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"res"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-M"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"AndroidManifest.xml"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-I"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${android-jar}"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--auto-add-overlay"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;</span><span class="comments">&lt;!--&nbsp;覆盖资源&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span><span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+<br><span>2. javac命令，生成class文件</span><br>
+<div class="dp-highlighter bg_plain">
+<div class="bar">
+<div class="tools"><strong>[plain]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">?</a>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol start="1">
+<li class="alt"><span><span>&gt;&nbsp;javac&nbsp;-target&nbsp;1.5&nbsp;-bootclasspath&nbsp;D:\android-sdk-windows\platforms\android-8\android.jar&nbsp;-d&nbsp;bin&nbsp;src\demo\project\*.java&nbsp;gen\demo\project\R.java&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+
+<br><span>&nbsp; -target &lt;版本&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 生成特定 VM 版本的类文件</span><br><span>&nbsp; -bootclasspath &lt;路径&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 覆盖引导类文件的位置</span><br><span>&nbsp; -d &lt;目录&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 指定存放生成的类文件的位置</span><br><span>&nbsp; -sourcepath &lt;路径&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 指定查找输入源文件的位置</span></div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<p>
+<span>转换为ant为：</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_html">
+<div class="bar">
+<div class="tools"><strong>[html]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/11100109">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/11100109">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/11100109">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/11100109">?</a><a title="在CODE上查看代码片" href="https://code.csdn.net/snippets/133706" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/CODE_ico.png" alt="在CODE上查看代码片" width="12" height="12"></a><a title="派生到我的代码片" href="https://code.csdn.net/snippets/133706/fork" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/ico_fork.svg" alt="派生到我的代码片" width="12" height="12"></a>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol class="dp-xml" start="1">
+<li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">javac</span><span>&nbsp;&nbsp;</span><span class="attribute">target</span><span>=</span><span class="attribute-value">"1.5"</span><span>&nbsp;</span><span class="attribute">destdir</span><span>=</span><span class="attribute-value">"bin/classes"</span><span>&nbsp;</span><span class="attribute">bootclasspath</span><span>=</span><span class="attribute-value">"${android-jar}"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">src</span><span>&nbsp;</span><span class="attribute">path</span><span>=</span><span class="attribute-value">"src"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">src</span><span>&nbsp;</span><span class="attribute">path</span><span>=</span><span class="attribute-value">"gen"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span><span class="tag">&lt;/</span><span class="tag-name">javac</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+<p>
+<br><br></p>
+<p>&nbsp;</p>
+<p><span>3. dx 命令，把class文件转换为.dex文件</span></p>
+<div class="dp-highlighter bg_plain">
+<div class="bar">
+<div class="tools"><strong>[plain]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">?</a>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol start="1">
+<li class="alt"><span><span>&gt;&nbsp;dx&nbsp;--dex&nbsp;--output=D:\ProjectDemo\bin\classes.dex&nbsp;D:\ProjectDemo\bin &nbsp;</span></span></li>
+
+</ol></div>
+<p>
+<span>--output=&lt;要生成的classes.dex路径&gt; &lt;要处理的class文件的路径&gt;</span></p>
+<p>&nbsp;</p>
+<p><span>&nbsp;</span></p>
+<p><span>转换为ant为：<br></span></p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_html">
+<div class="bar">
+<div class="tools"><strong>[html]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/11100109">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/11100109">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/11100109">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/11100109">?</a><a title="在CODE上查看代码片" href="https://code.csdn.net/snippets/133706" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/CODE_ico.png" alt="在CODE上查看代码片" width="12" height="12"></a><a title="派生到我的代码片" href="https://code.csdn.net/snippets/133706/fork" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/ico_fork.svg" alt="派生到我的代码片" width="12" height="12"></a>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol class="dp-xml" start="1">
+<li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"dx.bat"</span><span>&nbsp;</span><span class="attribute">failonerror</span><span>=</span><span class="attribute-value">"true"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--dex"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--output=${project-dir}\bin\classes.dex"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">path</span><span>=</span><span class="attribute-value">"${project-dir}\bin\classes"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span><span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+<p>
+<br><br></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div>4. aapt命令，打包资源<br>
+<div class="dp-highlighter bg_plain">
+<div class="bar">
+<div class="tools"><strong>[plain]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">?</a>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol start="1">
+<li class="alt"><span><span>&gt;&nbsp;aapt&nbsp;package&nbsp;-f&nbsp;-M&nbsp;AndroidManifest.xml&nbsp;-S&nbsp;res&nbsp;-I&nbsp;D:\android-sdk-windows\platforms\android-8\android.jar&nbsp;-F&nbsp;bin\resources.ap_&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+
+<br>-f 如果编译生成的文件已经存在，强制覆盖<br>-M 指定AndroidManifest.xml的路径<br>-S&nbsp;指定res文件夹路径</div>
+<div>-I&nbsp;指定某个版本平台的android.jar的路径</div>
+<div>-F&nbsp;指定输出文件完整路径</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span>转换为ant为：</span></p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_html">
+<div class="bar">
+<div class="tools"><strong>[html]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/11100109">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/11100109">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/11100109">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/11100109">?</a><a title="在CODE上查看代码片" href="https://code.csdn.net/snippets/133706" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/CODE_ico.png" alt="在CODE上查看代码片" width="12" height="12"></a><a title="派生到我的代码片" href="https://code.csdn.net/snippets/133706/fork" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/ico_fork.svg" alt="派生到我的代码片" width="12" height="12"></a>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol class="dp-xml" start="1">
+<li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"aapt"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"package"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-f"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-M"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"AndroidManifest.xml"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-S"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"res"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-A"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"assets"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-I"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${android-jar}"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-F"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"bin\resources.ap_"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--auto-add-overlay"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span><span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+<p>
+<br><br></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<div>5. apkbuilder命令，生成apk<br>
+<div class="dp-highlighter bg_plain">
+<div class="bar">
+<div class="tools"><strong>[plain]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">?</a>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol start="1">
+<li class="alt"><span><span>apkbuilder&nbsp;D:\ProjectDemo\bin\projectdemo.apk&nbsp;-v&nbsp;-u&nbsp;-z&nbsp;D:\ProjectDemo\bin\resources.ap_&nbsp;-f&nbsp;D:\ProjectDemo\bin\classes.dex&nbsp;-rf&nbsp;D:\ProjectDemo\src&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+
+<br>-v Verbose 显示过程信息<br>-u 创建一个无签名的包<br>-z 指定apk资源路径<br>-f&nbsp;指定dex文件路径</div>
+<div>-rf&nbsp;指定源码路径</div>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span>转换为ant为：</span></p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_html">
+<div class="bar">
+<div class="tools"><strong>[html]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/11100109">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/11100109">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/11100109">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/11100109">?</a><a title="在CODE上查看代码片" href="https://code.csdn.net/snippets/133706" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/CODE_ico.png" alt="在CODE上查看代码片" width="12" height="12"></a><a title="派生到我的代码片" href="https://code.csdn.net/snippets/133706/fork" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/ico_fork.svg" alt="派生到我的代码片" width="12" height="12"></a>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol class="dp-xml" start="1">
+<li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"apkbuilder.bat"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\unsigned.apk"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-u"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-z"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\resources.ap_"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-f"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\classes.dex"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span><span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+<p>
+<br><span>6. 签名</span></p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_plain">
+<div class="bar">
+<div class="tools"><strong>[plain]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/10948639" target="_blank">?</a>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol start="1">
+<li class="alt"><span><span>jarsigner&nbsp;&nbsp;-verbose&nbsp;-keystore&nbsp;C:\Users\UserName\Desktop\build\release.keystore&nbsp;-storepass&nbsp;antPassword&nbsp;-keypass&nbsp;antPassword&nbsp;-signedjar&nbsp;D:\ProjectDemo\bin\projectdemo-signed.apk&nbsp;D:\ProjectDemo\bin\projectdemo.apk&nbsp;release&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+<p>
+<br><span>-verbose&nbsp; 签名/验证时输出详细信息</span><br><span>-keystore 密钥库位置</span><br><span>-storepass&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 用于密钥库完整性的口令</span><br><span>-keypass&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 专用密钥的口令（如果不同）</span><br><span>-signedjar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 已签名的 JAR 文件的名称 （第一个apk是签名之后的文件， 第二个apk是需要签名的文件）</span></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p><span>转换为ant为：</span></p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_html">
+<div class="bar">
+<div class="tools"><strong>[html]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/11100109">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/11100109">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/11100109">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/11100109">?</a><a title="在CODE上查看代码片" href="https://code.csdn.net/snippets/133706" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/CODE_ico.png" alt="在CODE上查看代码片" width="12" height="12"></a><a title="派生到我的代码片" href="https://code.csdn.net/snippets/133706/fork" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/ico_fork.svg" alt="派生到我的代码片" width="12" height="12"></a>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol class="dp-xml" start="1">
+<li class="alt"><span><span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"jarsigner"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-keystore"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\release.keystore"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-storepass"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"antPassword"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-keypass"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"antPassword"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-signedjar"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\signed.apk"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\unsigned.apk"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"release"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span><span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+
+</ol></div>
+<p>&nbsp;</p>
+<p>三、完整build.xml文件</p>
+<p>&nbsp;</p>
+<div class="dp-highlighter bg_html">
+<div class="bar">
+<div class="tools"><strong>[html]</strong>&nbsp;<a class="ViewSource" title="view plain" href="http://blog.csdn.net/androiddevelop/article/details/11100109">view plain</a><a class="CopyToClipboard" title="copy" href="http://blog.csdn.net/androiddevelop/article/details/11100109">copy</a><a class="PrintSource" title="print" href="http://blog.csdn.net/androiddevelop/article/details/11100109">print</a><a class="About" title="?" href="http://blog.csdn.net/androiddevelop/article/details/11100109">?</a><a title="在CODE上查看代码片" href="https://code.csdn.net/snippets/133706" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/CODE_ico.png" alt="在CODE上查看代码片" width="12" height="12"></a><a title="派生到我的代码片" href="https://code.csdn.net/snippets/133706/fork" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/ico_fork.svg" alt="派生到我的代码片" width="12" height="12"></a>
+<div>&nbsp;</div>
+
+</div>
+
+</div>
+<ol class="dp-xml" start="1"><ol class="dp-xml" start="1">
+<li class="alt"><span><span class="tag">&lt;?</span><span class="tag-name">xml</span><span>&nbsp;</span><span class="attribute">version</span><span>=</span><span class="attribute-value">"1.0"</span><span>&nbsp;</span><span class="attribute">encoding</span><span>=</span><span class="attribute-value">"utf-8"</span><span class="tag">?&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span><span class="tag">&lt;</span><span class="tag-name">project</span><span>&nbsp;</span><span class="attribute">default</span><span>=</span><span class="attribute-value">"main"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;</span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"android-jar"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"D:\android-sdk-windows\platforms\android-8\android.jar"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">property</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"project-dir"</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"D:\ProjectDemo"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">target</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"init"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>start&nbsp;initing&nbsp;...&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;</span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mkdir</span><span>&nbsp;</span><span class="attribute">dir</span><span>=</span><span class="attribute-value">"gen"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">delete</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">fileset</span><span>&nbsp;</span><span class="attribute">dir</span><span>=</span><span class="attribute-value">"gen"</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">fileset</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">delete</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">mkdir</span><span>&nbsp;</span><span class="attribute">dir</span><span>=</span><span class="attribute-value">"bin/classes"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">delete</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">fileset</span><span>&nbsp;</span><span class="attribute">dir</span><span>=</span><span class="attribute-value">"bin/classes"</span><span class="tag">&gt;</span><span class="tag">&lt;/</span><span class="tag-name">fileset</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">delete</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;</span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>finish&nbsp;initing.&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">target</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">target</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"main"</span><span>&nbsp;</span><span class="attribute">depends</span><span>=</span><span class="attribute-value">"init"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>generating&nbsp;R.java&nbsp;for&nbsp;project&nbsp;to&nbsp;dir&nbsp;gen&nbsp;(using&nbsp;aapt)&nbsp;...&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"aapt"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"package"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-m"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-J"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"gen"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-S"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"res"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-M"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"AndroidManifest.xml"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-I"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${android-jar}"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--auto-add-overlay"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;</span><span class="comments">&lt;!--&nbsp;覆盖资源&nbsp;--&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">javac</span><span>&nbsp;&nbsp;</span><span class="attribute">target</span><span>=</span><span class="attribute-value">"1.5"</span><span>&nbsp;</span><span class="attribute">destdir</span><span>=</span><span class="attribute-value">"bin/classes"</span><span>&nbsp;</span><span class="attribute">bootclasspath</span><span>=</span><span class="attribute-value">"${android-jar}"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">src</span><span>&nbsp;</span><span class="attribute">path</span><span>=</span><span class="attribute-value">"src"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">src</span><span>&nbsp;</span><span class="attribute">path</span><span>=</span><span class="attribute-value">"gen"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">javac</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>packaging&nbsp;class&nbsp;files&nbsp;(include&nbsp;the&nbsp;third-party&nbsp;jars)&nbsp;to&nbsp;calsses.dex&nbsp;...&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"dx.bat"</span><span>&nbsp;</span><span class="attribute">failonerror</span><span>=</span><span class="attribute-value">"true"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--dex"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--output=${project-dir}\bin\classes.dex"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">path</span><span>=</span><span class="attribute-value">"${project-dir}\bin\classes"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>packaging&nbsp;resource&nbsp;(include&nbsp;res,&nbsp;assets,&nbsp;AndroidManifest.xml,&nbsp;etc.)&nbsp;to&nbsp;res.zip&nbsp;...&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"aapt"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"package"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-f"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-M"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"AndroidManifest.xml"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-S"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"res"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-A"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"assets"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-I"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${android-jar}"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-F"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"bin\resources.ap_"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"--auto-add-overlay"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>building&nbsp;unsigned.apk&nbsp;...&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"apkbuilder.bat"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\unsigned.apk"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-u"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-z"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\resources.ap_"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-f"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\classes.dex"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>signing&nbsp;the&nbsp;unsigned&nbsp;apk&nbsp;to&nbsp;final&nbsp;product&nbsp;apk&nbsp;...&nbsp;</span><span class="tag">&lt;/</span><span class="tag-name">echo</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">exec</span><span>&nbsp;</span><span class="attribute">executable</span><span>=</span><span class="attribute-value">"jarsigner"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-keystore"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\release.keystore"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-storepass"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"antPassword"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-keypass"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"antPassword"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"-signedjar"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\signed.apk"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"${project-dir}\bin\unsigned.apk"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">arg</span><span>&nbsp;</span><span class="attribute">value</span><span>=</span><span class="attribute-value">"release"</span><span>&nbsp;</span><span class="tag">/&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">exec</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">target</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;</span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+<li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;</span><span class="tag-name">target</span><span>&nbsp;</span><span class="attribute">name</span><span>=</span><span class="attribute-value">"clean"</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="tag">&lt;/</span><span class="tag-name">target</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li class="alt"><span><span class="tag">&lt;/</span><span class="tag-name">project</span><span class="tag">&gt;</span><span>&nbsp;&nbsp;</span></span></li>
+<li></li>
+
+</ol></ol></div></div><div id="MySignature"></div>
+<div class="clear"></div>
+<div id="blog_post_info_block">
+<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/wanqieddy/category/303970.html" target="_blank">android solve </a></div>
+<div id="EntryTag"></div>
+<div id="blog_post_info"><div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(3628700,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+            <a id="green_channel_follow" onclick="follow(&#39;29f35c0e-29af-df11-8eb9-001cf0cd104b&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_weibo" href="javascript:void(0);" title="分享至新浪微博" onclick="ShareToTsina()"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/icon_weibo_24.png" alt=""></a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareOnWechat()"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/wanqieddy/" target="_blank"><img src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/sample_face.gif" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="http://home.cnblogs.com/u/wanqieddy/">wanqi</a><br>
+            <a href="http://home.cnblogs.com/u/wanqieddy/followees">关注 - 5</a><br>
+            <a href="http://home.cnblogs.com/u/wanqieddy/followers">粉丝 - 135</a>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow">
+                <a href="javascript:void(0);" onclick="follow(&#39;29f35c0e-29af-df11-8eb9-001cf0cd104b&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(3628700,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(3628700,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+</div>
+</div>
+<div class="clear"></div>
+<div id="post_next_prev"><a href="http://www.cnblogs.com/wanqieddy/p/3613575.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/wanqieddy/p/3613575.html" title="发布于2014-03-20 13:55">UI设计师不可不知的安卓屏幕知识</a><br><a href="http://www.cnblogs.com/wanqieddy/p/3654449.html" class="p_n_p_prefix">» </a> 下一篇：<a href="http://www.cnblogs.com/wanqieddy/p/3654449.html" title="发布于2014-04-09 16:16">java Stack</a><br></div>
+</div>
+
+
+		</div>
+		<div class="postDesc">posted @ <span id="post-date">2014-03-27 16:51</span> <a href="http://www.cnblogs.com/wanqieddy/">wanqi</a> Views(<span id="post_view_count">3750</span>) Comments(<span id="post_comment_count">0</span>)  <a href="https://i.cnblogs.com/EditPosts.aspx?postid=3628700" rel="nofollow">Edit</a> <a href="http://www.cnblogs.com/wanqieddy/p/3628700.html#" onclick="AddToWz(3628700);return false;">收藏</a></div>
+	</div>
+	<script type="text/javascript">var allowComments=true,cb_blogId=89138,cb_entryId=3628700,cb_blogApp=currentBlogApp,cb_blogUserGuid='29f35c0e-29af-df11-8eb9-001cf0cd104b',cb_entryCreatedDate='2014/3/27 16:51:00';loadViewCount(cb_entryId);</script>
+	
+</div>
+</div><a name="!comments"></a><div id="blog-comments-placeholder"></div><script type="text/javascript">var commentManager = new blogCommentManager();commentManager.renderComments(0);</script>
+<div id="comment_form" class="commentform">
+<a name="commentform"></a>
+<div id="divCommentShow"></div>
+<div id="comment_nav"><span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="http://www.cnblogs.com/wanqieddy/p/3628700.html#" onclick="return RefreshPage();">刷新页面</a><a href="http://www.cnblogs.com/wanqieddy/p/3628700.html#top">返回顶部</a></div>
+<div id="comment_form_container"><div class="login_tips">注册用户登录后才能发表评论，请 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return login(&#39;commentform&#39;);">登录</a> 或 <a rel="nofollow" href="javascript:void(0);" class="underline" onclick="return register();">注册</a>，<a href="http://www.cnblogs.com/">访问</a>网站首页。</div></div>
+<div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+<div id="ad_t2"><a href="http://www.ucancode.com/index.htm" target="_blank">【推荐】50万行VC++源码: 大型组态工控、电力仿真CAD与GIS源码库</a><br><a href="http://vcloud.163.com/?adchannel=bp_cnblogs2" target="_blank">【推荐】用1%的研发投入，搭载3倍性能的网易视频云技术</a><br><a href="http://rongcloud.cn/reports/journal2" target="_blank">【推荐】融云发布 App 社交化白皮书 IM 提升活跃超 8 倍</a><br></div>
+<div id="opt_under_post"></div>
+<div id="ad_c1" class="c_ad_block"><a href="http://www.gcpowertools.com.cn/products/activereports_overview.htm?utm_source=cnblogs&utm_medium=blogpage&utm_term=bottom&utm_content=AR&utm_campaign=community" target="_blank"><img width="300" height="250" src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/24442-20161031104637174-1758680094.gif" alt=""></a></div>
+<div id="under_post_news"><div class="itnews c_ad_block"><b>最新IT新闻</b>:<br> ·  <a href="http://news.cnblogs.com/n/557087/" target="_blank">专访Mashable CTO：如何借助AI预测下一个会引爆的新闻点？</a><br> ·  <a href="http://news.cnblogs.com/n/557086/" target="_blank">华为国内首发Mate9系列手机，冒险进入5000元以上档位</a><br> ·  <a href="http://news.cnblogs.com/n/557085/" target="_blank">微软也爱上了开源 平台化成为科技公司的必由之路</a><br> ·  <a href="http://news.cnblogs.com/n/557084/" target="_blank">华为发布了一款不破万的“保时捷”，还有一个One More Thing</a><br> ·  <a href="http://news.cnblogs.com/n/557082/" target="_blank">腾讯做了个新的聊天应用TIM：在QQ上“动刀”的团队协作软件</a><br>» <a href="http://news.cnblogs.com/" title="IT新闻" target="_blank">更多新闻...</a></div></div>
+<div id="ad_c2" class="c_ad_block"><a href="https://www.jiguang.cn/devservice/?from=cnblogs01" target="_blank"><img width="468" height="60" src="./Android 自动编译、打包生成apk文件 2 - 使用原生Ant方式 - wanqi - 博客园_files/24442-20161114133622451-1554357151.jpg" alt=""></a></div>
+<div id="under_post_kb"><div class="itnews c_ad_block" id="kb_block"><b>最新知识库文章</b>:<br><div id="kb_recent"> ·  <a href="http://kb.cnblogs.com/page/555750/" target="_blank">循序渐进地代码重构</a><br> ·  <a href="http://kb.cnblogs.com/page/554496/" target="_blank">技术的正宗与野路子</a><br> ·  <a href="http://kb.cnblogs.com/page/553682/" target="_blank">陈皓：什么是工程师文化？</a><br> ·  <a href="http://kb.cnblogs.com/page/551422/" target="_blank">没那么难，谈CSS的设计模式</a><br> ·  <a href="http://kb.cnblogs.com/page/550625/" target="_blank">程序猿媳妇儿注意事项</a><br></div>» <a href="http://kb.cnblogs.com/" target="_blank">更多知识库文章...</a></div></div>
+<div id="HistoryToday" class="c_ad_block"></div>
+<script type="text/javascript">
+    fixPostBody();
+    setTimeout(function () { incrementViewCount(cb_entryId); }, 50);
+    deliverAdT2();
+    deliverAdC1();
+    deliverAdC2();    
+    loadNewsAndKb();
+    loadBlogSignature();
+    LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+    GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate);
+    loadOptUnderPost();
+    GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);   
+</script>
+</div>
+
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+
+	<div id="sideBar">
+		<div id="sideBarMain">
+			
+<!--done-->
+<div class="newsItem">
+<h3 class="catListTitle">公告</h3>
+	<div id="blog-news"><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/wanqieddy/">wanqi</a><br>园龄：<a href="http://home.cnblogs.com/u/wanqieddy/" title="入园时间：2010-08-24">6年2个月</a><br>粉丝：<a href="http://home.cnblogs.com/u/wanqieddy/followers/">135</a><br>关注：<a href="http://home.cnblogs.com/u/wanqieddy/followees/">5</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow(&#39;29f35c0e-29af-df11-8eb9-001cf0cd104b&#39;)">+加关注</a></div></div></div><script type="text/javascript">loadBlogNews();</script>
+</div>
+
+			<div id="calendar"></div>
+			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><div id="sidebar_search" class="sidebar-block">
+<div class="mySearch">
+<h3 class="catListTitle">Search</h3>
+<div id="widget_my_zzk" class="div_my_zzk"><input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="ZZK" id="btnZzk" class="btn_my_zzk"></div>
+<div id="widget_my_google" class="div_my_zzk"><input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event)" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="Google" class="btn_my_zzk"></div>
+</div></div><div id="sidebar_shortcut" class="sidebar-block">
+<!--
+<div class="catListLink">
+<h3 class ="catListTitle">常用链接</h3>
+<ul>
+<li><a href="http://www.cnblogs.com/wanqieddy/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/wanqieddy/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/wanqieddy/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/wanqieddy/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/wanqieddy/tag/" title="我的博客的标签列表">我的标签</a></li>
+<li><a id="itemListLink" onclick="this.blur();WarpClass('itemListLink', 'itemListLin_con');return false;" href="#">更多链接</a></li>
+</ul>
+<div id="itemListLin_con" style="display:none;">
+<ul>
+
+</ul>
+</div>
+</div>
+--></div><div id="sidebar_toptags" class="sidebar-block"></div><div id="sidebar_categories">
+<div class="catListPostCategory">
+<h3 class="catListTitle">Post Categories<span style="font-size:11px;font-weight:normal">(518)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_0_Link_0" href="http://www.cnblogs.com/wanqieddy/category/303970.html">android solve (323)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_1" href="http://www.cnblogs.com/wanqieddy/category/382459.html">android telephony solve(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_2" href="http://www.cnblogs.com/wanqieddy/category/430384.html">android_google_apps(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_3" href="http://www.cnblogs.com/wanqieddy/category/439041.html">android_新技术_转载(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_4" href="http://www.cnblogs.com/wanqieddy/category/326697.html">arm solve(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_5" href="http://www.cnblogs.com/wanqieddy/category/378272.html">C++(27)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_6" href="http://www.cnblogs.com/wanqieddy/category/506524.html">cocos2d-x SS(18)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_7" href="http://www.cnblogs.com/wanqieddy/category/431381.html">eclipse(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_8" href="http://www.cnblogs.com/wanqieddy/category/323193.html">electron 电子(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_9" href="http://www.cnblogs.com/wanqieddy/category/673317.html">h264(2)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_10" href="http://www.cnblogs.com/wanqieddy/category/305892.html">java lauguage(11)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_11" href="http://www.cnblogs.com/wanqieddy/category/519508.html">java 设计模式(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_12" href="http://www.cnblogs.com/wanqieddy/category/305618.html">linux C lauguage(7)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_13" href="http://www.cnblogs.com/wanqieddy/category/299649.html">linux command (31)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_14" href="http://www.cnblogs.com/wanqieddy/category/406859.html">linux git(12)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_15" href="http://www.cnblogs.com/wanqieddy/category/304963.html">linux tool(29)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_16" href="http://www.cnblogs.com/wanqieddy/category/673259.html">TRMP(1)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_17" href="http://www.cnblogs.com/wanqieddy/category/310080.html">ubuntu solve(28)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_18" href="http://www.cnblogs.com/wanqieddy/category/401062.html">windows(3)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_19" href="http://www.cnblogs.com/wanqieddy/category/548452.html">加密与解密(4)</a> </li>
+
+<li><a id="CatList_LinkList_0_Link_20" href="http://www.cnblogs.com/wanqieddy/category/310842.html">思考(3)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListPostArchive">
+<h3 class="catListTitle">Post Archives<span style="font-size:11px;font-weight:normal">(487)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/wanqieddy/archive/2016/03.html">2016/3 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/wanqieddy/archive/2016/01.html">2016/1 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_2" href="http://www.cnblogs.com/wanqieddy/archive/2015/11.html">2015/11 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_3" href="http://www.cnblogs.com/wanqieddy/archive/2015/10.html">2015/10 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_4" href="http://www.cnblogs.com/wanqieddy/archive/2015/09.html">2015/9 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_5" href="http://www.cnblogs.com/wanqieddy/archive/2015/08.html">2015/8 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_6" href="http://www.cnblogs.com/wanqieddy/archive/2015/07.html">2015/7 (19)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_7" href="http://www.cnblogs.com/wanqieddy/archive/2015/06.html">2015/6 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_8" href="http://www.cnblogs.com/wanqieddy/archive/2015/05.html">2015/5 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_9" href="http://www.cnblogs.com/wanqieddy/archive/2015/04.html">2015/4 (15)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_10" href="http://www.cnblogs.com/wanqieddy/archive/2015/03.html">2015/3 (27)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_11" href="http://www.cnblogs.com/wanqieddy/archive/2015/02.html">2015/2 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_12" href="http://www.cnblogs.com/wanqieddy/archive/2015/01.html">2015/1 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_13" href="http://www.cnblogs.com/wanqieddy/archive/2014/12.html">2014/12 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_14" href="http://www.cnblogs.com/wanqieddy/archive/2014/11.html">2014/11 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_15" href="http://www.cnblogs.com/wanqieddy/archive/2014/10.html">2014/10 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_16" href="http://www.cnblogs.com/wanqieddy/archive/2014/09.html">2014/9 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_17" href="http://www.cnblogs.com/wanqieddy/archive/2014/08.html">2014/8 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_18" href="http://www.cnblogs.com/wanqieddy/archive/2014/07.html">2014/7 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_19" href="http://www.cnblogs.com/wanqieddy/archive/2014/06.html">2014/6 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_20" href="http://www.cnblogs.com/wanqieddy/archive/2014/05.html">2014/5 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_21" href="http://www.cnblogs.com/wanqieddy/archive/2014/04.html">2014/4 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_22" href="http://www.cnblogs.com/wanqieddy/archive/2014/03.html">2014/3 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_23" href="http://www.cnblogs.com/wanqieddy/archive/2014/02.html">2014/2 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_24" href="http://www.cnblogs.com/wanqieddy/archive/2014/01.html">2014/1 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_25" href="http://www.cnblogs.com/wanqieddy/archive/2013/12.html">2013/12 (4)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_26" href="http://www.cnblogs.com/wanqieddy/archive/2013/11.html">2013/11 (1)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_27" href="http://www.cnblogs.com/wanqieddy/archive/2013/10.html">2013/10 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_28" href="http://www.cnblogs.com/wanqieddy/archive/2013/09.html">2013/9 (17)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_29" href="http://www.cnblogs.com/wanqieddy/archive/2013/08.html">2013/8 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_30" href="http://www.cnblogs.com/wanqieddy/archive/2013/07.html">2013/7 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_31" href="http://www.cnblogs.com/wanqieddy/archive/2013/06.html">2013/6 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_32" href="http://www.cnblogs.com/wanqieddy/archive/2013/05.html">2013/5 (7)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_33" href="http://www.cnblogs.com/wanqieddy/archive/2013/03.html">2013/3 (2)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_34" href="http://www.cnblogs.com/wanqieddy/archive/2013/01.html">2013/1 (5)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_35" href="http://www.cnblogs.com/wanqieddy/archive/2012/12.html">2012/12 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_36" href="http://www.cnblogs.com/wanqieddy/archive/2012/11.html">2012/11 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_37" href="http://www.cnblogs.com/wanqieddy/archive/2012/10.html">2012/10 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_38" href="http://www.cnblogs.com/wanqieddy/archive/2012/09.html">2012/9 (11)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_39" href="http://www.cnblogs.com/wanqieddy/archive/2012/08.html">2012/8 (12)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_40" href="http://www.cnblogs.com/wanqieddy/archive/2012/07.html">2012/7 (13)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_41" href="http://www.cnblogs.com/wanqieddy/archive/2012/06.html">2012/6 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_42" href="http://www.cnblogs.com/wanqieddy/archive/2012/05.html">2012/5 (45)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_43" href="http://www.cnblogs.com/wanqieddy/archive/2012/04.html">2012/4 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_44" href="http://www.cnblogs.com/wanqieddy/archive/2012/03.html">2012/3 (8)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_45" href="http://www.cnblogs.com/wanqieddy/archive/2012/02.html">2012/2 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_46" href="http://www.cnblogs.com/wanqieddy/archive/2012/01.html">2012/1 (3)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_47" href="http://www.cnblogs.com/wanqieddy/archive/2011/12.html">2011/12 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_48" href="http://www.cnblogs.com/wanqieddy/archive/2011/11.html">2011/11 (10)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_49" href="http://www.cnblogs.com/wanqieddy/archive/2011/10.html">2011/10 (9)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_50" href="http://www.cnblogs.com/wanqieddy/archive/2011/09.html">2011/9 (6)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_51" href="http://www.cnblogs.com/wanqieddy/archive/2011/08.html">2011/8 (13)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_52" href="http://www.cnblogs.com/wanqieddy/archive/2011/07.html">2011/7 (22)</a> </li>
+
+<li><a id="CatList_LinkList_1_Link_53" href="http://www.cnblogs.com/wanqieddy/archive/2011/06.html">2011/6 (19)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListArticleCategory">
+<h3 class="catListTitle">Article Categories</h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_2_Link_0" href="http://www.cnblogs.com/wanqieddy/category/352071.html">arm </a> </li>
+
+<li><a id="CatList_LinkList_2_Link_1" href="http://www.cnblogs.com/wanqieddy/category/527303.html">cocos2d-x</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catListArticleArchive">
+<h3 class="catListTitle">Article Archives<span style="font-size:11px;font-weight:normal">(1)</span></h3>
+
+<ul>
+
+<li><a id="CatList_LinkList_3_Link_0" href="http://www.cnblogs.com/wanqieddy/archives/2013/10.html" rel="nofollow">2013年10月 (1)</a> </li>
+
+</ul>
+
+</div>
+
+<div class="catList">
+<h3 class="catListTitle">eoe</h3>
+
+</div>
+
+</div><div id="sidebar_scorerank" class="sidebar-block">
+<!--
+<div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	519885
+	<li class="liRank">
+		排名 -	188
+	</li>
+</ul>
+</div>
+-->
+
+
+</div><div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+<div class="catListComment">
+<h3 class="catListTitle">Recent Comments</h3>
+
+	<div id="RecentCommentsBlock"><ul>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/09/21/2184257.html#3553380">1. Re:Makefile 中:= ?= += =的区别</a></li>
+        <li class="recent_comment_body">文章写的很不错</li>
+        <li class="recent_comment_author">--领编程之美</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html#3551905">2. Re:Linux  find 用法示例</a></li>
+        <li class="recent_comment_body">谢谢分享</li>
+        <li class="recent_comment_author">--郝姬友</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3556060.html#3537005">3. Re:Android签名总结</a></li>
+        <li class="recent_comment_body">good！</li>
+        <li class="recent_comment_author">--chahong</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3818718.html#3525005">4. Re:FragmentActivity和Activity的具体区别在哪里</a></li>
+        <li class="recent_comment_body">@公孙 轩辕我感觉言简意赅，哈哈！...</li>
+        <li class="recent_comment_author">--迷路的国王</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3818718.html#3514088">5. Re:FragmentActivity和Activity的具体区别在哪里</a></li>
+        <li class="recent_comment_body">写的太简短了吧</li>
+        <li class="recent_comment_author">--公孙 轩辕</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html#3500387">6. Re:Linux  find 用法示例</a></li>
+        <li class="recent_comment_body">这个帖子太牛逼了</li>
+        <li class="recent_comment_author">--岁月漫步</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/09/21/2184257.html#3487949">7. Re:Makefile 中:= ?= += =的区别</a></li>
+        <li class="recent_comment_body">强</li>
+        <li class="recent_comment_author">--climberDing</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3836480.html#3473116">8. Re:Android_深入解析AsyncTask</a></li>
+        <li class="recent_comment_body">可否贴出代码呢</li>
+        <li class="recent_comment_author">--栗子强</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2013/05/24/3096312.html#3448837">9. Re:如何调用Android隐藏API</a></li>
+        <li class="recent_comment_body">不错，推荐下工具</li>
+        <li class="recent_comment_author">--静以养身  俭以养德</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2012/08/02/2619928.html#3445898">10. Re:Linux下scp的用法</a></li>
+        <li class="recent_comment_body">不错！我在配置hadoop集群的时候，感觉这个命令十分有用！</li>
+        <li class="recent_comment_author">--klous</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/4933606.html#3426388">11. Re:android网络框架Retrofit 同步异步</a></li>
+        <li class="recent_comment_body">30分钟上手最火android网络请求框架Retrofit<a href="" target="_blank"></a></li>
+        <li class="recent_comment_author">--哟西西</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html#3405297">12. Re:Linux  find 用法示例</a></li>
+        <li class="recent_comment_body">很乱啊。</li>
+        <li class="recent_comment_author">--少林功夫好</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/12/15/2288598.html#3400363">13. Re:adb shell top</a></li>
+        <li class="recent_comment_body">怎么分析日志啊</li>
+        <li class="recent_comment_author">--perfect_11a</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/5172120.html#3384598">14. Re:android:configChanges属性总结</a></li>
+        <li class="recent_comment_body">很喜欢看你的文章，希望神作继续</li>
+        <li class="recent_comment_author">--浅海千</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/4350708.html#3380781">15. Re:Android Studio 出现 Gradle's dependency cache may be corrupt 错误分析</a></li>
+        <li class="recent_comment_body">md，我被你坑死了</li>
+        <li class="recent_comment_author">--为谁轻狂</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/09/21/2184257.html#3354512">16. Re:Makefile 中:= ?= += =的区别</a></li>
+        <li class="recent_comment_body">赞！写得很明白！</li>
+        <li class="recent_comment_author">--郝姬友</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html#3339229">17. Re:Linux  find 用法示例</a></li>
+        <li class="recent_comment_body">咱cnblogs的博主文章质量就是高</li>
+        <li class="recent_comment_author">--Pale Life</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2013/01/21/2869228.html#3335276">18. Re:android上传图片至服务器</a></li>
+        <li class="recent_comment_body">麻烦能发一份源码到我的qq邮箱吗？1372049490@qq.com,谢谢</li>
+        <li class="recent_comment_author">--ggsmt</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2013/01/21/2869228.html#3335153">19. Re:android上传图片至服务器</a></li>
+        <li class="recent_comment_body">吊</li>
+        <li class="recent_comment_author">--ggsmt</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2012/08/02/2619928.html#3328267">20. Re:Linux下scp的用法</a></li>
+        <li class="recent_comment_body">有用！</li>
+        <li class="recent_comment_author">--叫我序员好了</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3853863.html#3313673">21. Re:ExecutorService中submit和execute的区别</a></li>
+        <li class="recent_comment_body">感谢楼主，收藏了!</li>
+        <li class="recent_comment_author">--subFire</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/4931106.html#3298709">22. Re:Android Studio使用小技巧：提取方法代码片段</a></li>
+        <li class="recent_comment_body">太简单了。你又在装逼了</li>
+        <li class="recent_comment_author">--lixiaodaoaaa</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2012/03/01/2375424.html#3277592">23. Re:android apk反编译和odex转dex</a></li>
+        <li class="recent_comment_body">@自由用户...</li>
+        <li class="recent_comment_author">--scoluo</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3836477.html#3270232">24. Re:fragment做成选项卡，tab效果。  fragment+RadioGroup</a></li>
+        <li class="recent_comment_body">如何在fragment里点击一个button, 设置另外一个radiobutton被选择（显示）呢，谢谢</li>
+        <li class="recent_comment_author">--张雨涛</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3555989.html#3261652">25. Re:android4.0 中关于内外置sd卡的获取及读写权限问题</a></li>
+        <li class="recent_comment_body">有没有方法打开 system/etc/的写权限啊，在代码中</li>
+        <li class="recent_comment_author">--Amazing_happens</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3853863.html#3251110">26. Re:ExecutorService中submit和execute的区别</a></li>
+        <li class="recent_comment_body">不错，介绍的很清楚。确实看中文API有些看不懂，不之所云的感觉<br>感谢博主</li>
+        <li class="recent_comment_author">--oh my lady gaga</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/12/28/2304906.html#3247916">27. Re:android下创建文件夹和修改其权限的方法</a></li>
+        <li class="recent_comment_body">这种方式是不是过期了</li>
+        <li class="recent_comment_author">--songalee</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/09/21/2184257.html#3247511">28. Re:Makefile 中:= ?= += =的区别</a></li>
+        <li class="recent_comment_body">明白了，多谢博主！！！</li>
+        <li class="recent_comment_author">--Eric_IT</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3545368.html#3245911">29. Re:Android SDK Download List</a></li>
+        <li class="recent_comment_body">东西很全</li>
+        <li class="recent_comment_author">--6572789</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/4482738.html#3230639">30. Re:在Activity中使用Thread导致的内存泄漏</a></li>
+        <li class="recent_comment_body">厉害</li>
+        <li class="recent_comment_author">--一座城池2012</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3555989.html#3225687">31. Re:android4.0 中关于内外置sd卡的获取及读写权限问题</a></li>
+        <li class="recent_comment_body">这个只能系统app声明这个权限啊 0.0</li>
+        <li class="recent_comment_author">--xiayuanzhong</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/09/21/2184257.html#3220194">32. Re:Makefile 中:= ?= += =的区别</a></li>
+        <li class="recent_comment_body">短小易懂！谢谢博主！</li>
+        <li class="recent_comment_author">--BillZhao@SZ</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/4135239.html#3205586">33. Re:消除“Permission is only granted to system apps”错误</a></li>
+        <li class="recent_comment_body">找不到ProtectdedPermission怎么办</li>
+        <li class="recent_comment_author">--何必自作自受自己伤己</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3545368.html#3201018">34. Re:Android SDK Download List</a></li>
+        <li class="recent_comment_body">楼主好人~~</li>
+        <li class="recent_comment_author">--胖崔</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076783.html#3195152">35. Re:linux svn 使用</a></li>
+        <li class="recent_comment_body">写得很好，赞</li>
+        <li class="recent_comment_author">--江中炼</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/4478690.html#3178175">36. Re:MVP模式在Android开发中的应用</a></li>
+        <li class="recent_comment_body">程序不错哦</li>
+        <li class="recent_comment_author">--lixiaodaoaaa</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/p/3654501.html#3177553">37. Re:java中newInstance()和new()</a></li>
+        <li class="recent_comment_body">终于懂了，好感动</li>
+        <li class="recent_comment_author">--指下生虫</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html#3171351">38. Re:Linux  find 用法示例</a></li>
+        <li class="recent_comment_body">给力呀...太帅了...</li>
+        <li class="recent_comment_author">--逍遥坏蛋</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2011/11/25/2263381.html#3162372">39. Re:Android有效解决加载大图片时内存溢出的问题</a></li>
+        <li class="recent_comment_body">这一快感觉挺深奥的，还得好好研究研究。谢谢博主的分享，写的还是挺详细的。</li>
+        <li class="recent_comment_author">--繁华未至</li>
+        <li class="recent_comment_title"><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/05/2484534.html#3157924">40. Re:Android中滑屏实现----手把手教你如何实现触摸滑屏以及Scroller类详解</a></li>
+        <li class="recent_comment_body">初步学习的模范教程...</li>
+        <li class="recent_comment_author">--ffccy</li>
+</ul>
+</div>
+</div>
+</div></div><div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+<div class="catListView">
+<h3 class="catListTitle">Top Posts</h3>
+	<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html">1. Linux  find 用法示例(606249)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/09/21/2184257.html">2. Makefile 中:= ?= += =的区别(56066)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/08/02/2619928.html">3. Linux下scp的用法(46408)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3556060.html">4. Android签名总结(39297)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/05/2484534.html">5. Android中滑屏实现----手把手教你如何实现触摸滑屏以及Scroller类详解(38211)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/11/25/2263381.html">6. Android有效解决加载大图片时内存溢出的问题(37837)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3836485.html">7. Android_开源框架_AndroidUniversalImageLoader网络图片加载(37712)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3545368.html">8. Android SDK Download List(37498)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/08/03/2621027.html">9. git config配置文件(37487)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3818718.html">10. FragmentActivity和Activity的具体区别在哪里(36548)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/04/07/2436299.html">11. Android中SharePreference的使用(32202)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3312288.html">12. android 常见分辨率（mdpi、hdpi 、xhdpi、xxhdpi ）及屏幕适配注意事项(29014)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/11/22/2782975.html">13. eclipse老是building workspace及自动更新问题,eclipse加速(24771)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3853863.html">14. ExecutorService中submit和execute的区别(22760)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/03/01/2375424.html">15. android apk反编译和odex转dex(22331)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3313920.html">16. C++笔记：头文件的作用和写法(20819)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/10/11/2719606.html">17. Android 查看内存使用情况(20324)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2013/06/09/3128102.html">18. 给android添加系统属性：Settings.system和SystemProperties(20142)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3555989.html">19. android4.0 中关于内外置sd卡的获取及读写权限问题(18732)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3967895.html">20. Android Butterknife框架(18521)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076783.html">21. linux svn 使用(17036)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/07/2487761.html">22. Linux系统下用find命令查找最近修改过的文件(16836)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/09/17/2688366.html">23. android 开关机动画(16717)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/11/25/2263367.html">24. Android中/system/build.prop文件解读(15961)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/4040601.html">25. java.lang.ClassCastException: android.widget.RelativeLayout$LayoutParams cannot be cast to android.widget.AbsListView$LayoutParams(15828)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/12/28/2304906.html">26. android下创建文件夹和修改其权限的方法(15306)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/04/2482661.html">27. Android ANR(14555)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/07/26/2610048.html">28. 内存调试的东西D/dalvikvm( 809 ): GC_CONCURRENT freed(13889)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/07/15/2107375.html">29. Android SDK 源代码编译(13376)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/02/10/2344905.html">30. Ubuntu下Arm-Linux-GCC交叉编译环境的搭建(13306)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3709466.html">31. 【Android】开源项目汇总-备用(12690)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/07/2074113.html">32. linux下rm命令使用详解(12605)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3492373.html">33. 如何分析解决Android ANR(12322)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3836477.html">34. fragment做成选项卡，tab效果。  fragment+RadioGroup(12248)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2013/01/21/2869228.html">35. android上传图片至服务器(12101)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/4153203.html">36. runOnUiThread更新主线程(11768)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/4479868.html">37. Google推荐的图片加载库Glide介绍(11274)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/03/06/2382408.html">38. 在Ubuntu中VirtualBox下xp使用usb设备(11163)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/02/08/2342787.html">39. 嵌入式Linux学习笔记之GPIO接口(10511)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/07/14/2106652.html">40. 详细位置搜索ubuntu系统jdk安装的默认路径。(10303)</a></li></ul></div>
+</div>
+</div></div><div id="sidebar_topcommentedposts" class="sidebar-block"><div id="topfeedback_posts_wrap" style="display: none;">
+<!--
+<div class="catListFeedback">
+<h3 class="catListTitle">评论排行榜</h3>
+	<div id="TopFeedbackPostsBlock"></div>
+</div>
+-->
+</div></div><div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+<h3 class="catListTitle">推荐排行榜</h3>
+<div class="RecentComment">
+	<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076785.html">1. Linux  find 用法示例(28)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/09/21/2184257.html">2. Makefile 中:= ?= += =的区别(20)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/05/2484534.html">3. Android中滑屏实现----手把手教你如何实现触摸滑屏以及Scroller类详解(8)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3545368.html">4. Android SDK Download List(5)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3853863.html">5. ExecutorService中submit和execute的区别(5)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3836485.html">6. Android_开源框架_AndroidUniversalImageLoader网络图片加载(5)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/04/2482661.html">7. Android ANR(4)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/03/01/2375424.html">8. android apk反编译和odex转dex(4)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3818718.html">9. FragmentActivity和Activity的具体区别在哪里(3)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/11/25/2263381.html">10. Android有效解决加载大图片时内存溢出的问题(3)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3836477.html">11. fragment做成选项卡，tab效果。  fragment+RadioGroup(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/12/19/2824559.html">12. 二维码原理简介(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/5172120.html">13. android:configChanges属性总结(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3709466.html">14. 【Android】开源项目汇总-备用(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/07/12/2104077.html">15. Android 多媒体(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/12/22/2298208.html">16. android activity 生命周期(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/23/2088290.html">17. android CursorAdapter的监听事件(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/07/26/2610048.html">18. 内存调试的东西D/dalvikvm( 809 ): GC_CONCURRENT freed(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/08/2490402.html">19. Android智能指针sp wp详解(2)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/07/2486974.html">20. 堆和栈的区别 (转贴)(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/05/2484965.html">21. Thread.dumpStack()(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/05/2484536.html">22. Android中MediaButtonReceiver广播监听器的机制分析(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/07/18/2597471.html">23. Android Out Of Memory(OOM) 的详细研究(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/06/13/2547793.html">24. Android Handler详解(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/21/2512152.html">25. JAVA 中int类型转String类型的通常方法,有三种:(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/07/14/2106652.html">26. 详细位置搜索ubuntu系统jdk安装的默认路径。(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/07/14/2106648.html">27. 在Ubuntu 10.04上安装java 1.5 java 1.6(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2011/06/09/2076783.html">28. linux svn 使用(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/08/02/2619928.html">29. Linux下scp的用法(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3556060.html">30. Android签名总结(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3548165.html">31. Android： INSTALL_FAILED_UPDATE_INCOMPATIBLE(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3492373.html">32. 如何分析解决Android ANR(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3456890.html">33. adb install -r 中出现INSTALL_FAILED_UNKNOWN_SOURCES，怎样解决？(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/3312288.html">34. android 常见分辨率（mdpi、hdpi 、xhdpi、xxhdpi ）及屏幕适配注意事项(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/4329852.html">35. Android版本和API Level对应关系(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/4312814.html">36. Android之Monkey全参数（包含隐藏参数）(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/4040601.html">37. java.lang.ClassCastException: android.widget.RelativeLayout$LayoutParams cannot be cast to android.widget.AbsListView$LayoutParams(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/03/06/2382408.html">38. 在Ubuntu中VirtualBox下xp使用usb设备(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/archive/2012/05/05/2484530.html">39. Linux学习笔记一 ---- Linux基础知识认知以及初识Linux下C编程入门(1)</a></li><li><a href="http://www.cnblogs.com/wanqieddy/p/4638032.html">40. lib32asound2 : Depends: libc6-i386 (&gt;= 2.7) but it is not going to be installed(1)</a></li></ul></div>
+</div></div></div></div><script type="text/javascript">loadBlogSideColumn();</script>
+			</div>
+			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		
+<!--done-->
+Copyright ©2016 wanqi
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+</body></html>

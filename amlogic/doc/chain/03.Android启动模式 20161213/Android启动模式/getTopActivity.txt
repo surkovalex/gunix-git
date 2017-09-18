@@ -1,0 +1,51 @@
+	@SuppressWarnings("deprecation")
+	public static String getTopActivity(Context context) {
+	    String topActivityPkg = "";
+		if(isAndroidVersionLargerM8()) {
+			setNewMode(context);
+			UsageStatsManager sUsageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+		    
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            long endt = calendar.getTimeInMillis();//结束时间
+            calendar.add(Calendar.HOUR_OF_DAY, -1);//时间间隔为一个天
+            long statt = calendar.getTimeInMillis();//开始时间
+            LogUtil.i(TAG, "queryUsageStats----statt = " + (endt - statt));
+            List<UsageStats> queryUsageStats = sUsageStatsManager.queryUsageStats(
+            		UsageStatsManager.INTERVAL_DAILY, statt, endt);
+           
+            if (queryUsageStats == null || queryUsageStats.isEmpty()) {
+                return "";
+            }
+            
+            UsageStats recentStats = null;
+            for (UsageStats usageStats : queryUsageStats) {
+            	if (recentStats == null || recentStats.getLastTimeUsed() < usageStats.getLastTimeUsed()) {
+            		recentStats = usageStats;
+                }
+            }
+            
+            LogUtil.i(TAG, "recentStats.getPackageName()" + recentStats.getPackageName());
+            topActivityPkg = recentStats.getPackageName();
+		}else {
+			ActivityManager actManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+			ComponentName name = actManager.getRunningTasks(1).get(0).topActivity;
+			topActivityPkg = name.getPackageName();
+		}
+		
+		return topActivityPkg;
+	}
+	
+    private static void setNewMode(Context context) {
+		 ActivityManager actManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+	     List<RunningAppProcessInfo> info =  actManager.getRunningAppProcesses();
+		 for(int i =0; i < info.size(); i++) {
+		     RunningAppProcessInfo appProcess = info.get(i);	 
+		     if(appProcess.processName.equals("com.sdmc.facTest")) {
+			     Log.i("setNewMode", "appProcess.uid : "+ appProcess.uid);
+				 AppOpsManager mAppOpsManager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+				 mAppOpsManager.setMode(AppOpsManager.OP_GET_USAGE_STATS, appProcess.uid, 
+						 appProcess.processName, AppOpsManager.MODE_ALLOWED);
+			 }
+		  }
+	   }

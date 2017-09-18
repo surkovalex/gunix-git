@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>Android wifi属性简介 及 wifi信息获取（wifi列表、配置信息、热点信息） - </title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Android wifi,wifi获取,wifi列表,热点信息" />
+<meta name="description" content="Android wifi对象属性及简易Demo 本章介绍Android开发中WiFi热点和WiFi属性的获取，介绍WiFi的名称、状态等属性以及获取周围WiFi热点的方法。 一、怎样获取wifi对象并进行操作 要操作 WIFI 设备，需要先获取? Cont" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+<meta http-equiv="X-UA-Compatible" content="IE=9" />
+<link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
+<link href="/assets/css/font-awesome-ie7.min.css" rel="stylesheet" />
+<link href="/assets/css/min_style.css" rel="stylesheet" />
+<link href="/assets/css/prettify.css" rel="stylesheet" /></head>
+<body>
+    <div class="tw-top-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6">
+                <div class="tw-top-bar-info">欢迎访问小程序员！</div>
+            </div>
+    </div>
+    </div>
+</div>
+
+
+<div class="navbar navbar-default " role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+                <div class="tw-logo" style=" margin-top:0px; margin-bottom:0px;">
+                    <a class="logo" href="http://www.mincoder.com">
+                        <img class="logo-img" src="http://www.mincoder.com/assets/images/logo1x.png"  >
+                    </a>
+                </div>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="margin-left: 180px">
+            <ul class="nav navbar-nav navbar-menu">
+                <li class=""><a href="/index.shtml"><i class="icon-home"></i> 首 页</a></li>
+                <li class=""><a href="/list/share.shtml"><i class="icon-share"></i> 文 章</a>
+                <li class=""><a href="/list/dynamic.shtml"><i class="icon-time"></i> 动 态</a>
+                <li class=""><a href="/list/solution.shtml"><i class="icon-comments"></i> 解决方案</a>
+                <li class=""><a href="/about/feedback.shtml"><i class="icon-lightbulb"></i> 反 馈</a>
+            </ul>
+        </div>
+    </div>
+</div><!--header end-->
+<div class="container">
+    <div class="page">
+        <div class="row">
+            <div class="col-md-9 left-column">
+
+                <div>
+                    
+                    <div class="artcile-title">
+                        <div class="content-title">
+                            <h3 class="entry-title">Android wifi属性简介 及 wifi信息获取（wifi列表、配置信息、热点信息）</h3>
+                            <div class="iititle">
+                                <span>
+                                    2015-05-21
+                                </span>
+                                <span>
+                                    <i class="icon-comment-alt "></i> <a href="#comment">0条评论</a></span>
+                                 <span>
+                                    <i class="icon-eye-open "></i> 1138次浏览
+                                </span>
+                                                                    <div>
+                                        <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a><a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a><a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a><a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a><a href="#" class="bds_tqf" data-cmd="tqf" title="分享到腾讯朋友"></a><a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a><a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a><a href="#" class="bds_mail" data-cmd="mail" title="分享到邮件分享"></a><a href="#" class="bds_ty" data-cmd="ty" title="分享到天涯社区"></a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+                                    </div>
+                                                                <div>
+                                                                            原文：<a href="http://blog.csdn.net/gao_chun/article/details/45891865" target="_blank">http://blog.csdn.net/gao_chun/article/details/45891865</a>
+                                                                    </div>
+                            </div>
+                            <hr>
+                        </div>
+                    </div>
+                    <div class="article">
+
+                                                    <div class="hidden-sm hidden-xs" style="text-align: left">
+                                <script type="text/javascript">
+var sogou_ad_id=426221;
+var sogou_ad_height=60;
+var sogou_ad_width=640;
+</script>
+<script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+
+                            </div>
+                        
+
+                        
+                        <div> 
+ <strong><span>Android wifi对象属性及简易Demo</span></strong> 
+</div> 
+<div> 
+ <span>本章介绍Android开发中WiFi热点和WiFi属性的获取，介绍WiFi的名称、状态等属性以及获取周围WiFi热点的方法。</span> 
+</div> 
+<h1> <span>一、怎样获取wifi对象并进行操作</span> </h1> 
+<div> 
+ <span>要操作 WIFI 设备，需要先获取&nbsp;</span> 
+ <span>Context.getSystemService(Context.WIFI_SERVICE)</span> 
+ <span>获取</span> 
+ <span>WifiManager</span> 
+ <span>对象，并通过这个对象来管理WIFI设备。</span> 
+</div> 
+<div> 
+ <pre name="code" class="html">addNetwork(WifiConfiguration config) 添加一个config描述的WIFI网络，默认情况下，这个WIFI网络是DISABLE状态的。
+calculateSignalLevel(int rssi , int numLevels) 计算信号的等级
+compareSignalLevel(int rssiA, int rssiB) 对比网络A和网络B的信号强度
+createWifiLock(int lockType, String tag) 创建一个WIFI 锁，锁定当前的WIFI连接
+disableNetwork(int netId) 让一个网络连接失效
+disconnect() 断开当前的WIFI连接
+enableNetwork(int netId, Boolean disableOthers) 连接netId所指的WIFI网络，并是其他的网络都被禁用
+getConfiguredNetworks() 获取网络连接的状态
+getConnectionInfo() 获取当前连接的信息
+getDhcpInfo() 获取DHCP 的信息
+getScanResulats() 获取扫描测试的结果
+getWifiState() 获取当前WIFI设备的状态
+isWifiEnabled() 判断WIFI设备是否打开
+pingSupplicant() ping操作，和PC的ping操作相同作用
+ressociate() 重新连接WIFI网络，即使该网络是已经被连接上的
+reconnect() 重新连接一个未连接上的WIFI网络
+removeNetwork() 移除某一个网络
+saveConfiguration() 保留一个配置信息
+setWifiEnabled() 让一个连接有效
+startScan() 开始扫描
+updateNetwork(WifiConfiguration config) 更新一个网络连接
+</pre> 
+</div> 
+<h1> <span>二、常用的wifi状态</span> </h1> 
+<div> 
+ <pre name="code" class="html">WIFI_STATE_DISABLED 	//WIFI网卡不可用 
+WIFI_STATE_DISABLING 	//WIFI网卡正在关闭 
+WIFI_STATE_ENABLED 	//WIFI网卡可用 
+WIFI_STATE_ENABLING 	//WIFI网卡正在打开 
+WIFI_STATE_UNKNOWN 	//WIFI网卡状态不可知
+</pre> 
+</div> 
+<h1> <span>三、列表查看有连接信号的wifi热点</span> </h1> 
+<div> 
+ <span>ScanResult </span> 
+ <span>对象就是用来表示附近 wifi 热点的属性的，可通过&nbsp;</span> 
+ <span>WifiManager.getScanResults()&nbsp;</span> 
+ <span>返回一个ScanResult列表，</span> 
+</div> 
+<div> 
+ <span>ScanResult 的重要属性如下：</span> 
+</div> 
+<div> 
+ <strong><span>1.&nbsp;</span></strong> 
+ <span>BSSID</span> 
+ <span>接入点的地址</span> 
+</div> 
+<div> 
+ <span><strong>2.&nbsp;</strong></span> 
+ <span>SSID</span> 
+ <span>网络的名字，唯一区别WIFI网络的名字</span> 
+</div> 
+<div> 
+ <span><strong>3.&nbsp;</strong></span> 
+ <span>Capabilities</span> 
+ <span>网络接入的性能</span> 
+</div> 
+<div> 
+ <strong><span>4.&nbsp;</span></strong> 
+ <span>Frequency</span> 
+ <span>当前WIFI设备附近热点的频率(MHz)</span> 
+</div> 
+<div> 
+ <span><strong>5.&nbsp;</strong></span> 
+ <span>Level</span> 
+ <span>所发现的WIFI网络信号强度</span> 
+</div> 
+<h1> <span><strong>四、连接wifi热点</strong></span> </h1> 
+<div> 
+ <span>通过&nbsp;</span> 
+ <span>WifiManager.getConfiguredNetworks()&nbsp;</span> 
+ <span>方法会返回</span> 
+ <span>WifiConfiguration</span> 
+ <span>对象的列表，然后再调用</span> 
+ <span>WifiManager.enableNetwork();</span> 
+ <span>方法就可以连接上指定的热点。</span> 
+</div> 
+<h1> <span>五、查看已经连接上的wifi信息</span> </h1> 
+<div> 
+ <span>WifiInfo </span> 
+ <span>是专门用来表示连接的对象，这个对象可以通过</span> 
+ <span>WifiManager.getConnectionInfo()</span> 
+ <span>来获取。</span> 
+</div> 
+<div> 
+ <span>WifiInfo中包含了当前连接中的相关信息。</span> 
+</div> 
+<div> 
+ <pre name="code" class="html">getBSSID() 获取BSSID属性
+getDetailedStateOf() 获取客户端的连通性
+getHiddenSSID() 获取SSID 是否被隐藏
+getIpAddress() 获取IP 地址
+getLinkSpeed() 获取连接的速度
+getMacAddress() 获取Mac 地址
+getRssi() 获取802.11n 网络的信号
+getSSID() 获取SSID
+getSupplicanState() 获取具体客户端状态的信息
+</pre> 
+ <h1> <span>六、示例</span> </h1> 
+</div> 
+<div> 
+ <strong>1)获得WifiManager</strong> 
+</div> 
+<div> 
+ <pre name="code" class="java">WifiManager wifiManager=(WifiManager) getSystemService(WIFI_SERVICE);
+</pre> 
+ <strong>2)获取Wifi信息</strong> 
+</div> 
+<div> 
+ <pre name="code" class="java">WifiInfo wifiInfo=wifiManager.getConnectionInfo();	//当前wifi连接信息
+ List&lt;ScanResult&gt; scanResults=wifiManager.getScanResults();//搜索到的设备列表
+    for (ScanResult scanResult : scanResults) {
+            tv.append(&quot;\n设备名：&quot;+scanResult.SSID
+                       +&quot; 信号强度：&quot;+scanResult.level+&quot;/n :&quot;+wifiManager.calculateSignalLevel(scanResult.level,4));
+        }
+</pre> 
+ <strong>附 WifiManager中计算级别的代码：</strong> 
+</div> 
+<div> 
+ <pre name="code" class="java">/**
+     * Calculates the level of the signal. This should be used any time a signal
+     * is being shown.
+     * @param rssi The power of the signal measured in RSSI.
+     * @param numLevels The number of levels to consider in the calculated
+     *            level.
+     * @return A level of the signal, given in the range of 0 to numLevels-1
+     *         (both inclusive).
+     */
+    public static int calculateSignalLevel(int rssi, int numLevels) {
+        if (rssi &lt;= MIN_RSSI) {
+            return 0;
+        } else if (rssi &gt;= MAX_RSSI) {
+            return numLevels - 1;
+        } else {
+            int partitionSize = (MAX_RSSI - MIN_RSSI) / (numLevels - 1);
+            return (rssi - MIN_RSSI) / partitionSize;
+        }
+    }
+</pre> 
+ <span>3）网络权限</span> 
+</div> 
+<div> 
+ <pre name="code" class="html">&lt;!-- 以下是使用wifi访问网络所需的权限 --&gt;
+    &lt;uses-permission android:name=&quot;android.permission.CHANGE_NETWORK_STATE&quot;/&gt;
+    &lt;uses-permission android:name=&quot;android.permission.CHANGE_WIFI_STATE&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.ACCESS_NETWORK_STATE&quot; /&gt;
+    &lt;uses-permission android:name=&quot;android.permission.ACCESS_WIFI_STATE&quot; /&gt;
+</pre> 
+ <strong>如：方法封装（返回返回当前连接的wifi的名字）</strong> 
+</div> 
+<div> 
+ <pre name="code" class="java">private String getConnectWifiSsid(){
+WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+Log.d(&quot;wifiInfo&quot;, wifiInfo.toString());
+Log.d(&quot;SSID&quot;,wifiInfo.getSSID());
+return wifiInfo.getSSID();
+}
+</pre> 
+ <span>如果不是想获取当前连接,而是想获取WIFI设置中的连接，</span> 
+ <span>可以使用&nbsp;</span> 
+ <span>WifiManager.getConfiguredNetworks</span> 
+</div> 
+<h1> <span>七、获取当前已连接的wifi配置信息</span> </h1> 
+<div> 
+ <pre name="code" class="java">public class MyWifi extends Activity  
+    {  
+        @Override  
+        public void onCreate(Bundle savedInstanceState)  
+        {  
+            super.onCreate(savedInstanceState);  
+            setContentView(R.layout.main);  
+            TextView infoText = (TextView) this.findViewById(R.id.info);  
+            infoText.setText(getInfo());  
+        }  
+        private String getInfo()  
+        {  
+            WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);  
+            WifiInfo info = wifi.getConnectionInfo();  
+            String maxText = info.getMacAddress();  
+            String ipText = intToIp(info.getIpAddress());  
+            String status = &quot;&quot;;  
+            if (wifi.getWifiState() == WifiManager.WIFI_STATE_ENABLED)  
+            {  
+                status = &quot;WIFI_STATE_ENABLED&quot;;  
+            }  
+            String ssid = info.getSSID();  
+            int networkID = info.getNetworkId();  
+            int speed = info.getLinkSpeed();  
+            return &quot;mac：&quot; + maxText + &quot;\n\r&quot;  
+            + &quot;ip：&quot; + ipText + &quot;\n\r&quot;  
+            + &quot;wifi status :&quot; + status + &quot;\n\r&quot;  
+            + &quot;ssid :&quot; + ssid + &quot;\n\r&quot;  
+            + &quot;net work id :&quot; + networkID + &quot;\n\r&quot;  
+            + &quot;connection speed:&quot; + speed + &quot;\n\r&quot;  
+            ;  
+        }  
+        private String intToIp(int ip)  
+        {  
+            return (ip &amp; 0xFF) + &quot;.&quot; + ((ip &gt;&gt; 8) &amp; 0xFF) + &quot;.&quot; + ((ip &gt;&gt; 16) &amp; 0xFF) + &quot;.&quot;  
+                    + ((ip &gt;&gt; 24) &amp; 0xFF);  
+        }  
+    }
+</pre> 
+</div> 
+<h1> <span>八、Android开发周围wifi热点和属性的获取</span> </h1> 
+<p> </p>
+<p> <span><span>一、获取wifi属性</span></span> </p> 
+<p> <span>获得Android系统相关的属性，通过Manager来获得对对象的操作服务。WiFi相关的操作中需要用到两个Manager：WifiManager和ConnectivityManage：</span> </p> 
+<p> <span> </span></p>
+<pre class="prettyprint lang-java">public WifiManager wifiManager;             //管理wifi
+public ConnectivityManager connectManager; //管理网络连接</pre>  
+<p></p> 
+<div class="dp-highlighter bg_java"> 
+ <p> </p>
+ <p> </p>
+ <pre class="prettyprint lang-java">wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);        //获得系统wifi服务
+connectManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);  </pre> 
+ <p></p> 
+ <p></p> 
+</div> 
+<p> <span><span>获得服务后，即可得到对象进而获得相关属性：</span></span> </p> 
+<div class="dp-highlighter bg_java"> 
+ <div class="bar"> 
+  <div class="tools"> 
+   <pre class="prettyprint lang-java">public NetworkInfo netInfo;                 //网络连接
+public WifiInfo wifiInfo;                   //wifi
+public DhcpInfo dhcpInfo;//动态主机配置协议信息的对象，获得IP等网关信息</pre> 
+  </div> 
+ </div> 
+</div> 
+<p> <span><span>网络信息的获取：</span></span> </p> 
+<p> <span><span> </span></span></p>
+<pre class="prettyprint lang-java">netInfo = connectManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);  
+dhcpInfo = wifiManager.getDhcpInfo();  
+wifiInfo = wifiManager.getConnectionInfo();  </pre>  
+<p></p> 
+<span><span><span>要获得wifi相关的网络信息，必须设定网络类型参数：</span><span>ConnectivityManager.TYPE_WIFI.</span></span></span> 
+<p></p> 
+<p> <span><span><span>下面就可以获得需要的信息，例如当前连接wifi的名称等等属性，即SSID：</span></span></span> </p> 
+<p> <span><span><span> </span></span></span></p>
+<pre class="prettyprint lang-java">wifiInfo.getSSID();  </pre> 
+<span>还要获得当前连接wifi网络的&nbsp;</span> 
+<span><span>ip、mask、netgate、dns&nbsp;</span></span> 
+<span>等信息，则需要如下实现：</span> 
+<p></p> 
+<p> <span> </span></p>
+<pre class="prettyprint lang-java">String wifiProperty = &quot;当前连接Wifi信息如下：&quot;+wifiInfo.getSSID()+'\n'+  
+                &quot;ip:&quot;     +     FormatString(dhcpInfo.ipAddress)   +'\n'+  
+                &quot;mask:&quot;   +     FormatString(dhcpInfo.netmask)     +'\n'+  
+                &quot;netgate:&quot;+     FormatString(dhcpInfo.gateway)     +'\n'+  
+                &quot;dns:&quot;    +     FormatString(dhcpInfo.dns1)  ;  </pre> 
+<span><span>其中dhcpInfo属性的值为int型，要转换成通常见到的32位地址则需要转换方法：</span></span> 
+<p></p> 
+<p> <span><span> </span></span></p>
+<pre class="prettyprint lang-java">public String FormatString(int value){  
+        String strValue=&quot;&quot;;  
+        byte[] ary = intToByteArray(value);  
+        for(int i=ary.length-1;i&gt;=0;i--){  
+                strValue += (ary[i] &amp; 0xFF);  
+                if(i&gt;0){  
+                        strValue+=&quot;.&quot;;  
+                }  
+        }  
+        return strValue;  
+    }  
+publicbyte[] intToByteArray(int value){  
+        byte[] b = newbyte[4];  
+         for (int i = 0; i &lt; 4; i++){  
+                int offset = (b.length - 1 - i) * 8;  
+                 b[i] = (byte) ((value &gt;&gt;&gt; offset) &amp; 0xFF);  
+          }  
+          return b;  
+    }  </pre> 
+<span>上述方法即可获得wifi网络相关的信息，根据需要来选择方法。</span> 
+<p> <span><span>二、获取周围WiFi热点</span></span> </p> 
+<p> <span>wifiManager提供了一个方法getScanResults()来获得周围的wifi信息，其返回的是一组ScanResult对象，存放在list当中，每个ScanResult对象封装了一个wifi热点相关信息，通过ScanResult对象的属性即可获取到，最常用的两个属性为wifi名称（SSID）和信号强度（level）：</span> </p> 
+<p> <span> </span></p>
+<pre class="prettyprint lang-java">ArrayList&lt;ScanResult&gt; list;                   //存放周围wifi热点对象的列表
+list = (ArrayList&lt;ScanResult&gt;) wifiManager.getScanResults();  </pre>  
+<p></p> 
+<p> <span>通常我们会根据所搜索到的wifi信号的强度level从强到弱进行排序并显示在列表上：</span> </p> 
+<p> <span> </span></p>
+<pre class="prettyprint lang-java">//将搜索到的wifi根据信号强度从强到弱进行排序  
+private void sortByLevel(ArrayList&lt;ScanResult&gt; list) {  
+        for(int i=0;i&lt;list.size();i++)  
+            for(int j=1;j&lt;list.size();j++)  
+            {  
+                if(list.get(i).level&lt;list.get(j).level)    //level属性即为强度  
+                {  
+                    ScanResult temp = null;  
+                    temp = list.get(i);  
+                    list.set(i, list.get(j));  
+                    list.set(j, temp);  
+                }  
+            }  
+    }  </pre>  
+<p></p> 
+<span>ScanResult的信号强度属性level是负值，因为它是以分贝数来计算的。然后根据你自己的需求创建相应的Adapter将其显示在ListView上。上述方法搜索到的wifi很多，你还可以加上动态更新、wifi过滤等功能进行显示。</span> 
+<p></p> 
+<div> 
+ <div> 
+  <span><span><strong>获取Wifi列表简单示例：</strong></span><a target="_blank" href="http://download.csdn.net/download/gao_chun/8724413">http://download.csdn.net/download/gao_chun/8724413</a></span> 
+ </div> 
+</div>
+
+                        
+
+                                                    <div class="hidden-sm hidden-xs" style="text-align: left">
+                                <script type="text/javascript">
+var sogou_ad_id=426219;
+var sogou_ad_height=60;
+var sogou_ad_width=640;
+</script>
+<script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+
+                            </div>
+                        
+                    </div>
+
+                    <div class="relates">
+    <h4 class="widget-title"><i class="icon-share-alt"></i> 您可能也会对以下文章感兴趣</h4>
+    <ul>
+                                    <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5613.shtml" title="C++中的指针与引用详细解读">C++中的指针与引用详细解读</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5612.shtml" title="C++静态库与动态库深入研究">C++静态库与动态库深入研究</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5611.shtml" title="C++对象模型详解">C++对象模型详解</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5610.shtml" title="聊聊移动端跨平台开发的各种技术">聊聊移动端跨平台开发的各种技术</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5609.shtml" title="MySQL 数据高可用的实现思路">MySQL 数据高可用的实现思路</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5608.shtml" title="10分钟学会如何用compass 和sass">10分钟学会如何用compass 和sass</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5607.shtml" title="js 模拟手机页面文件的下拉刷新">js 模拟手机页面文件的下拉刷新</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5606.shtml" title="为什么你说“就差一个码农了”，我们是拒绝的">为什么你说“就差一个码农了”，我们是拒绝的</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5605.shtml" title="如何在Linux中用命令行工具管理KVM虚拟环境">如何在Linux中用命令行工具管理KVM虚拟环境</a></li>
+                            <li><i class="icon-double-angle-right"></i> <a target="_blank" href="/article/5604.shtml" title="为什么JVM指定-Xmx参数后占用内存会变少？">为什么JVM指定-Xmx参数后占用内存会变少？</a></li>
+                        </ul>
+</div>
+                    <div id="comment">
+
+
+
+<form action="/content/post-comment.shtml" method="post">
+        <input type="hidden" name="postId" value="5766">
+        <h3 class="widget-title"><i class="icon-comments"></i> 发表评论</h3>
+        <div class="comment-container">
+            
+            <div class="row">
+                <div class="col-xs-1 img-header trend-header">
+                    <img src="http://www.mincoder.com/assets/images/avatar.jpg" style="max-width: 100%">
+                </div>
+                <div class="col-xs-11 comment-context">
+
+                    <textarea placeholder="写点什么..." class="input-block-level comt-area"  style="width: 100%" name="content" id="content" rows="3"></textarea>
+                    <div class="comment-btn">
+                        <span class="pull-right">
+                                                    <span id="post-comment-login-tip">未<a target="_blank" href="/user/login.shtml">登录</a>，将以游客形式发表</span>
+                            <button class="btn btn-primary" type="submit" tabindex="5"><i class="icon-ok-circle icon-white icon12"></i> 提交评论</button>
+                                                </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div>
+      <form action="" method="post" name="commentForm" id="commentForm">
+      <input type="hidden" name="postId" value="5766">
+        <h3 class="post-comment-list-title">
+            网友最新评论<b>(0)</b>
+        </h3>
+        <ol class="post-comment-list">
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </ol>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </form>
+
+      <div id="speed-comment-template" style="display: none">
+          <input type="hidden" name="parentCommentId" value="template_post_comment_id">
+          <div class="speed-comment">
+              <textarea placeholder="写点什么..." class="input-block-level comt-area"  style="width: 100%" name="content" id="content" rows="3"></textarea>
+              <div class="comment-btn">
+                    <span class="pull-right">
+                        <a href="#this" onclick="comment2comment('template_post_comment_id')">取消评论</a>
+                        <button class="btn btn-primary " type="button" onclick="formSubmit('commentForm','/content/comment2comment.shtml','post')" tabindex="5"><i class="icon-ok-circle icon-white icon12"></i> 提交评论</button>
+                    </span>
+                  <span class="comment-smile"><i class="icon-hand-right"></i> 表情</span>
+              </div>
+          </div>
+      </div>
+    </div>
+</div>
+                </div>
+            </div>
+            <div class="col-md-3 hidden-xs right-column">
+                <div class="hidden-xs" id="right_sidebar">
+
+    <div class="content-list">
+        <div class="widget-title"><span class="glyphicon glyphicon-hand-right content-list-ico"></span>评论排行</div>
+        <ul>
+                            <li>
+                    <a target="_blank" href="/article/3755.shtml" title="JavaScript完美md5等各类加密，兼容中文"><i class="icon-caret-right"></i> JavaScript完美md5等各类加密，兼容中文</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/449.shtml" title="提升你开发技能的 8 个提示"><i class="icon-caret-right"></i> 提升你开发技能的 8 个提示</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4110.shtml" title="揭开程序员装 13 行为的面具"><i class="icon-caret-right"></i> 揭开程序员装 13 行为的面具</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/2096.shtml" title="Spring使用Cache、整合Ehcache"><i class="icon-caret-right"></i> Spring使用Cache、整合Ehcache</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/3547.shtml" title="Eclipse的PyDev插件安装及解决安装后找不到的问题"><i class="icon-caret-right"></i> Eclipse的PyDev插件安装及解决安装后找不到的问题</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/6627.shtml" title="每个新手程序员必看的 SQL 指南"><i class="icon-caret-right"></i> 每个新手程序员必看的 SQL 指南</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/3422.shtml" title="IOS制作一个漂亮的登录界面"><i class="icon-caret-right"></i> IOS制作一个漂亮的登录界面</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/1768.shtml" title="IOS开发之记录用户登陆状态"><i class="icon-caret-right"></i> IOS开发之记录用户登陆状态</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4152.shtml" title="老不死的IE6 到底有什么幕后原因？"><i class="icon-caret-right"></i> 老不死的IE6 到底有什么幕后原因？</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/1602.shtml" title="运行yum报错Error: Cannot retrieve metalink for repository: epel. Please verify its path and try again"><i class="icon-caret-right"></i> 运行yum报错Error: Cannot retrieve metalink for repository: epel. Please verify its path and try again</a>
+                </li>
+                    </ul>
+    </div>
+
+            <div style="text-align: left">
+            <script type="text/javascript">
+var sogou_ad_id=426223;
+var sogou_ad_height=250;
+var sogou_ad_width=250;
+</script>
+<script type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/c.js'></script>
+
+        </div>
+    
+    <div class="content-list">
+        <div class="widget-title"><span class="glyphicon glyphicon-hand-right content-list-ico"></span>随机文档</div>
+        <ul>
+                            <li>
+                    <a target="_blank" href="/article/4607.shtml" title="Android ViewPager 指示器控件的最佳实现"><i class="icon-caret-right"></i> Android ViewPager 指示器控件的最佳实现</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4606.shtml" title="Android Annotation注解的剖析和使用"><i class="icon-caret-right"></i> Android Annotation注解的剖析和使用</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4605.shtml" title=" java序列化一定要应该注意的6个事项！"><i class="icon-caret-right"></i>  java序列化一定要应该注意的6个事项！</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4604.shtml" title="配置Yum源repo文件及搭建本地Yum服务器"><i class="icon-caret-right"></i> 配置Yum源repo文件及搭建本地Yum服务器</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4603.shtml" title="Git / Gitolite 的应用学习"><i class="icon-caret-right"></i> Git / Gitolite 的应用学习</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4602.shtml" title="Solr 在mmseg4j中使用中文停止词（的、地、得）"><i class="icon-caret-right"></i> Solr 在mmseg4j中使用中文停止词（的、地、得）</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4601.shtml" title="在线数据迁移经验：如何为正在飞行的飞机更换引擎"><i class="icon-caret-right"></i> 在线数据迁移经验：如何为正在飞行的飞机更换引擎</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4600.shtml" title="泛型中的类型约束和类型推断"><i class="icon-caret-right"></i> 泛型中的类型约束和类型推断</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4599.shtml" title="Swift 中的利刃，函数和闭包"><i class="icon-caret-right"></i> Swift 中的利刃，函数和闭包</a>
+                </li>
+                            <li>
+                    <a target="_blank" href="/article/4598.shtml" title="快速用低度下降法实现一个Logistic Regression 分类器"><i class="icon-caret-right"></i> 快速用低度下降法实现一个Logistic Regression 分类器</a>
+                </li>
+                    </ul>
+    </div>
+
+            <div style="text-align: left">
+            <a href="http://s.click.taobao.com/t?e=m%3D2%26s%3DIu9FMPNiQ9wcQipKwQzePCperVdZeJviEViQ0P1Vf2kguMN8XjClAvprJ4dR14KTbgq%2FLQiS3wNgwRv4CxIqbWVaaHQ0vIZecCI2k6siEhEmekbPfTGM3Odn1BbglxZYxUhy8exlzcq9AmARIwX9K%2BnbtOD3UdznPV1H2z0iQv9NkKVMHClW0QbMqOpFMIvnvjQXzzpXdTHGJe8N%2FwNpGw%3D%3D" target="_blank"><img src="http://www.mincoder.com/ali250.gif"></a>
+        </div>
+    
+    <div class="content-list">
+        <div class="widget-title"><span class="glyphicon glyphicon-hand-right content-list-ico"></span>热门标签</div>
+        <div class="tags">
+                            <a style="background-color: #B433FF" href="/list/term/84.shtml" title="android">android</a>
+                            <a style="background-color: #428BCA" href="/list/term/50.shtml" title="java">java</a>
+                            <a style="background-color: #D8B303" href="/list/term/34.shtml" title="web综合">web综合</a>
+                            <a style="background-color: #428BCA" href="/list/term/92.shtml" title="Linux">Linux</a>
+                            <a style="background-color: #B37333" href="/list/term/95.shtml" title="oracle">oracle</a>
+                            <a style="background-color: #D9534F" href="/list/term/28.shtml" title="程序人生">程序人生</a>
+                            <a style="background-color: #B433FF" href="/list/term/132.shtml" title="ios">ios</a>
+                            <a style="background-color: #00ABA9" href="/list/term/88.shtml" title="mysql">mysql</a>
+                            <a style="background-color: #428BCA" href="/list/term/29.shtml" title="javascript">javascript</a>
+                            <a style="background-color: #00ABA9" href="/list/term/63.shtml" title="数据库">数据库</a>
+                            <a style="background-color: #D9534F" href="/list/term/70.shtml" title="php">php</a>
+                            <a style="background-color: #428BCA" href="/list/term/76.shtml" title="编程语言">编程语言</a>
+                            <a style="background-color: #FF6600" href="/list/term/64.shtml" title="python">python</a>
+                            <a style="background-color: #FF6600" href="/list/term/66.shtml" title="服务器">服务器</a>
+                            <a style="background-color: #D9534F" href="/list/term/192.shtml" title=".net">.net</a>
+                            <a style="background-color: #5CB85C" href="/list/term/46.shtml" title="操作系统">操作系统</a>
+                            <a style="background-color: #FF6600" href="/list/term/41.shtml" title="职场">职场</a>
+                            <a style="background-color: #00ABA9" href="/list/term/40.shtml" title="创业">创业</a>
+                            <a style="background-color: #5CB85C" href="/list/term/78.shtml" title="前端">前端</a>
+                            <a style="background-color: #428BCA" href="/list/term/26.shtml" title="软件工程">软件工程</a>
+                            <a style="background-color: #D8B303" href="/list/term/103.shtml" title="spring">spring</a>
+                            <a style="background-color: #4A4A4A" href="/list/term/53.shtml" title="移动开发">移动开发</a>
+                            <a style="background-color: #D8B303" href="/list/term/163.shtml" title="错误解决">错误解决</a>
+                            <a style="background-color: #B37333" href="/list/term/44.shtml" title="运营推广">运营推广</a>
+                            <a style="background-color: #5CB85C" href="/list/term/147.shtml" title="云计算/大数据">云计算/大数据</a>
+                            <a style="background-color: #D8B303" href="/list/term/30.shtml" title="ui-ue">ui-ue</a>
+                            <a style="background-color: #00ABA9" href="/list/term/236.shtml" title="C/C++">C/C++</a>
+                            <a style="background-color: #00ABA9" href="/list/term/93.shtml" title="开发工具">开发工具</a>
+                            <a style="background-color: #FF6600" href="/list/term/197.shtml" title="C#">C#</a>
+                            <a style="background-color: #4A4A4A" href="/list/term/31.shtml" title="幽默">幽默</a>
+                            <a style="background-color: #D9534F" href="/list/term/59.shtml" title="观点评论">观点评论</a>
+                            <a style="background-color: #D8B303" href="/list/term/155.shtml" title="nginx">nginx</a>
+                            <a style="background-color: #B433FF" href="/list/term/183.shtml" title="Mybatis">Mybatis</a>
+                            <a style="background-color: #B433FF" href="/list/term/33.shtml" title="算法">算法</a>
+                            <a style="background-color: #00ABA9" href="/list/term/148.shtml" title="UI/UE">UI/UE</a>
+                            <a style="background-color: #00ABA9" href="/list/term/90.shtml" title="sql server">sql server</a>
+                            <a style="background-color: #4A4A4A" href="/list/term/91.shtml" title="开发框架">开发框架</a>
+                            <a style="background-color: #D8B303" href="/list/term/51.shtml" title="seo">seo</a>
+                            <a style="background-color: #FF6600" href="/list/term/65.shtml" title="asp.net">asp.net</a>
+                            <a style="background-color: #428BCA" href="/list/term/94.shtml" title="大数据">大数据</a>
+                    </div>
+    </div>
+
+    </div>            </div>
+        </div>
+    </div>
+</div>
+<!--main end-->
+    
+<div class="footer" id="footer">
+    <div class="container">
+
+
+    <div class="row">
+        <div class="col-md-3">
+    <H1 style="font-size: 32px;"><a style="color: #fff" href="/about/us.shtml">小程序员</a></h1>
+            <span class="copyright-text">© Copyright © 2014.Company mincoder All rights reserved.</span>
+            <a href="http://www.miibeian.gov.cn/" class="copyright-text" target="_blank">浙ICP备13036460号-2</a>
+    <script type="text/javascript">
+        var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+        document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F6ea66428ce05538b14a42ed084cb2a3d' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+        </div>
+        <div class="col-md-3">
+            <h5>Contact</h5>
+            <ul>
+                <li class="icon-home"> http://www.mincoder.com </li>
+                <li class="icon-user"> QQ : 341470 </li>
+                <li class="icon-envelope"> Email : admin@mincoder.com</li>
+            </ul>
+        </div>
+        <div class="col-md-3">
+            <h5>Friend Link</h5>
+            <ul>
+                <li><a target="_blank" href="http://www.dexcoder.com">码农的士</a></li>
+                <li><a target="_blank" href="http://www.5739.com" _hover-ignore="1">手机下载软件教程</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3">
+            <h5>New Member</h5>
+            <ul>
+                <li><a href="#">小程序员</a></li>
+                <li><a target="_blank" href="http://www.meiriyouke.net">每日有客</a></li>
+            </ul>
+
+        </div>
+    </div>
+    </div>
+</div>
+
+    <script src="/assets/js/jquery-1.10.2.min.js"></script>
+<script src="/assets/js/site.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/prettify.js"></script>
+<script src="/assets/js/scrollFollow.js"></script>
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+<script src="/assets/js/html5shiv.js.js"></script>
+<script src="/assets/js/respond.min.js"></script>
+<![endif]-->
+<script>
+
+    jQuery(document).ready(function(){
+        jQuery("pre").addClass("prettyprint");
+        prettyPrint();
+
+//        var sidebarWidth = jQuery("#right_sidebar").width();
+//        jQuery("#right_sidebar").css("width",sidebarWidth);
+//
+//        var left = $('.page .left-column');
+//        var sidebar = $('#right_sidebar');
+//        if (left.height() > sidebar.height()) {
+//            jQuery("#right_sidebar").scrollFollow({
+//                bottomObj: '#footer',
+//                marginTop: 0,
+//                bottomMargin: 0,
+//                marginBottom: 0
+//            });
+//        }
+    });
+
+    function slideToggle(id){
+        jQuery("#"+id).slideToggle();//窗帘效果的切换,点一下收,点一下开,参数可以无,参数说明同上
+    }
+</script></body>
+</html>

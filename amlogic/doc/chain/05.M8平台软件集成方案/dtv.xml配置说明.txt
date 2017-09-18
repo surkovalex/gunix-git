@@ -1,0 +1,121 @@
+dtv.xml文件放在system/hdtv目录下，用于配置DTV的一些默认设置。
+打包时请在system目录下创建hdtv文件夹，放入配置好的xml文件，如无此文件则按缺省值进行设置。
+
+示例文件：
+
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<dtv
+	defaut_tuner_type="DVB-T" 
+	isCoverOldProgram="1"
+	region="5"
+	audio_language="0"
+	subtitle_language="0"
+	ratio="3"
+	support_searchxml="0"
+	isShowTxtSubCaption="1"
+	isAutoUpdatePrograms="1"
+	LCN="0"
+	ProgramSortType="0"
+	scremble_sort="1"
+	antenna_power="0"
+	subtitle_mintop="0"
+	subtitle_inctop="0"
+	coretv_stringcode="0"
+	support_osd_timeout="0"
+	>
+</dtv>
+
+defaut_tuner_type: 默认高频头类型，缺省为DVB-T；
+isCoverOldProgram：是否覆盖不同频点的相同节目，0为不覆盖，缺省为覆盖；
+region：DVB地区，可以为地区编号，也可以为域名缩写（大写），缺省为英国；
+audio_language：音频语言，缺省为自动根据系统语言判断；
+subtitle_language：字幕语言，缺省为自动根据系统语言判断；
+ratio：视频宽高比，1为4:3，2为16:9，3为自动，缺省为自动；
+support_searchxml：客户特定功能；
+isShowTxtSubCaption：是否显示TXT字幕的标题，0为不显示，缺省为显示；
+isAutoUpdatePrograms：是否自动更新节目列表，0为不更新，缺省为更新；
+LCN：LCN是否打开，1为打开，缺省为不打开；
+ProgramSortType:排序方式，缺省为default；
+scremble_sort:加扰排序，缺省为打开；
+antenna_power:天线供电是否打开，缺省为关闭；
+subtitle_mintop:字幕显示位置距顶部的最小值；
+subtitle_inctop:字幕显示位置不足subtitle_mintop时对字幕位置下移的值;
+coretv_stringcode:CoreTV字符编码格式，见CoreTVStringCode_E；
+support_osd_timeout:是否允许设置OSD自动消失时间，缺省为不允许；
+isFilterOneSeg:是否过滤one Seg节目，0为不过滤，缺省为过滤。
+
+region：配置region时可使用地区的排序号或id。
+	<regions_all>
+	    <region id="CN" />  <!-- 0 -->
+	    <region id="HK" />
+	    <region id="TW" />
+	    <region id="US" />
+	    <region id="FR" />
+	    <region id="GB" />
+	    <region id="NL" />
+	    <region id="IT" />
+	    <region id="DE" />
+	    <region id="PL" />
+	    <region id="PT" />  <!-- 10 -->
+	    <region id="ES" />
+	    <region id="RU" />
+	    <region id="AU" />
+	    <region id="JP" />
+	    <region id="BR" />
+	    <region id="AR" />
+	    <region id="CL" />
+	    <region id="PE" />
+	    <region id="VE" />
+	    <region id="IL" />  <!-- 20 -->
+	    <region id="TH" />
+	    <region id="HU" />
+	    <region id="CO" />
+	    <region id="CR" />
+	</regions_all>
+	
+language：配置audio_language\subtitle_language时可使用value或id。
+<coretv_languages>
+    <!-- id:language abbreviation;  value:coretv language-->
+    <coretv_language id="zh_CN" value="1"/>
+    <coretv_language id="zh_TW" value="2"/>
+    <coretv_language id="en" value="3"/>
+    <coretv_language id="fr" value="4"/>
+    <coretv_language id="de" value="5"/>
+    <coretv_language id="it" value="6"/>
+    <coretv_language id="es" value="7"/>
+    <coretv_language id="nl" value="8"/>
+    <coretv_language id="tr" value="9"/>
+    <coretv_language id="ru" value="10"/>
+    <coretv_language id="da" value="11"/>
+    <coretv_language id="ja" value="12"/>
+    <coretv_language id="pl" value="13"/>
+    <coretv_language id="ar" value="14"/>
+    <coretv_language id="iw" value="15"/>
+    <coretv_language id="uk" value="16"/>
+    <coretv_language id="hu" value="17"/>
+    <coretv_language id="th" value="18"/>
+</coretv_languages>
+	
+CoreTVStringCode_E
+typedef enum
+{
+	CoreTVStringCode_ISO8859_1 = 1,
+	CoreTVStringCode_ISO8859_2,
+	CoreTVStringCode_ISO8859_3,
+	CoreTVStringCode_ISO8859_4,
+	CoreTVStringCode_ISO8859_5,
+	CoreTVStringCode_ISO8859_6,
+	CoreTVStringCode_ISO8859_7,
+	CoreTVStringCode_ISO8859_8,
+	CoreTVStringCode_ISO8859_9,
+	CoreTVStringCode_ISO8859_10,
+	CoreTVStringCode_ISO8859_11,
+	CoreTVStringCode_ISO8859_13,
+	CoreTVStringCode_ISO8859_14,
+	CoreTVStringCode_ISO8859_15,
+	CoreTVStringCode_ISO8859_16,
+	CoreTVStringCode_GB2312,
+	CoreTVStringCode_BIG5,
+	CoreTVStringCode_UTF8,
+}CoreTVStringCode_E;
+

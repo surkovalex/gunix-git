@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="custom_rules" default="release">
+<target name="-pre-compile">
+    <path id="project.target.class.path">  
+    <pathelement location="E:/4.4_framework/classes.jar"/>  
+    <pathelement location="${sdk.dir}/platforms/android-17/android.jar"/>  
+    </path>  
+</target>
+</project>

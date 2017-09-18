@@ -1,0 +1,11 @@
+windows环境下：
+
+1、查看本机的DNS缓存记录访问很简单，在命令行下用 ipconfig /displaydns  命令就可以了
+2、 清除本机的DNS缓存命令： ipconfig /flushdns   
+3、 查询某域名的DNS   nslookup set debug www.domain.com 
+
+
+在linux中
+nscd进程负责管理DNS缓存。要清空DNS缓存，重启nscd 守护进程就行了。
+
+要重启nscd 进程，使用命令（不带引号）‘/etc/rc.d/init.d/nscd restart’

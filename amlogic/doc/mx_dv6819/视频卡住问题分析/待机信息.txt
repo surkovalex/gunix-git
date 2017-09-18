@@ -1,0 +1,235 @@
+r$UEventThread.run:187 
+I/ActivityManager( 3903): Start proc com.aml.settings for broadcast com.aml.settings/.BootReceiver: pid=5802 uid=1000 gids={41000, 1015, 1028, 3002, 3001, 3003}
+E/Trace   ( 5802): error opening trace file: No such file or directory (2)
+D/BootReceiver( 5802): intent.getAction(): android.intent.action.HDMI_HW_PLUGGED
+I/ActivityManager( 3903): Start proc com.android.settings for broadcast com.android.settings/.BootCompletedReceiverAML: pid=5814 uid=1000 gids={41000, 1015, 1028, 3002, 3001, 3003}
+I/ActivityManager( 3903): No longer want com.android.provision (pid 4309): empty for 2068s
+D/ActivityManager( 3903): send app_CRASH broadcast,packageName:com.android.provision
+W/ContextImpl( 3903): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1067 com.android.server.am.ActivityManagerService.onVideoPlayerCrashed:2964 com.android.server.am.ActivityManagerService.handleAppDiedLocked:3014 com.android.server.am.ActivityManagerService.appDiedLocked:3097 com.android.server.am.ActivityManagerService$AppDeathRecipient.binderDied:870 
+E/Trace   ( 5814): error opening trace file: No such file or directory (2)
+D/BootCompletedReceiverAML( 5814): HDMI unPlugged
+I/ActivityManager( 3903): No longer want android.process.acore (pid 4335): empty for 1986s
+D/HDMICheckHandler( 5814): freescale is open
+D/OutputConfigurations( 5814): Display[0] is 480I
+D/OutputConfigurations( 5814):   Logic[0] is 480i
+D/OutputConfigurations( 5814): Display[1] is 480P
+D/OutputConfigurations( 5814):   Logic[1] is 480p
+D/OutputConfigurations( 5814): Display[2] is 576I
+D/OutputConfigurations( 5814):   Logic[2] is 576i
+D/OutputConfigurations( 5814): Display[3] is 576P
+D/OutputConfigurations( 5814):   Logic[3] is 576p
+D/OutputConfigurations( 5814): Display[4] is 720P 60HZ
+D/OutputConfigurations( 5814):   Logic[4] is 720p
+D/OutputConfigurations( 5814): Display[5] is 1080I 60HZ
+D/OutputConfigurations( 5814):   Logic[5] is 1080i
+D/OutputConfigurations( 5814): Display[6] is 1080P 60HZ
+D/OutputConfigurations( 5814):   Logic[6] is 1080p
+D/OutputConfigurations( 5814): Display[7] is 720P 50HZ
+D/ActivityManager( 3903): send app_CRASH broadcast,packageName:android.process.acore
+D/OutputConfigurations( 5814):   Logic[7] is 720p50hz
+D/OutputConfigurations( 5814): Display[8] is 1080I 50HZ
+D/OutputConfigurations( 5814):   Logic[8] is 1080i50hz
+D/OutputConfigurations( 5814): Display[9] is 1080P 50HZ
+D/OutputConfigurations( 5814):   Logic[9] is 1080p50hz
+D/OutputConfigurations( 5814): Now successfully..............
+D/com.android.settings.HDMICheckHandler( 5814): new mode is: 480cvbs
+D/com.android.settings.HDMICheckHandler( 5814): current mode is: 720p
+W/ContextImpl( 3903): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1067 com.android.server.am.ActivityManagerService.onVideoPlayerCrashed:2964 com.android.server.am.ActivityManagerService.handleAppDiedLocked:3014 com.android.server.am.ActivityManagerService.appDiedLocked:3097 com.android.server.am.ActivityManagerService$AppDeathRecipient.binderDied:870 
+D/HDMICheckHandler( 5814): HdmiUnPlugged:open vdac
+W/ContextImpl( 5814): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1067 android.content.ContextWrapper.sendBroadcast:338 android.content.ContextWrapper.sendBroadcast:338 com.android.settings.HDMICheckHandler.setOutputResolution:436 com.android.settings.HDMICheckHandler.hdmiUnPlugged:319 
+W/ContextImpl( 5814): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1067 android.content.ContextWrapper.sendBroadcast:338 android.content.ContextWrapper.sendBroadcast:338 com.android.settings.HDMICheckHandler.setOutputResolution:437 com.android.settings.HDMICheckHandler.hdmiUnPlugged:319 
+D/dalvikvm( 5802): No JNI_OnLoad found in /system/lib/libboxsettings.so 0x41cdd338, skipping init
+D/OutputSettingsBroadcastReceiver( 5802): Action:android.intent.action.OUTPUTMODE_CHANGE
+D/OutputSettingsBroadcastReceiver( 5802): Action:android.intent.action.OUTPUTMODE_SAVE
+D/Laconic ( 5495): UpdateService::OnUpdateCheckSuccess: no update found for Lebara
+D/Laconic ( 5495): BSTBUpdatePlugin::OnNoUpdateFound
+E/CheckinTask( 4291): Checkin failed: https://android.clients.google.com/checkin (request #0): org.apache.http.conn.ConnectTimeoutException: Connect to /74.125.204.100:443 timed out
+D/AlarmManager( 3903): com.google.android.gsf in blacklist, type is 0
+I/EventLogService( 4291): Aggregate from 1451445317539 (log), 1451443700532 (data)
+W/DropBoxManagerService( 3903): Dropping: event_data (39 > 0 bytes)
+D/AlarmManager( 3903): com.google.android.gsf in blacklist, type is 0
+D/Laconic ( 5495): LiveImageSequence: FireLoadRequest http://streaming.lebaraplay.com/20_300x300.jpeg
+D/Laconic ( 5495): LiveImageSequence: FireLoadRequest http://streaming.lebaraplay.com/124_300x300.jpeg
+D/Laconic ( 5495): LiveImageSequence: FireLoadRequest http://streaming.lebaraplay.com/124_300x300.jpeg
+D/Laconic ( 5495): LiveImageSequence: FireLoadRequest http://streaming.lebaraplay.com/92_300x300.jpeg
+D/Laconic ( 5495): LiveImageSequence: FireLoadRequest http://streaming.lebaraplay.com/11_300x300.jpeg
+D/PlatformHelper( 5495): HDMI standby timer fired
+D/PlatformHelper( 5495): Sending power key
+D/AndroidRuntime( 5829): 
+D/AndroidRuntime( 5829): >>>>>> AndroidRuntime START com.android.internal.os.RuntimeInit <<<<<<
+D/AndroidRuntime( 5829): CheckJNI is OFF
+D/dalvikvm( 5829): Unable to stat classpath element '/system/framework/framework_ext.jar'
+D/dalvikvm( 5829): Trying to load lib libjavacore.so 0x0
+D/dalvikvm( 5829): Added shared lib libjavacore.so 0x0
+D/dalvikvm( 5829): Trying to load lib libnativehelper.so 0x0
+D/dalvikvm( 5829): Added shared lib libnativehelper.so 0x0
+D/Laconic ( 5495): Jpeg: skip input data 57 currently in buffer 12725
+D/Laconic ( 5495): LiveImageSequence::OnLoaded: http://streaming.lebaraplay.com/11_300x300.jpeg
+D/Laconic ( 5495): Jpeg: skip input data 57 currently in buffer 8050
+D/Laconic ( 5495): LiveImageSequence::OnLoaded: http://streaming.lebaraplay.com/20_300x300.jpeg
+D/Laconic ( 5495): Jpeg: skip input data 57 currently in buffer 11869
+D/Laconic ( 5495): LiveImageSequence::OnLoaded: http://streaming.lebaraplay.com/124_300x300.jpeg
+I/ethernet( 5829): Loading ethernet jni class
+I/pppoe   ( 5829): Loading pppoe jni class
+D/Laconic ( 5495): Jpeg: skip input data 57 currently in buffer 10286
+D/Laconic ( 5495): LiveImageSequence::OnLoaded: http://streaming.lebaraplay.com/92_300x300.jpeg
+D/AndroidRuntime( 5829): Calling main entry com.android.commands.input.Input
+I/Input   ( 5829): injectKeyEvent: KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_POWER, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=2098037, downTime=2098037, deviceId=-1, source=0x101 }
+I/WindowManager( 3903): mapkey no map key list
+I/AudioService( 3903):  AudioFocus  requestAudioFocus() from android.media.AudioManager@41e6a278com.android.internal.policy.impl.PhoneWindowManager$16@41e62b60
+E/WindowManager( 3903): +++****====: onAudioFocusChange
+W/ContextImpl( 3903): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1067 com.android.internal.policy.impl.PhoneWindowManager.interceptKeyBeforeQueueing:4157 com.android.server.wm.InputMonitor.interceptKeyBeforeQueueing:337 com.android.server.input.InputManagerService.interceptKeyBeforeQueueing:1338 com.android.server.input.InputManagerService.nativeInjectInputEvent:-2 
+I/Input   ( 5829): injectKeyEvent: KeyEvent { action=ACTION_UP, keyCode=KEYCODE_POWER, scanCode=0, metaState=0, flags=0x0, repeatCount=0, eventTime=2098037, downTime=2098037, deviceId=-1, source=0x101 }
+I/WindowManager( 3903): mapkey no map key list
+D/AndroidRuntime( 5829): Shutting down VM
+W/ContextImpl( 3903): Calling a method in the system process without a qualified user: android.app.ContextImpl.sendBroadcast:1067 com.android.internal.policy.impl.PhoneWindowManager.interceptKeyBeforeQueueing:4202 com.android.server.wm.InputMonitor.interceptKeyBeforeQueueing:337 com.android.server.input.InputManagerService.interceptKeyBeforeQueueing:1338 com.android.server.input.InputManagerService.nativeInjectInputEvent:-2 
+I/PowerManagerService( 3903): Going to sleep by user request...
+D/dalvikvm( 5829): GC_CONCURRENT freed 95K, 18% free 470K/568K, paused 0ms+1ms, total 6ms
+W/BufferQueue( 2608): freeAllBuffersLocked called but mQueue is not empty
+D/SurfaceFlinger( 2608): Screen released, type=0 flinger=0x404d6318
+W/BSTBActivity( 5495): onPause
+W/BSTBGLSurfaceView( 5495): destroySurface 
+V/BluetoothManagerService( 3903): bt mScreenOff
+D/NetUtils( 3903): android_net_utils_resetConnections in env=0x6540df08 clazz=0x22300001 iface=ppp0 mask=0x3
+D/PppoeService( 3903): ACTION_SCREEN_OFF
+I/PppoeStateTracker( 3903): stop interface
+D/dalvikvm( 3903): GC_CONCURRENT freed 514K, 25% free 6374K/8428K, paused 3ms+12ms, total 70ms
+D/EthernetService( 3903): ACTION_SCREEN_OFF
+I/EthernetStateTracker( 3903): stop dhcp and interface
+D/BSTBActivity( 5495): Localytics: closeSession
+D/Laconic ( 5495): Localytics: AnalyticsAndroidSender: OnSessionClosed
+D/Laconic ( 5495): Localytics: handler 0x6b858f98
+D/Laconic ( 5495): Localytics: call OnSessionClosed()
+D/JNIJavaRequest( 5495): runOnUiThread
+D/JNIJavaRequest( 5495): onSuccess
+D/Laconic ( 5495): JavaRequest: native onSuccess called
+D/Laconic ( 5495): LocalyticsListener: OnSessionClosed
+D/BSTBLocalytics( 5495): Localytics: tagEvent: Session Summary
+D/BSTBLocalytics( 5495): Localytics: Watched Free Channels: 0
+D/BSTBLocalytics( 5495): Localytics: On-Site Searches: 0
+D/BSTBLocalytics( 5495): Localytics: Watched Free Movies: 0
+D/BSTBLocalytics( 5495): Localytics: Changed Settings: 1
+D/BSTBLocalytics( 5495): Localytics: Viewed Settings: 0
+D/BSTBLocalytics( 5495): Localytics: Watched Channels: 0
+D/BSTBLocalytics( 5495): Localytics: Watched Movies: 0
+D/BSTBLocalytics( 5495): Localytics: Video Starts: 0
+D/dalvikvm( 5495): GC_CONCURRENT freed 403K, 10% free 4515K/4980K, paused 3ms+3ms, total 25ms
+D/NetUtils( 3903): android_net_utils_resetConnections in env=0x6540df08 clazz=0x26d00001 iface=eth0 mask=0x3
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+I/ethernet( 3903): event: NEWLINK(16), flags=0X1002
+I/ethernet( 3903): flags: BC MC
+I/ethernet( 3903): poll state :eth0:17:
+I/pppoe   ( 3903): For NETLINK bug, RTM_NEWLINK ==> RTM_DELLINK
+I/pppoe   ( 3903): Event(DELLINK) NOT from PPP interface, ignore it
+I/ethernet( 3903): Event from LOOP interface, ignore it
+I/pppoe   ( 3903): Event(DELADDR) from LOOP interface, ignore it
+V/EthernetStateTracker( 3903): report new state DISCONNECTED on dev eth0 current=eth0
+V/EthernetStateTracker( 3903): update network state tracker
+V/PppoeMonitor( 3903): net.pppoe.running not FOUND
+V/PppoeMonitor( 3903): !net.pppoe.running. Discard event
+I/PppoeMonitor( 3903): go poll events
+I/EthernetStateTracker( 3903): Old status stackConnected=true HWConnected=true
+I/EthernetStateTracker( 3903): [EVENT: ether is removed]
+D/EthernetStateTracker( 3903): setEthState state=true->false event=4
+D/EthernetStateTracker( 3903): ***isConnected: true
+D/EthernetStateTracker( 3903): ***isConnected: false
+D/EthernetStateTracker( 3903): EVENT_HW_DISCONNECTED: StopInterface
+V/PppoeMonitor( 3903): net.pppoe.running not FOUND
+V/PppoeMonitor( 3903): !net.pppoe.running. Discard event
+I/PppoeMonitor( 3903): go poll events
+I/EthernetStateTracker( 3903): stop dhcp and interface
+D/audio_hw_primary( 2611): adev_set_parameters(0x400a8ca8, screen_state=off)
+I/ScreenListenerService( 4195): intent.getAction() = android.intent.action.SCREEN_OFF
+I/ScreenListenerService( 4195): ACTION_SCREEN_OFF red
+D/ScreenListenerService( 4195): commond dumpsys power | grep -E "PARTIAL_WAKE_LOCK|SCREEN_DIM_WAKE_LOCK|SCREEN_BRIGHT_WAKE_LOCK|FULL_WAKE_LOCKPROXIMITY_SCREEN_OFF_WAKE_LOCK" > /mnt/sdcard/dumpsys.txt
+D/AlarmManager( 3903): com.google.android.gsf in blacklist, type is 0
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/NetUtils( 3903): android_net_utils_resetConnections in env=0x6820e2f0 clazz=0x8cf00001 iface=eth0 mask=0x3
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+D/Laconic ( 5495): CurlMultiSession::SockoptCallback: rc=-1
+V/NetworkSettingsHelper( 5495): android.net.ethernet.ETH_STATE_CHANGED
+I/EthernetStateTracker( 3903): New status, stackConnected=true HWConnected=false
+V/NetworkSettingsHelper( 5495): Detailed state: DISCONNECTED
+V/NetworkSettingsHelper( 5495): Reason: null
+V/NetworkSettingsHelper( 5495): ExtraInfo: null
+V/NetworkSettingsHelper( 5495): isAvailable: false
+D/ConnectivityService( 3903): ConnectivityChange for ethernet: DISCONNECTED/DISCONNECTED
+D/ConnectivityService( 3903): Disconnected network(9) is ActiveDefaultNetwork. Make ActiveDefaultNetwork as -1
+D/ConnectivityService( 3903): tryFailover: Attempting to switch to mobile
+D/ConnectivityService( 3903): tryFailover: Attempting to switch to wifi
+I/PppoeStateTracker( 3903): >>>reconnect
+I/PppoeService( 3903): setPppoeState from 2 to 2
+I/PppoeStateTracker( 3903): >>>resetInterface
+I/PppoeStateTracker( 3903): pppoeConfigured: true
+I/PppoeStateTracker( 3903): IfName:ppp0
+I/PppoeStateTracker( 3903): IP:0.0.0.0
+I/PppoeStateTracker( 3903): Mask:255.255.255.0
+I/PppoeStateTracker( 3903): DNS:0.0.0.0
+D/NetUtils( 3903): android_net_utils_resetConnections in env=0x6820e2f0 clazz=0x94a00001 iface=ppp0 mask=0x3
+I/PppoeStateTracker( 3903): reset device ppp0
+I/PppoeStateTracker( 3903): Force the connection disconnected before configuration
+V/PppoeStateTracker( 3903): configureInterfaceStatic: ifname:ppp0
+D/CommandListener( 2606): Setting iface cfg
+D/PppoeStateTracker( 3903): PST.setPppoeState()false ==> false
+V/PppoeStateTracker( 3903): IP configuration failed: java.lang.IllegalStateException: command '140 interface setcfg ppp0 0.0.0.0 24' failed with '400 140 Failed to set address (No such device)'
+D/NetUtils( 3903): android_net_utils_resetConnections in env=0x6820e2f0 clazz=0x96900001 iface=eth0 mask=0x3
+D/ConnectivityService( 3903): tryFailover: Attempting to switch to pppoe
+D/ConnectivityService( 3903): resetConnections(eth0, 3)
+D/Tethering( 3903): MasterInitialState.processMessage what=3
+D/ConnectivityService( 3903): handleInetConditionChange: no active default network - ignore
+D/dalvikvm( 4172): GC_CONCURRENT freed 386K, 11% free 4256K/4772K, paused 6ms+5ms, total 72ms
+V/MulticastDnsServer( 4172): Sending connectivity msg for localhost/127.0.0.1
+V/MulticastDnsServer( 4172): Processing connectivity message
+I/MulticastDnsServer( 4172): Stopping JmDNS implementation
+V/MulticastDnsServer( 4172): Done sending connectivity msg
+I/SsdpServer( 4172): --- Stopping SSDP sender and receiver
+D/dalvikvm( 4291): GC_CONCURRENT freed 421K, 11% free 4359K/4860K, paused 5ms+7ms, total 85ms
+W/DNSStateTask( 4172): Canceler(android-9e8bb443346babfc-lan).run() exception 
+W/DNSStateTask( 4172): java.net.SocketException: sendto failed: ENETUNREACH (Network is unreachable)
+W/DNSStateTask( 4172):  at libcore.io.IoBridge.maybeThrowAfterSendto(IoBridge.java:506)
+W/DNSStateTask( 4172):  at libcore.io.IoBridge.sendto(IoBridge.java:475)
+W/DNSStateTask( 4172):  at java.net.PlainDatagramSocketImpl.send(PlainDatagramSocketImpl.java:182)
+W/DNSStateTask( 4172):  at java.net.DatagramSocket.send(DatagramSocket.java:284)
+W/DNSStateTask( 4172):  at javax.jmdns.impl.JmDNSImpl.send(JmDNSImpl.java:1545)
+W/DNSStateTask( 4172):  at javax.jmdns.impl.tasks.state.DNSStateTask.run(DNSStateTask.java:131)
+W/DNSStateTask( 4172):  at java.util.Timer$TimerImpl.run(Timer.java:284)
+W/DNSStateTask( 4172): Caused by: libcore.io.ErrnoException: sendto failed: ENETUNREACH (Network is unreachable)
+W/DNSStateTask( 4172):  at libcore.io.Posix.sendtoBytes(Native Method)
+W/DNSStateTask( 4172):  at libcore.io.Posix.sendto(Posix.java:151)
+W/DNSStateTask( 4172):  at libcore.io.BlockGuardOs.sendto(BlockGuardOs.java:177)
+W/DNSStateTask( 4172):  at libcore.io.IoBridge.sendto(IoBridge.java:473)
+W/DNSStateTask( 4172):  ... 5 more
+W/System.err( 4172): stopped
+I/SsdpServer( 4172): --- Starting SSDP sender and receiver
+^C
+130|root@android:/ # sleep .......
+CEC P_AO_DEBUG_REG0:
+00000000
+step 1
+cec
+60a80000  LP_CTRL1
+00020f29  MCFG
+00060021  MCFG
+step 2
+step 3
+step 4
+step 5
+step 6

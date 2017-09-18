@@ -1,0 +1,91 @@
+1.public WifiConfiguration createWifiConfig(String SSID, String password, int type) {...}
+
+
+public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
+     AccessPoint point = (AccessPoint)mSelectLv.getAdapter().getItem(position);
+	 String ssid = point.ssid;
+	 int protectMode = point.getSecurityInt(point.security);
+}
+
+AccessPoint.java
+public int getSecurityInt(int security) {
+		int protectMode = WifiAdmins.TYPE_EAP;
+		switch (security) {
+		case SECURITY_NONE:
+			protectMode =  WifiAdmins.TYPE_NO_PASSWD;
+			break;
+		case SECURITY_EAP:
+			protectMode = WifiAdmins.TYPE_EAP;
+			break;
+		case SECURITY_WEP:
+			protectMode = WifiAdmins.TYPE_WEP;
+			break;
+		case SECURITY_PSK:
+			protectMode = WifiAdmins.TYPE_WPA;
+			break;
+		default:
+			break;
+		}
+		return protectMode;
+	}
+
+手动添加时：
+WifiConfiguration config = mWifiAdmins.createWifiConfig(ssid, password, getConnectType(ssid));
+private int getConnectType(String ssid) {
+		ScanResult sr = checkScanResult(ssid);
+		if(sr != null){
+			if(sr.capabilities.contains(WPA)){
+				return WifiAdmins.TYPE_WPA;
+			} else if(sr.capabilities.contains(WEP)) {
+				return WifiAdmins.TYPE_WEP;
+			} else if(sr.capabilities.contains(EAP)) {
+				return WifiAdmins.TYPE_EAP;
+			}else {
+				return WifiAdmins.TYPE_NO_PASSWD;
+			}
+		} 
+		return WifiAdmins.TYPE_WPA;
+	}
+	
+private ScanResult checkScanResult(String ssid){
+		mWifiAdmins.startScan();	
+		for(ScanResult sr : mWifiAdmins.getWifiList()){          //return mWifiManager.getScanResults();
+			if(ssid.equals(sr.SSID)){
+				return sr;
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	
+	
+2.SSID = "\"" + SSID + "\""
+/**
+     * The network's SSID. Can either be an ASCII string,
+     * which must be enclosed in double quotation marks
+     * (e.g., {@code "MyNetwork"}, or a string of
+     * hex digits,which are not enclosed in quotes
+     * (e.g., {@code 01a243f405}).
+     */
+	 
+	 
+网络的SSID。可以是ASCII字符串，
+*必须用双引号引起来
+*（例如，{"mynetwork"}，
+或十六进制数字的一个字符串，它在引号中不是封闭的
+*（例如，{01a243f405 }）。
+	
+getSSID()获取到的SSID名称和手机的Android版本有关，
+如果是Android 4.2（API Level = 17）及其以上的版本，获取到的SSID名称是有双引号的即"haha"，
+如果是Android 4.2以下的版本，获取到的SSID名称没有双引号，即haha。
+	
+	
+	
+	
+	
+	
+	
+	
+	

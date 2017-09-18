@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SmoothStreamingMedia MajorVersion="2" MinorVersion="0" TimeScale="10000000" Duration="0" LookAheadFragmentCount="2" IsLive="TRUE" DVRWindowLength="300000000">
+<Protection><ProtectionHeader SystemID="9a04f079-9840-4286-ab92-e65be0885f95">lAIAAAEAAQCKAjwAVwBSAE0ASABFAEEARABFAFIAIAB4AG0AbABuAHMAPQAiAGgAdAB0AHAAOgAvAC8AcwBjAGgAZQBtAGEAcwAuAG0AaQBjAHIAbwBzAG8AZgB0AC4AYwBvAG0ALwBEAFIATQAvADIAMAAwADcALwAwADMALwBQAGwAYQB5AFIAZQBhAGQAeQBIAGUAYQBkAGUAcgAiACAAdgBlAHIAcwBpAG8AbgA9ACIANAAuADAALgAwAC4AMAAiAD4APABEAEEAVABBAD4APABQAFIATwBUAEUAQwBUAEkATgBGAE8APgA8AEsARQBZAEwARQBOAD4AMQA2ADwALwBLAEUAWQBMAEUATgA+ADwAQQBMAEcASQBEAD4AQQBFAFMAQwBUAFIAPAAvAEEATABHAEkARAA+ADwALwBQAFIATwBUAEUAQwBUAEkATgBGAE8APgA8AEwAQQBfAFUAUgBMAD4AaAB0AHQAcABzADoALwAvAHAAcgAuAGwAZQBiAGEAcgBhAHAAbABhAHkALgBjAG8AbQAvAHAAbABhAHkAcgBlAGEAZAB5AC8AcgBpAGcAaAB0AHMAbQBhAG4AYQBnAGUAcgAuAGEAcwBtAHgAPAAvAEwAQQBfAFUAUgBMAD4APABLAEkARAA+AFcAUABRAFcAdQA4AGsAVQBnADAAaQBTAGsAWgBiAHcAZAA4AEwAYgA5AHcAPQA9ADwALwBLAEkARAA+ADwAQwBIAEUAQwBLAFMAVQBNAD4AOQB2AEMAeQBpAEIAeQB6AHMAYwBrAD0APAAvAEMASABFAEMASwBTAFUATQA+ADwALwBEAEEAVABBAD4APAAvAFcAUgBNAEgARQBBAEQARQBSAD4A</ProtectionHeader></Protection>
+<StreamIndex Type="video" QualityLevels="5" TimeScale="10000000" Name="video-inadv" Chunks="7" Url="http://cdn.lebaraplay.com/live_mss/124.isml/QualityLevels({bitrate})/Fragments(video-inadv={start time})" MaxWidth="1024" MaxHeight="576" DisplayWidth="1024" DisplayHeight="576">
+<QualityLevel Index="0" Bitrate="1500001" CodecPrivateData="00000001674D401FDB0100126840000003004000000C83C60CB80000000168EA8CB2" MaxWidth="1024" MaxHeight="576" FourCC="H264" NALUnitLengthField="4" />
+<QualityLevel Index="1" Bitrate="1000002" CodecPrivateData="00000001674D401FDB0320EFE221000003000100000300320F1832E00000000168EA8CB2" MaxWidth="800" MaxHeight="450" FourCC="H264" NALUnitLengthField="4" />
+<QualityLevel Index="2" Bitrate="500003" CodecPrivateData="000000016742C01EDB0280BFE584000003000400000300C83C58BB800000000168CA8CB2" MaxWidth="640" MaxHeight="360" FourCC="H264" NALUnitLengthField="4" />
+<QualityLevel Index="3" Bitrate="300004" CodecPrivateData="000000016742C014DB0586FE6840000003004000000C83C50AB80000000168CA8CB2" MaxWidth="352" MaxHeight="198" FourCC="H264" NALUnitLengthField="4" />
+<QualityLevel Index="4" Bitrate="150005" CodecPrivateData="000000016742C014DB0586FE6840000003004000000C83C50AB80000000168CA8CB2" MaxWidth="352" MaxHeight="198" FourCC="H264" NALUnitLengthField="4" />
+<c t="14562854960000000" d="40000000" n="0" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+</StreamIndex>
+<StreamIndex Type="audio" QualityLevels="1" TimeScale="10000000" Language="und" Name="audio-inadv" Chunks="7" Url="http://cdn.lebaraplay.com/live_mss/124.isml/QualityLevels({bitrate})/Fragments(audio-inadv={start time})">
+<QualityLevel Index="0" Bitrate="48001" CodecPrivateData="1288" SamplingRate="32000" Channels="1" BitsPerSample="16" PacketSize="2" AudioTag="255" FourCC="AACL" />
+<c t="14562854960000000" d="40000000" n="0" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+<c d="40000000" />
+</StreamIndex>
+<!-- X-SPBTV-INADV-FLAG:1 -->
+</SmoothStreamingMedia>

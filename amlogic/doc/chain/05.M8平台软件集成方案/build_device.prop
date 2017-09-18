@@ -1,0 +1,15 @@
+ro.ethernet.default_on=true
+ubootenv.var.has.accelerometer=false
+ro.dev.id=sdmc
+libplayer.hls.cmf=true
+sdmc.netupdate.isSupport=1
+dtv.Verimatrix.isSupport=1
+sdmc.phone_remote.isSupport=1
+#dtv.ca.isSupport=1
+dtv.xbmc.isSupport=1
+sdmc.standby.model=sleep
+ro.sdmc.hw.ver=1.0.5
+ro.product.sn.num=12
+
+#add for video boot, 1 means use video boot, others not .
+service.bootvideo=1
